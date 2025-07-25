@@ -17,6 +17,7 @@ export class BookListComponent {
   }
 
   ngOnInit() : void {
-    this.service.getAllBooks().subscribe(allBooks => this.books = allBooks)
+    this.service.getAllBooks()
+      .subscribe(allBooks => this.books = allBooks)
   }
 }

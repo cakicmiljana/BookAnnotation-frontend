@@ -8,7 +8,7 @@ import { Book } from 'src/app/models/book';
   standalone: false
 })
 export class BookPreviewComponent {
-  @Input() book: Book | null = null;
+  @Input() book: Book | null | undefined = null;
 
   constructor() {
 
