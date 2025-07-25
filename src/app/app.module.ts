@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { BookListComponent } from './components/book-list/book-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BookPreviewComponent } from './components/book-preview/book-preview.component';
+import { BookViewerComponent } from './book-viewer/book-viewer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BookListComponent,
-    BookPreviewComponent
+    BookPreviewComponent,
+    BookViewerComponent
   ],
   imports: [
     BrowserModule,

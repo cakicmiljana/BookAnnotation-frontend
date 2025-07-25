@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Book } from 'src/app/models/book';
 
 @Component({
   selector: 'app-book-preview',
@@ -7,5 +8,9 @@ import { Component } from '@angular/core';
   standalone: false
 })
 export class BookPreviewComponent {
+  @Input() book: Book | null = null;
 
+  constructor() {
+
+  }
 }

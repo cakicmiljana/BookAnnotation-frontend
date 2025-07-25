@@ -1,6 +1,5 @@
 <div class="books-list-div">
     <ul class="book-div" *ngFor="let book of books">
-        {{book.title}}
-        <!-- <app-book [book] = "book" > </app-book> -->
+        <app-book-preview [book]="book"></app-book-preview>
     </ul>
 </div>
