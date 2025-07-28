@@ -7,6 +7,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { BookPreviewComponent } from './components/book-preview/book-preview.component';
 import { BookViewerComponent } from './components/book-viewer/book-viewer.component';
 import { VersionListComponent } from './components/version-list/version-list.component';
+import { MenuToolbarComponent } from './components/menu-toolbar/menu-toolbar.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
+import { AccountComponent } from './components/account/account.component';
 
 @NgModule({
   declarations: [
@@ -14,12 +18,18 @@ import { VersionListComponent } from './components/version-list/version-list.com
     BookListComponent,
     BookPreviewComponent,
     BookViewerComponent,
-    VersionListComponent
+    VersionListComponent,
+    MenuToolbarComponent,
+    AccountComponent
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MatToolbarModule,
+    MatIconModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

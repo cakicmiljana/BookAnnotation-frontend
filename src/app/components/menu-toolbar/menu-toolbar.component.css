@@ -1,0 +1,30 @@
+/* top-menu-bar.component.css */
+.menu-bar {
+    /* color: wheat; */
+    padding: 5px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+  
+.menu-bar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-bar li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.menu-bar a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.menu-bar a:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

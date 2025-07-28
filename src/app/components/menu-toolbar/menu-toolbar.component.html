@@ -1,0 +1,40 @@
+<div class="menu-bar">
+  <mat-toolbar>
+    <nav>
+      <ul>
+        <li>
+          <mat-icon style="font-size: 30px;" color="accent">menu</mat-icon>
+        </li>
+        <li><a routerLink="/all-books">
+          <button mat-raised-button color="accent">
+            HOME
+            <mat-icon color="wheat">home</mat-icon>
+          </button>
+        </a></li>
+        <li><a routerLink="/my-books">
+          <button mat-raised-button color="accent">
+            MY BOOKS
+            <mat-icon color="wheat">my_library_books</mat-icon>
+          </button>
+        </a></li>
+        <li><a routerLink="/account">
+          <button mat-raised-button color="accent">
+            ACCOUNT
+            <mat-icon>account_box</mat-icon>
+          </button>
+        </a></li>
+        <span class="spacer"></span>
+        <li><a (click)="logOut()">
+          <button mat-raised-button color="accent">
+            LOG OUT
+            <mat-icon>logout</mat-icon>
+          </button>
+        </a></li>
+      </ul>
+    </nav>
+  </mat-toolbar>
+</div>
+
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
