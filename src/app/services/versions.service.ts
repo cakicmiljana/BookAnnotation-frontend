@@ -19,7 +19,7 @@ export class VersionsService {
     return this.httpClient.get<Version[]>(this.api + "/GetAllVersions")
   }
 
-  getVersionById(id: string) {
+  getVersionById(id: number) {
     return this.httpClient.get<Version>(`${this.api}/GetVersion/${id}`);
   }
 }

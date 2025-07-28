@@ -18,7 +18,7 @@ export class BooksService {
     return this.httpClient.get<Book[]>(this.api + "/GetAllBooks")
   }
 
-  getBookById(id: string) {
+  getBookById(id: number) {
     return this.httpClient.get<Book>(`${this.api}/GetBook/${id}`);
   }
 }
