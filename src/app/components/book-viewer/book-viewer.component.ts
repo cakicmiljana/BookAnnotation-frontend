@@ -13,10 +13,11 @@ import { VersionsService } from 'src/app/services/versions.service';
 })
 export class BookViewerComponent {
   @Input() book: Book | null = null;
+  versions: Version[] | null = null;
   routerId: string | null = "";
   bookId: number | null = null;
 
-  constructor(private service: BooksService, private route: ActivatedRoute) {
+  constructor(private booksService: BooksService, private versionsService: VersionsService, private route: ActivatedRoute) {
 
   }
 
@@ -26,8 +27,12 @@ export class BookViewerComponent {
       this.bookId = Number(this.routerId.slice(1));
     }
 
-    if(this.bookId)
-      this.service.getBookById(this.bookId)
-        .subscribe(v => this.book=v)
+    if(this.bookId) {
+      this.booksService.getBookById(this.bookId)
+        .subscribe(b => this.book=b)
+
+      this.versionsService.getVersionsByBookId(this.bookId)
+        .subscribe(v => this.versions=v)
+    }
   }
 }
