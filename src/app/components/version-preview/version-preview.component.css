@@ -1,0 +1,51 @@
+/* body {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    margin-bottom: 20px;
+} */
+
+h3, h4, h5 {
+    margin: 0;
+    padding: 5px;
+    /* // color: wheat; */
+    /* text-shadow: black 1px 1px 10px; */
+    font-weight: 500;
+}
+
+.version-item-div {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    position: relative;
+}
+
+.version-item-div:hover {
+    background-color: rgba(16, 77, 120, 0.3);
+    cursor: pointer;
+}
+
+.order-button {
+    position: absolute;
+    bottom: 0;
+    /* // background-color: antiquewhite; */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+    align-content: center;
+    /* // color: wheat; */
+  }

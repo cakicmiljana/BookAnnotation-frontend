@@ -11,6 +11,7 @@ import { MenuToolbarComponent } from './components/menu-toolbar/menu-toolbar.com
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import { AccountComponent } from './components/account/account.component';
+import { VersionPreviewComponent } from './components/version-preview/version-preview.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AccountComponent } from './components/account/account.component';
     BookViewerComponent,
     VersionListComponent,
     MenuToolbarComponent,
-    AccountComponent
+    AccountComponent,
+    VersionPreviewComponent
     
   ],
   imports: [

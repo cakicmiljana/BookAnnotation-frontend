@@ -35,7 +35,7 @@
         </h2>
         <div class="versions-list">
             <ul *ngFor="let version of versions">
-                {{version.language}}
+                <app-version-preview [version]="version"></app-version-preview>
             </ul>
         </div>
     </div>
