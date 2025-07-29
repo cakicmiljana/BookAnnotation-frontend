@@ -12,6 +12,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import { AccountComponent } from './components/account/account.component';
 import { VersionPreviewComponent } from './components/version-preview/version-preview.component';
+import { BookAnnotatorComponent } from './components/book-annotator/book-annotator.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { VersionPreviewComponent } from './components/version-preview/version-pr
     VersionListComponent,
     MenuToolbarComponent,
     AccountComponent,
-    VersionPreviewComponent
+    VersionPreviewComponent,
+    BookAnnotatorComponent
     
   ],
   imports: [
