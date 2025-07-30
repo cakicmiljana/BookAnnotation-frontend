@@ -3,3 +3,12 @@
     margin: 30px;
     padding: 10px;
 }
+
+.book-details h2, h3, h4, div {  
+    font-weight: 200;
+}
+
+mat-card {
+  border: 1px solid rgb(0, 0, 0, 0.3); /* Indigo as an example */
+  border-radius: 8px; /* Optional: for rounded corners */
+}
