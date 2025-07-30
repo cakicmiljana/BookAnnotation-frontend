@@ -11,8 +11,22 @@ import { VersionsService } from 'src/app/services/versions.service';
 })
 export class BookAnnotatorComponent {
   @Input() version: Version | null = null;
+  routerId: string | null = "";
+  versionId: number | null = null;
 
   constructor(private booksService: BooksService, private versionsService: VersionsService, private route: ActivatedRoute) {
 
+  }
+
+  ngOnInit(): void {
+    this.routerId = this.route.snapshot.paramMap.get("id");
+    if (this.routerId && this.routerId.startsWith(":")) {
+      this.versionId = Number(this.routerId.slice(1));
+    }
+
+    if(this.versionId) {
+      this.versionsService.getVersionById(this.versionId)
+        .subscribe(b => this.version=b)
+    }
   }
 }

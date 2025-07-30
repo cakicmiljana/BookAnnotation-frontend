@@ -20,15 +20,6 @@ h2, h3, h4, div {
     /* padding-left: 30px; */
 }
 
-
-.details-item {
-    /* margin-right: 30px; */
-}
-
-.title {
-    /* padding-left: 30px; */
-}
-
 .array-details {
     display: flex;
     flex-direction: row;
@@ -50,54 +41,54 @@ h2, h3, h4, div {
 }
 
 .dark-accordion {
-    background-color: #1e1e1e;
-    /* border-radius: 10px; */
-    color: #f0f0f0;
-    font-family: 'Inter', sans-serif;
-  }
-  
-  .dark-panel {
-    background-color: #2a2a2a;
-    margin-bottom: 8px;
-    border-radius: 10px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-    overflow: hidden;
-  }
-  
-  .dark-header {
-    background-color: #2e2e2e;
-    color: #ffffff;
-    font-weight: 500;
-    /* padding: 0 16px; */
-    font-size: 16px;
-  }
-  
-  .dark-header.mat-expanded {
-    background-color: #383838;
-  }
-  
-  .dark-content {
-    /* padding: 16px; */
-    font-size: 18px;
-    /* color: #cccccc; */
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  /* Optional: Smooth animation */
-  mat-expansion-panel {
-    transition: all 0.3s ease-in-out;
-  }
+background-color: #1e1e1e;
+/* border-radius: 10px; */
+color: #f0f0f0;
+font-family: 'Inter', sans-serif;
+}
 
-  img {
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  
-    &:hover {
-      transform: scale(1.03);
-    }
-  }
-  
-  .versions {
+.dark-panel {
+background-color: #2a2a2a;
+margin-bottom: 8px;
+border-radius: 10px !important;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+overflow: hidden;
+}
+
+.dark-header {
+background-color: #2e2e2e;
+color: #ffffff;
+font-weight: 500;
+/* padding: 0 16px; */
+font-size: 16px;
+}
+
+.dark-header.mat-expanded {
+background-color: #383838;
+}
+
+.dark-content {
+/* padding: 16px; */
+font-size: 18px;
+/* color: #cccccc; */
+border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Optional: Smooth animation */
+mat-expansion-panel {
+transition: all 0.3s ease-in-out;
+}
+
+img {
+transition: transform 0.3s ease;
+cursor: pointer;
+
+&:hover {
+    transform: scale(1.03);
+}
+}
+
+.versions {
     padding-top: 20px;
 }
 

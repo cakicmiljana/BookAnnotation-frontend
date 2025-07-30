@@ -1,8 +1,11 @@
 /* top-menu-bar.component.css */
 .menu-bar {
-    /* color: wheat; */
+    color: cadetblue;
     padding: 5px;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 16px 0 8px;
+    min-width: 120px;
 }
   
 .menu-bar ul {
@@ -17,12 +20,15 @@
 }
 
 .menu-bar a {
-    text-decoration: none;
-    color: #fff;
+    /* text-decoration: none; */
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-.menu-bar a:hover {
-    background-color: rgba(0, 0, 0, 0.6);
+button:hover {
+    background-color: rgba(95, 158, 160, 0.6);
+    
 }
 
 .spacer {

@@ -13,6 +13,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { AccountComponent } from './components/account/account.component';
 import { VersionPreviewComponent } from './components/version-preview/version-preview.component';
 import { BookAnnotatorComponent } from './components/book-annotator/book-annotator.component';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -24,15 +25,15 @@ import { BookAnnotatorComponent } from './components/book-annotator/book-annotat
     MenuToolbarComponent,
     AccountComponent,
     VersionPreviewComponent,
-    BookAnnotatorComponent
-    
+    BookAnnotatorComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
     
   ],
   providers: [],
