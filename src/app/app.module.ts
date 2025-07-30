@@ -14,6 +14,7 @@ import { AccountComponent } from './components/account/account.component';
 import { VersionPreviewComponent } from './components/version-preview/version-preview.component';
 import { BookAnnotatorComponent } from './components/book-annotator/book-annotator.component';
 import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -33,8 +34,8 @@ import {MatButtonModule} from '@angular/material/button';
     HttpClientModule,
     MatToolbarModule,
     MatIconModule,
-    MatButtonModule
-    
+    MatButtonModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

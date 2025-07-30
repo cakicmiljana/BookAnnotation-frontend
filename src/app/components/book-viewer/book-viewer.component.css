@@ -1,5 +1,4 @@
-
-h2, h3, h4, div {  
+.book-details h2, h3, h4, div {  
     font-weight: 200;
 }
 
@@ -44,7 +43,7 @@ h2, h3, h4, div {
 background-color: #1e1e1e;
 /* border-radius: 10px; */
 color: #f0f0f0;
-font-family: 'Inter', sans-serif;
+/* font-family: 'Inter', sans-serif; */
 }
 
 .dark-panel {
@@ -80,12 +79,12 @@ transition: all 0.3s ease-in-out;
 }
 
 img {
-transition: transform 0.3s ease;
-cursor: pointer;
+    transition: transform 0.3s ease;
+    cursor: pointer;
 
-&:hover {
-    transform: scale(1.03);
-}
+    &:hover {
+        transform: scale(1.03);
+    }
 }
 
 .versions {
