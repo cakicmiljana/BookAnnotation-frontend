@@ -28,9 +28,16 @@
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <p>
-            {{version?.content || 'No content available.'}}
-        </p>
+        {{pageContent}}
+        <mat-paginator 
+            [length]="100000"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[1000, 2000, 5000]"
+            aria-label="Select page"
+            (page)="getPageData($event)"
+        >
+    </mat-paginator>
+
     </mat-card-content>
     <mat-card-footer>
         
