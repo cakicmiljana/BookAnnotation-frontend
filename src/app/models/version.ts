@@ -8,4 +8,5 @@ export interface Version {
     userId: number;
     bookId: number;
     book: Book;
+    pageSize: number;
 }

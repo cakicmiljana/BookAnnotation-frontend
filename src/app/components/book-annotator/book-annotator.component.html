@@ -16,23 +16,22 @@
                         <h3>
                             {{version?.book?.author}}
                         </h3>
-                        <h4>
+                        <h5>
                             {{version?.book?.pages}} pages
-                        </h4>
-                        <h4>
+                        </h5>
+                        <h5>
                             {{version?.book?.country}}, {{version?.book?.publicationYear}}.
-                        </h4>
+                        </h5>
                     </div>
                 </div>
                 </div>
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        {{pageContent}}
+        <pre>{{pageText}}</pre>
         <mat-paginator 
             [length]="100000"
-            [pageSize]="pageSize"
-            [pageSizeOptions]="[1000, 2000, 5000]"
+            [pageSize]="version?.pageSize"
             aria-label="Select page"
             (page)="getPageData($event)"
         >
