@@ -1,4 +1,4 @@
-<div routerLink="../book/:{{[book.id]}}" class="book-item-div" *ngIf="book">
+<button mat-raised-button routerLink="../book/:{{[book.id]}}" class="book-item-div" *ngIf="book">
     <h3>{{ book.title }}</h3>
     <h4>{{ book.author }}</h4>
-</div>
+</button>

@@ -1,0 +1,51 @@
+<div class="upload-form">
+    <h3>Upload edition</h3>
+
+    <mat-form-field class="upload-item">
+    <mat-label>Book name</mat-label>
+    <input disabled matInput type="text" [value]="data.title">
+    </mat-form-field>
+
+    <mat-form-field class="upload-item">
+    <mat-label>Author</mat-label>
+    <input disabled matInput type="text" [value]="data.author">
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field class="upload-item">
+    <mat-label>ISBN</mat-label>
+    <input class="input-item" matInput type="number" [(ngModel)]="isbn">
+    </mat-form-field>
+
+    <mat-form-field class="upload-item">
+    <mat-label>Language</mat-label>
+    <input class="input-item" matInput type="text" [(ngModel)]="language">
+    </mat-form-field>
+
+    <div class="file-upload-group">
+    <mat-form-field appearance="fill" class="upload-item">
+        <mat-label>File path</mat-label>
+        <input matInput [value]="fileName" disabled>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="fileInput.click()">
+        Choose File
+        <mat-icon>attach_file</mat-icon>
+    </button>
+    <input
+        #fileInput
+        type="file"
+        accept="application/pdf"
+        (change)="onFileSelected($event)"
+        hidden
+    />
+
+    
+</div>
+<br>
+<button mat-raised-button color="primary" (click)="uploadVersion()">
+    Upload edition
+    <mat-icon>upload_file</mat-icon>
+</button>
+</div>

@@ -1,11 +1,17 @@
 .menu-bar {
-    padding: 10px;
+    /* padding: 10px; */
     font-size: 14px;
     font-weight: bold;
     /* margin: 0 16px 0 8px; */
     min-width: 120px;
     background-color: black;
     color: cadetblue;
+    display: flex;
+}
+
+.menu-bar mat-toolbar {
+    background-color: black !important;
+    color: white !important;
 }
   
 .menu-bar ul {
@@ -16,17 +22,20 @@
 .menu-bar li {
     display: inline;
     margin-right: 20px;
-    color: cadetblue;
+    /* color: cadetblue; */
+    background-color: black;
 }
 
 .menu-bar a {
-    color: cadetblue;
+    /* color: cadetblue; */
     font-size: 14px;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 button:hover {
-    background-color: rgba(95, 158, 160, 0.6);
+    background-color: rgba(95, 158, 160, 0.9) !important;
+    color: black !important;
+    font-weight: 500;
 }
 
 .spacer {
@@ -35,4 +44,10 @@ button:hover {
 
 .menu-icon {
     margin-right: 30px;
+}
+
+.menu-button {
+    background-color: black !important;
+    color: white !important;
+    font-weight: 400;
 }

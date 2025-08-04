@@ -33,6 +33,12 @@
         <h2>
             EDITIONS
         </h2>
+        <div>
+            <button mat-raised-button (click)="openVersionUploadDialog()">
+                <mat-icon>upload_file</mat-icon>
+                Upload edition
+            </button>
+        </div>
         <div class="versions-list">
             <ul *ngFor="let version of versions">
                 <app-version-preview [version]="version"></app-version-preview>

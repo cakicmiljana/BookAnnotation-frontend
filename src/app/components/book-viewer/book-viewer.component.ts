@@ -1,9 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Book } from 'src/app/models/book';
 import { Version } from 'src/app/models/version';
 import { BooksService } from 'src/app/services/books.service';
 import { VersionsService } from 'src/app/services/versions.service';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogTitle,
+  MatDialogContent,
+} from '@angular/material/dialog';
+import { VersionUploadComponent } from '../version-upload/version-upload.component';
 
 @Component({
   selector: 'app-book-viewer',
@@ -16,6 +23,8 @@ export class BookViewerComponent {
   versions: Version[] | null = null;
   routerId: string | null = "";
   bookId: number | null = null;
+
+  dialog = inject(MatDialog);
 
   constructor(private booksService: BooksService, private versionsService: VersionsService, private route: ActivatedRoute) {
 
@@ -34,5 +43,11 @@ export class BookViewerComponent {
       this.versionsService.getVersionsByBookId(this.bookId)
         .subscribe(v => this.versions=v)
     }
+  }
+
+  openVersionUploadDialog() {
+    this.dialog.open(VersionUploadComponent, {
+      data: this.book
+    })
   }
 }
