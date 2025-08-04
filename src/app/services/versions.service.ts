@@ -39,4 +39,11 @@ export class VersionsService {
       }
     );
   }
+
+  uploadVersionPDF(file: File, userId: number, bookId: number, language: string) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    return this.httpClient.post(`${environment.api}/File/UploadPdf/${userId}/${bookId}/${language}`, formData);
+  }
 }
