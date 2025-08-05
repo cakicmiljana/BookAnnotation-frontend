@@ -1,1 +1,14 @@
-<p>account works!</p>
+<div class="account-div">
+    <h3>
+        username: {{user?.username}}
+    </h3>
+    <h3>
+        email: {{user?.email}}
+    </h3>
+    <div>
+        <button class="update-button" mat-raised-button (click)="updateUser()">
+            <mat-icon>manage_accounts</mat-icon>
+            Update information
+        </button>
+    </div>
+</div>

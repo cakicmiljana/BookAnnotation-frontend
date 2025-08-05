@@ -1,0 +1,13 @@
+.account-div {
+    margin: 50px;
+}
+
+.account-div button:hover {
+    background-color: rgba(95, 158, 160, 0.9);
+    color: black;
+}
+
+.account-div button {
+    background-color: black;
+    color: white;
+}

@@ -10,10 +10,13 @@
     align-self: center;
     position: relative;
     height: auto;
+    background-color: black;
+    color: white;
 }
 
 .book-item-div:hover {
-    background-color: rgba(16, 77, 120, 0.3);
+    background-color: rgb(95, 158, 160, 0.8);
+    color: rgb(0, 0, 0);
     cursor: pointer;
 }
 

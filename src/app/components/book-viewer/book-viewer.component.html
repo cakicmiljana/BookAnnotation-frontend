@@ -23,7 +23,7 @@
     </div>
     <div class="plot">
         <h2>
-            PLOT
+            DESCRIPTION
         </h2>
         <p class="dark-content">
             {{ book?.description || 'No plot available' }}
@@ -34,7 +34,7 @@
             EDITIONS
         </h2>
         <div>
-            <button mat-raised-button (click)="openVersionUploadDialog()">
+            <button class="upload-button" mat-raised-button (click)="openVersionUploadDialog()">
                 <mat-icon>upload_file</mat-icon>
                 Upload edition
             </button>

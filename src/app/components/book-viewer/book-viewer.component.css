@@ -105,3 +105,13 @@ img {
     background-color: black;
     color: white;
 }
+
+.versions-list ul {
+  margin-right: 15px;
+  padding: 0;
+  /* list-style: none; optional, removes bullets */
+}
+
+.upload-button {
+    margin-bottom: 10px;
+}

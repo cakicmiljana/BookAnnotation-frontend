@@ -2,8 +2,8 @@
     width: fit-content;
     display: flex;
     flex-direction: row;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    /* margin-top: 20px; */
+    /* margin-bottom: 20px; */
 }
 
 .version-item-div h3, h4, h5 {
@@ -19,8 +19,8 @@
 .version-item-div {
     display: flex;
     flex-direction: column;
-    align-self: center;
-    position: relative;
+    /* align-self: center; */
+    /* position: relative; */
 }
 
 .version-item-div:hover {

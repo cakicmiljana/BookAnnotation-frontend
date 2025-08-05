@@ -1,9 +1,14 @@
 .books-list-div {
     display: flex;
     flex-direction: row;
-    padding: 20px 0;
 }
 
 .book-div {
     flex: 0 0 auto;
+}
+
+.title {
+    margin-top: 40px;
+    margin-left: 40px;
+    font-weight: 550;
 }
