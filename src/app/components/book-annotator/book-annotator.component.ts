@@ -22,7 +22,7 @@ export class BookAnnotatorComponent {
   versionId: number | null = null;
 
   currentPage = 0;
-  pageSize = 1000;
+  pageSize = 2000;
   totalPages = 0;
 
   pageText = '';
