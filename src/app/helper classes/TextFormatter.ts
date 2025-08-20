@@ -3,13 +3,13 @@ export class TextFormatter {
 
   constructor(
     private fullText: string,
-    private pageSize: number = 2000 // number of characters per page
+    private pageSize: number = 2000
   ) {
     this.paginate();
   }
 
-  private paginate() {
-    const paragraphs = this.fullText.split(/\n\s*\n/); // split on empty lines
+  private paginate() {  
+    const paragraphs = this.fullText.split(/\n\s*\n/);
 
     let currentPage = '';
     for (const para of paragraphs) {

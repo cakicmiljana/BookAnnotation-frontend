@@ -1,0 +1,30 @@
+<div class="upload-form">
+    <h3>Update information</h3>
+
+    <mat-form-field class="upload-item">
+    <mat-label>Username</mat-label>
+    <input matInput type="text" [(ngModel)]="username">
+    </mat-form-field>
+
+    <mat-form-field class="upload-item">
+    <mat-label>Email</mat-label>
+    <input disabled matInput type="text" [value]="data.email">
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field class="upload-item">
+    <mat-label>Password</mat-label>
+    <input class="input-item" matInput type="text" [(ngModel)]="password">
+    </mat-form-field>
+    
+    <mat-form-field class="upload-item">
+    <mat-label>Repeat password</mat-label>
+    <input class="input-item" matInput type="text" [(ngModel)]="password">
+    </mat-form-field>
+    <br>
+    <button mat-raised-button color="primary" (click)="updateUser()">
+        Update
+        <mat-icon>manage_accounts</mat-icon>
+    </button>
+</div>

@@ -4,12 +4,7 @@ import { Book } from 'src/app/models/book';
 import { Version } from 'src/app/models/version';
 import { BooksService } from 'src/app/services/books.service';
 import { VersionsService } from 'src/app/services/versions.service';
-import {
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogTitle,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { VersionUploadComponent } from '../version-upload/version-upload.component';
 
 @Component({

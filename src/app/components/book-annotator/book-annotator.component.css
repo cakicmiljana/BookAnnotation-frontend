@@ -1,14 +1,28 @@
 .card {
-    /* max-width: 400px; */
-    margin: 30px;
-    padding: 10px;
+  margin: 30px;
+  padding: 10px;
 }
 
-.book-details h2, h3, h4, h5, div {  
-    font-weight: 200;
+.book-details h2, h3, h4, h5, div {
+  font-weight: 200;
 }
 
 mat-card {
-  border: 1px solid rgb(0, 0, 0, 0.3); /* Indigo as an example */
-  border-radius: 8px; /* Optional: for rounded corners */
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+/* Highlighted annotation span */
+.annotation {
+  background-color: yellow !important;
+  padding: 2px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Reader styles */
+.book-content {
+  font-family: 'Roboto', sans-serif;
+  white-space: normal;
+  line-height: 1.6;
 }

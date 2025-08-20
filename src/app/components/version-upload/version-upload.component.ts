@@ -1,10 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogTitle,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { VersionsService } from 'src/app/services/versions.service';
 
 @Component({

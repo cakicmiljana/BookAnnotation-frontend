@@ -21,6 +21,7 @@ import { VersionUploadComponent } from './components/version-upload/version-uplo
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { AccountUpdateComponent } from './components/account-update/account-update.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { FormsModule } from '@angular/forms';
     VersionPreviewComponent,
     BookAnnotatorComponent,
     VersionUploadComponent,
+    AccountUpdateComponent,
   ],
   imports: [
     BrowserModule,

@@ -17,7 +17,7 @@
     <mat-label>ISBN</mat-label>
     <input class="input-item" matInput type="number" [(ngModel)]="isbn">
     </mat-form-field>
-
+    
     <mat-form-field class="upload-item">
     <mat-label>Language</mat-label>
     <input class="input-item" matInput type="text" [(ngModel)]="language">
@@ -40,12 +40,10 @@
         (change)="onFileSelected($event)"
         hidden
     />
-
-    
-</div>
-<br>
-<button mat-raised-button color="primary" (click)="uploadVersion()">
-    Upload edition
-    <mat-icon>upload_file</mat-icon>
-</button>
+    </div>
+    <br>
+    <button mat-raised-button color="primary" (click)="uploadVersion()">
+        Upload edition
+        <mat-icon>upload_file</mat-icon>
+    </button>
 </div>

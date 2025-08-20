@@ -4,6 +4,7 @@ import { Book } from '../models/book';
 import { environment } from 'src/environments/environment';
 import { Version } from '../models/version';
 import { Observable } from 'rxjs';
+import { Annotation } from '../models/annotation';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class VersionsService {
   }
 
   getAllVersions() {
-    return this.httpClient.get<Version[]>(this.api + "/GetAllVersions")
+    return this.httpClient.get<Version[]>(this.api + "/GetAllVersions");
   }
 
   getVersionById(id: number) {
@@ -45,5 +46,13 @@ export class VersionsService {
     formData.append('file', file);
     
     return this.httpClient.post(`${environment.api}/File/UploadPdf/${userId}/${bookId}/${language}`, formData);
+  }
+
+  getAnnotationsByVersionId(versionId: number) {
+    return this.httpClient.get<Annotation[]>(`${environment.api}/Annotation/GetAnnotationsByVersionId/${versionId}`);
+  }
+
+  addAnnotation(versionId: number, userId: number, start: number, end: number, comment: string, tag: string) {
+    return this.httpClient.post(`${environment.api}/Annotation/AddAnnotation/${versionId}/${userId}/${start}/${end}/${comment}/${tag}`, {});
   }
 }
