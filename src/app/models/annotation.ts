@@ -6,4 +6,5 @@ export interface Annotation {
     endOffset: number;
     comment: string;
     tag: string;
+    color: string;
 }

@@ -7,7 +7,7 @@ body {
 }
 
 .annotation {
-  background-color: cadetblue !important;
+  /* background-color: lightblue !important; */
   padding: 2px;
   border-radius: 3px;
   cursor: pointer;

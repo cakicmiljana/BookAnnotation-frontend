@@ -19,7 +19,7 @@ export class TextAnnotator {
 
       if (start >= end) continue;
 
-      const open = `<span class="annotation" data-id="${ann.id ?? ''}">`;
+      const open = `<span class="annotation" data-id="${ann.id ?? ''}" style="background-color: ${ann.color};">`;
       const close = `</span>`;
 
       result =
