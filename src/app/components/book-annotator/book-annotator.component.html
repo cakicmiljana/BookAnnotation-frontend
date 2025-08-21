@@ -15,7 +15,7 @@
   </mat-card-header>
 
   <mat-card-content>
-    <div class="book-content" [innerHTML]="annotatedText"></div>
+    <div class="book-content" [innerHTML]="annotatedText" (mouseup)="annotateText($event)"></div>
 
     <mat-paginator
       [length]="totalPages"

@@ -32,4 +32,18 @@ export class TextAnnotator {
 
     return result;
   }
+
+  getOffset(root: Node, node: Node, offset: number): number {
+    let chars = 0;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    while (walker.nextNode()) {
+      const current = walker.currentNode;
+      if (current === node) {
+        return chars + offset;
+      }
+      chars += current.textContent?.length ?? 0;
+    }
+
+    return chars;
+  }
 }
