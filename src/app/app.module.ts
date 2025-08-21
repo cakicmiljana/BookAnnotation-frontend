@@ -23,6 +23,8 @@ import {MatInputModule} from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { AccountUpdateComponent } from './components/account-update/account-update.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { AddAnnotationComponent } from './components/add-annotation/add-annotation.component';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     BookAnnotatorComponent,
     VersionUploadComponent,
     AccountUpdateComponent,
+    AddAnnotationComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatDialogModule,
     MatInputModule,
     FormsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

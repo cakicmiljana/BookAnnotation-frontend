@@ -1,0 +1,44 @@
+.upload-form {
+    padding: 20px;
+    width: fit-content;
+}
+
+.upload-item {
+    color: cadetblue !important;
+    margin: 5px;
+    width: fit-content;
+}
+
+.file-upload-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.upload-form button {
+    background-color: black !important;
+    color: white !important;
+    font-weight: 400;
+}
+
+.upload-form button:hover {
+    background-color: rgba(95, 158, 160, 0.9) !important;
+    color: black !important;
+    font-weight: 500;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  stroke: cadetblue !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline:hover .mat-form-field-outline-thick {
+  stroke: lightblue !important;
+}
+
+.text {
+    
+}

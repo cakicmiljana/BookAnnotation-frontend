@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
@@ -9,6 +9,8 @@ import { Annotation } from 'src/app/models/annotation';
 
 import { VersionsService } from 'src/app/services/versions.service';
 import { TextAnnotator } from 'src/app/helper classes/TextAnnotator';
+import { MatDialog } from '@angular/material/dialog';
+import { AddAnnotationComponent } from '../add-annotation/add-annotation.component';
 
 @Component({
   selector: 'app-book-annotator',
@@ -35,9 +37,8 @@ export class BookAnnotatorComponent {
 
   // new annotation
   selectedText: string = "";
-  selectedComment: string = "";
-  selectedTag: string = "";
-  selectedColor: string = "lightblue";
+
+  dialog = inject(MatDialog);
 
   constructor(
     private versionsService: VersionsService,
@@ -125,9 +126,19 @@ export class BookAnnotatorComponent {
   
       console.log(this.selectedText);
 
-      this.versionsService.addAnnotation(this.versionId, this.userId, startOffset, endOffset, this.selectedComment, this.selectedTag, this.selectedColor)
-        .subscribe();
+      this.annotationDialog(this.selectedText, startOffset, endOffset);
     }
+  }
 
+  annotationDialog(text: string, start: number, end: number) {
+    this.dialog.open(AddAnnotationComponent, {
+      data: {
+        userId: this.userId,
+        versionId: this.versionId,
+        text,
+        start,
+        end
+      }
+    })
   }
 }

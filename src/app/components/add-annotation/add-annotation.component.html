@@ -1,0 +1,48 @@
+<div class="upload-form">
+    <h3>Add annotation</h3>
+
+    <div class="text">
+        <span>{{data.text}}</span>
+    </div>
+
+    <br>
+
+    <mat-form-field class="comment-item">
+    <mat-label>Comment</mat-label>
+    <input matInput type="text" [(ngModel)]="comment">
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field class="upload-item">
+    <mat-label>Tag</mat-label>
+    <mat-select [(value)]="tag">
+        <mat-option>None</mat-option>
+        <mat-option value="important">Important</mat-option>
+        <mat-option value="analysis">Analysis</mat-option>
+        <mat-option value="quote">Quote</mat-option>
+        <mat-option value="definition">Definition</mat-option>
+        <mat-option value="question">Question</mat-option>
+        <mat-option value="symbolism">Symbolism</mat-option>
+        <mat-option value="motif">Motif</mat-option>
+        <mat-option value="criticism">Criticism</mat-option>
+    </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="upload-item">
+    <mat-label>Color</mat-label>
+    <mat-select [(value)]="color">
+        <mat-option value="lightblue">Blue</mat-option>
+        <mat-option value="lightcoral">Red</mat-option>
+        <mat-option value="darkseagreen">Green</mat-option>
+        <mat-option value="lightpink">Pink</mat-option>
+        <mat-option value="lightyellow">Yellow</mat-option>
+    </mat-select>
+    </mat-form-field>
+    
+    <br>
+    <button mat-raised-button color="primary" (click)="addAnnotation()">
+        Add annotation
+        <mat-icon>post_add</mat-icon>
+    </button>
+</div>
