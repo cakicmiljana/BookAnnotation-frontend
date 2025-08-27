@@ -57,4 +57,10 @@ export class VersionsService {
     return this.httpClient.post(`${environment.api}/Annotation/AddAnnotation`, body);
     // return this.httpClient.post(`${environment.api}/Annotation/AddAnnotation/${versionId}/${userId}/${start}/${end}/${comment}/${tag}/${color}`, {});
   }
+
+  updateAnnotation(id: number, startOffset: number, endOffset: number, comment: string, tag: string, color: string) {
+    const body = { id, startOffset, endOffset, comment, tag, color };
+    return this.httpClient.put(`${environment.api}/Annotation/UpdateAnnotation`, body);
+    // return this.httpClient.post(`${environment.api}/Annotation/AddAnnotation/${versionId}/${userId}/${start}/${end}/${comment}/${tag}/${color}`, {});
+  }
 }

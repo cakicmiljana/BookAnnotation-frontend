@@ -25,6 +25,7 @@ import { AccountUpdateComponent } from './components/account-update/account-upda
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { AddAnnotationComponent } from './components/add-annotation/add-annotation.component';
 import {MatSelectModule} from '@angular/material/select';
+import { UpdateAnnotationComponent } from './components/update-annotation/update-annotation.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import {MatSelectModule} from '@angular/material/select';
     VersionUploadComponent,
     AccountUpdateComponent,
     AddAnnotationComponent,
+    UpdateAnnotationComponent,
   ],
   imports: [
     BrowserModule,

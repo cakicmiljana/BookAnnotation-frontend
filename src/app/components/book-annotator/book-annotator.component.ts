@@ -11,6 +11,7 @@ import { VersionsService } from 'src/app/services/versions.service';
 import { TextAnnotator } from 'src/app/helper classes/TextAnnotator';
 import { MatDialog } from '@angular/material/dialog';
 import { AddAnnotationComponent } from '../add-annotation/add-annotation.component';
+import { UpdateAnnotationComponent } from '../update-annotation/update-annotation.component';
 
 @Component({
   selector: 'app-book-annotator',
@@ -140,5 +141,27 @@ export class BookAnnotatorComponent {
         end
       }
     })
+  }
+
+  updateAnnotation(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('annotation')) {
+      const id = target.getAttribute('data-id');
+      const comment = target.getAttribute('data-comment');
+      const tag = target.getAttribute('data-tag');
+      const color = target.getAttribute('data-color');
+      const start = target.getAttribute('data-start');
+      const end = target.getAttribute('data-end');
+      this.dialog.open(UpdateAnnotationComponent, {
+        data: {
+          id,
+          start,
+          end,
+          comment,
+          tag,
+          color
+        }
+      })
+    }
   }
 }
