@@ -1,5 +1,4 @@
 <div class="upload-form">
-    <h3>Update annotation</h3>
 
     <br>
 
@@ -37,8 +36,14 @@
     </mat-form-field>
     
     <br>
-    <button mat-raised-button color="primary" (click)="updateAnnotation()">
-        Add annotation
-        <mat-icon>post_add</mat-icon>
-    </button>
+    <div class="action-buttons">
+        <button class="update-button" mat-raised-button (click)="updateAnnotation()">
+            Update
+            <mat-icon>post_add</mat-icon>
+        </button>
+        <button class="delete-button" mat-raised-button (click)="deleteAnnotation()">
+            Delete annotation
+            <mat-icon>post_add</mat-icon>
+        </button>
+    </div>
 </div>

@@ -24,4 +24,8 @@ export class UpdateAnnotationComponent {
     this.service.updateAnnotation(this.data.id, this.data.start, this.data.end, this.comment, this.tag, this.color)
         .subscribe();
   }
+
+  deleteAnnotation() {
+    this.service.deleteAnnotation(this.data.id).subscribe();
+  }
 }

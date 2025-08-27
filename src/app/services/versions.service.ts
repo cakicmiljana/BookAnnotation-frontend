@@ -63,4 +63,8 @@ export class VersionsService {
     return this.httpClient.put(`${environment.api}/Annotation/UpdateAnnotation`, body);
     // return this.httpClient.post(`${environment.api}/Annotation/AddAnnotation/${versionId}/${userId}/${start}/${end}/${comment}/${tag}/${color}`, {});
   }
+
+  deleteAnnotation(id: number) {
+    return this.httpClient.delete(`${environment.api}/Annotation/DeleteAnnotation/${id}`);
+  }
 }

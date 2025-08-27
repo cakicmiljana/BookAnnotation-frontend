@@ -19,13 +19,13 @@
   }
 }
 
-.upload-form button {
+.update-button {
     background-color: black !important;
     color: white !important;
     font-weight: 400;
 }
 
-.upload-form button:hover {
+.update-button:hover {
     background-color: rgba(95, 158, 160, 0.9) !important;
     color: black !important;
     font-weight: 500;
@@ -37,4 +37,19 @@
 
 ::ng-deep .mat-form-field-appearance-outline:hover .mat-form-field-outline-thick {
   stroke: lightblue !important;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.delete-button {
+  margin-left: 10px;
+  background-color: darkred !important;
+  color: white !important;
+}
+
+.delete-button:hover {
+  background-color: red !important;
 }
