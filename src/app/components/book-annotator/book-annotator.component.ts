@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
@@ -12,6 +12,7 @@ import { TextAnnotator } from 'src/app/helper classes/TextAnnotator';
 import { MatDialog } from '@angular/material/dialog';
 import { AddAnnotationComponent } from '../add-annotation/add-annotation.component';
 import { UpdateAnnotationComponent } from '../update-annotation/update-annotation.component';
+import { Note } from 'src/app/models/note';
 
 @Component({
   selector: 'app-book-annotator',
@@ -20,6 +21,10 @@ import { UpdateAnnotationComponent } from '../update-annotation/update-annotatio
 })
 export class BookAnnotatorComponent {
   @Input() version: Version | null = null;
+
+  showNote: boolean = false;
+  note: Note | undefined = undefined;
+  noteContent: string = "";
 
   userId: number = 1;
 
@@ -42,10 +47,15 @@ export class BookAnnotatorComponent {
   dialog = inject(MatDialog);
 
   constructor(
-    private versionsService: VersionsService,
+    private cdRef: ChangeDetectorRef,
+    private service: VersionsService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer
   ) {}
+
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges();
+  }
 
   ngOnInit(): void {
     this.routerId = this.route.snapshot.paramMap.get('id');
@@ -56,9 +66,9 @@ export class BookAnnotatorComponent {
     if (!this.versionId) return;
     
     forkJoin({
-      version: this.versionsService.getVersionById(this.versionId),
-      annotations: this.versionsService.getAnnotationsByVersionId(this.versionId),
-      content: this.versionsService.getPageContent(this.versionId, this.currentPage, this.pageSize)
+      version: this.service.getVersionById(this.versionId),
+      annotations: this.service.getAnnotationsByVersionId(this.versionId),
+      content: this.service.getPageContent(this.versionId, this.currentPage, this.pageSize)
     }).subscribe(({ version, annotations, content }) => {
       this.version = version;
       this.allAnnotations = annotations ?? [];
@@ -75,6 +85,12 @@ export class BookAnnotatorComponent {
       );
       this.annotatedText = this.sanitizer.bypassSecurityTrustHtml(rawAnnotated);
     });
+
+    this.service.getNoteByVersionId(this.versionId)
+      .subscribe(note => {
+        this.note = note;
+        this.noteContent = note.content;
+      })
   }
 
   getPageData(event: PageEvent) {
@@ -83,7 +99,7 @@ export class BookAnnotatorComponent {
     const nextPage = event.pageIndex;
     const nextSize = event.pageSize ?? this.pageSize;
 
-    this.versionsService
+    this.service
       .getPageContent(this.versionId, nextPage, nextSize)
       .subscribe(content => {
         this.pageText = content ?? '';
@@ -162,6 +178,15 @@ export class BookAnnotatorComponent {
           color
         }
       })
+    }
+  }
+
+  saveNote() {
+    if(this.note) {
+      this.service.updateNote(this.note.id, this.noteContent).subscribe();
+    }
+    else {
+      this.service.addNote(this.versionId, this.userId, this.noteContent).subscribe();
     }
   }
 }

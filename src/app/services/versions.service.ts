@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Version } from '../models/version';
 import { Observable } from 'rxjs';
 import { Annotation } from '../models/annotation';
+import { Note } from '../models/note';
 
 @Injectable({
   providedIn: 'root'
@@ -66,5 +67,19 @@ export class VersionsService {
 
   deleteAnnotation(id: number) {
     return this.httpClient.delete(`${environment.api}/Annotation/DeleteAnnotation/${id}`);
+  }
+
+  getNoteByVersionId(versionId: number) {
+    return this.httpClient.get<Note>(`${environment.api}/Note/GetNoteByVersionId/${versionId}`);
+  }
+
+  addNote(bookId: number, userId: number, content: string) {
+    const body = { bookId, userId, content };
+    return this.httpClient.post(`${environment.api}/Note/AddNote`, body);
+  }
+
+  updateNote(id: number, content: string) {
+    const body = { id, content };
+    return this.httpClient.put(`${environment.api}/Note/UpdateNote`, body);
   }
 }

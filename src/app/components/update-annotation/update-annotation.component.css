@@ -53,3 +53,11 @@
 .delete-button:hover {
   background-color: red !important;
 }
+
+.comment-item::after {
+  box-sizing: border-box;
+}
+
+.comment-item::before {
+  box-sizing: border-box;
+}

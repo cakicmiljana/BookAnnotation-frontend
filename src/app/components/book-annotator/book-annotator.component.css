@@ -1,6 +1,12 @@
 .card {
   margin: 30px;
   padding: 10px;
+  height: 100vh;
+  overflow: hidden !important;
+}
+
+.note-container {
+  overflow: hidden !important;
 }
 
 .book-details h2, h3, h4, h5, div {
@@ -25,4 +31,56 @@ mat-card {
   font-family: 'Roboto', sans-serif;
   white-space: normal;
   line-height: 1.6;
+}
+
+.side-button {
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.note-button {
+  margin-top: 1rem;
+  align-self: flex-end;
+  background-color: black !important;
+  color: white !important;
+  font-weight: 400;
+}
+
+.note-button:hover {
+    background-color: rgba(95, 158, 160, 0.9) !important;
+    color: black !important;
+    font-weight: 500;
+}
+
+.note-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;         /* Fill drawer height */
+  padding: 20px;
+}
+
+.note-drawer {
+  height: 100vh;        /* Full page height */
+  width: 320px;         /* Adjust width as you like */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden !important;
+}
+
+.note-form {
+  flex: 1;              /* Take all available vertical space */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.note-textarea {
+  flex: 1;              /* Expand textarea to fill space */
+  display: flex;
+  flex-direction: column;
+}
+
+mat-drawer-container {
+  height: 100vh !important;
+  overflow: hidden !important;        /* prevent container scroll */
 }

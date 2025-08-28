@@ -26,6 +26,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { AddAnnotationComponent } from './components/add-annotation/add-annotation.component';
 import {MatSelectModule} from '@angular/material/select';
 import { UpdateAnnotationComponent } from './components/update-annotation/update-annotation.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { UpdateAnnotationComponent } from './components/update-annotation/update
     VersionUploadComponent,
     AccountUpdateComponent,
     AddAnnotationComponent,
-    UpdateAnnotationComponent,
+    UpdateAnnotationComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +58,8 @@ import { UpdateAnnotationComponent } from './components/update-annotation/update
     MatInputModule,
     FormsModule,
     MatTooltipModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSidenavModule
   ],
   providers: [],
   bootstrap: [AppComponent]

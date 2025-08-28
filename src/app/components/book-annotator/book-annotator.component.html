@@ -1,28 +1,67 @@
-<mat-card class="card" appearance="outlined">
-  <mat-card-header>
-    <mat-card-title>
-      <div>
-        <h2 class="title">{{ version?.book?.title }}</h2>
-        <div class="details">
-          <div class="details-item">
-            <h3>{{ version?.book?.author }}</h3>
-            <h5>{{ version?.book?.pages }} pages</h5>
-            <h5>{{ version?.book?.country }}, {{ version?.book?.publicationYear }}.</h5>
+<mat-drawer-container class="note-container" autosize>
+
+  <!-- Left sidenav -->
+  <mat-drawer #drawer mode="side" position="start" class="note-drawer">
+    <div class="note-content">
+      <h3>Notes</h3>
+
+      <form class="note-form">
+        <mat-form-field appearance="fill" class="note-textarea">
+          <textarea 
+            matInput 
+            [(ngModel)]="noteContent" 
+            name="noteContent"
+            placeholder="Write your note here...">
+          </textarea>
+        </mat-form-field>
+      </form>
+
+      <button mat-raised-button color="primary" class="note-button" (click)="saveNote()">
+        Save note
+        <mat-icon>edit_note</mat-icon>
+      </button>
+    </div>
+  </mat-drawer>
+
+  <!-- Main content -->
+  <mat-drawer-content>
+    <button mat-raised-button class="side-button" (click)="drawer.toggle()">
+      Show notes
+      <mat-icon>sticky_note_2</mat-icon>
+    </button>
+
+    <mat-card class="card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <div>
+            <h2 class="title">{{ version?.book?.title }}</h2>
+            <div class="details">
+              <div class="details-item">
+                <h3>{{ version?.book?.author }}</h3>
+                <h5>{{ version?.book?.pages }} pages</h5>
+                <h5>{{ version?.book?.country }}, {{ version?.book?.publicationYear }}.</h5>
+              </div>
+            </div>
           </div>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="book-content" 
+             [innerHTML]="annotatedText" 
+             (mouseup)="annotateText($event)" 
+             (click)="updateAnnotation($event)">
         </div>
-      </div>
-    </mat-card-title>
-  </mat-card-header>
 
-  <mat-card-content>
-    <div class="book-content" [innerHTML]="annotatedText" (mouseup)="annotateText($event)" (click)="updateAnnotation($event)"></div>
+        <mat-paginator
+          [length]="totalPages"
+          [pageSize]="pageSize"
+          [pageIndex]="currentPage"
+          aria-label="Select page"
+          (page)="getPageData($event)">
+        </mat-paginator>
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer-content>
 
-    <mat-paginator
-      [length]="totalPages"
-      [pageSize]="pageSize"
-      [pageIndex]="currentPage"
-      aria-label="Select page"
-      (page)="getPageData($event)">
-    </mat-paginator>
-  </mat-card-content>
-</mat-card>
+</mat-drawer-container>
