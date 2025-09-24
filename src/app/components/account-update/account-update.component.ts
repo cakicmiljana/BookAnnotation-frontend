@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class AccountUpdateComponent {
   email: string = "";
   password: string = "";
 
-  constructor(private service: UsersService) {
+  constructor(private service: UsersService, private snackBar: MatSnackBar) {
 
   }
 
@@ -28,7 +29,23 @@ export class AccountUpdateComponent {
   updateUser() {
     console.log(this.data.id, this.username, this.email, this.password)
     this.service.updateUser(this.data.id, this.username, this.email, this.password)
-        .subscribe()
+        .subscribe({
+          next: (res) => {
+            this.snackBar.open('You successfully updated your data ✅', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+            });
+          },
+          error: (err) => {
+            this.snackBar.open('Data update failed ❌', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+            });
+            console.error(err);
+          }
+        })
   }
 
 }

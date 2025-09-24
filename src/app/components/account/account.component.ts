@@ -3,6 +3,7 @@ import { User } from 'src/app/models/user';
 import { UsersService } from 'src/app/services/users.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountUpdateComponent } from '../account-update/account-update.component';
+import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
   selector: 'app-account',
@@ -20,7 +21,7 @@ export class AccountComponent {
   }
 
   ngOnInit() {
-    this.service.getUserById(1)
+    this.service.getUserById(getUserId())
       .subscribe(u => this.user = u);
   }
 

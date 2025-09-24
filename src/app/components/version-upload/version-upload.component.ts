@@ -1,6 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { VersionsService } from 'src/app/services/versions.service';
+import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
   selector: 'app-version-upload',
@@ -8,13 +10,16 @@ import { VersionsService } from 'src/app/services/versions.service';
   styleUrls: ['./version-upload.component.css']
 })
 export class VersionUploadComponent {
+  @Output() versionUploaded = new EventEmitter<void>();
+
   data = inject(MAT_DIALOG_DATA);
   language: string = "";
   isbn: string = "";
   fileName: string = "";
   file: File | null = null;
+  bookId: number = 0;
 
-  constructor(private service: VersionsService) {
+  constructor(private service: VersionsService, private snackBar: MatSnackBar) {
 
   }
 
@@ -31,7 +36,27 @@ export class VersionUploadComponent {
   }
 
   uploadVersion() {
-    if(this.file)
-      this.service.uploadVersionPDF(this.file, 1, 3, this.language).subscribe();
+    if (!this.file) return;
+
+    this.service.uploadVersionPDF(this.file, getUserId(), this.data.id, this.language)
+      .subscribe({
+        next: () => {
+          this.snackBar.open('You successfully uploaded a new version ✅', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
+
+          this.versionUploaded.emit();
+        },
+        error: (err) => {
+          this.snackBar.open('Version upload failed ❌', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
+          console.error(err);
+        }
+      });
   }
 }

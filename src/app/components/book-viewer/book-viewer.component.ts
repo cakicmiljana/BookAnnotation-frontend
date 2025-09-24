@@ -6,6 +6,7 @@ import { BooksService } from 'src/app/services/books.service';
 import { VersionsService } from 'src/app/services/versions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { VersionUploadComponent } from '../version-upload/version-upload.component';
+import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
   selector: 'app-book-viewer',
@@ -35,14 +36,21 @@ export class BookViewerComponent {
       this.booksService.getBookById(this.bookId)
         .subscribe(b => this.book=b)
 
-      this.versionsService.getVersionsByBookId(this.bookId)
+      this.versionsService.getVersionsByBookId(getUserId(), this.bookId)
         .subscribe(v => this.versions=v)
     }
   }
 
   openVersionUploadDialog() {
-    this.dialog.open(VersionUploadComponent, {
+    const dialogRef = this.dialog.open(VersionUploadComponent, {
       data: this.book
     })
+
+    dialogRef.componentInstance.versionUploaded.subscribe(() => {
+      if(this.bookId)
+        this.versionsService.getVersionsByBookId(getUserId(), this.bookId)
+          .subscribe(v => this.versions=v)
+        dialogRef.close();
+    });
   }
 }

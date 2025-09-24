@@ -1,0 +1,28 @@
+/* login.component.css */
+.login-card {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+}
+
+.login-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
+}
+
+.login-button {
+    background-color: black !important;
+    color: white !important;
+    font-weight: 400;
+}
+
+.login-button:hover {
+    background-color: rgba(95, 158, 160, 0.9) !important;
+    color: black !important;
+    font-weight: 500;
+}

@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { VersionsService } from 'src/app/services/versions.service';
 
 @Component({
@@ -8,18 +9,42 @@ import { VersionsService } from 'src/app/services/versions.service';
   styleUrls: ['./add-annotation.component.css']
 })
 export class AddAnnotationComponent {
+  @Output() annotationAdded = new EventEmitter<void>();
+  
   data = inject(MAT_DIALOG_DATA);
 
   comment: string = "";
   tag: string = "";
   color: string = "lightblue";
 
-  constructor(private service: VersionsService) {
+  constructor(private dialogRef: MatDialogRef<AddAnnotationComponent>, private service: VersionsService, private snackBar: MatSnackBar) {
 
   }
 
   addAnnotation() {
     this.service.addAnnotation(this.data.versionId, this.data.userId, this.data.start, this.data.end, this.comment, this.tag, this.color)
-        .subscribe();
+        .subscribe({
+          next: (res) => {
+            this.snackBar.open('You successfully annotated this book ✅', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+            });
+
+            this.annotationAdded.emit();
+          },
+          error: (err) => {
+            this.snackBar.open('Annotation failed ❌', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+            });
+            console.error(err);
+          }
+        });
+  }
+
+  onSubmit() {
+    this.dialogRef.close();
   }
 }

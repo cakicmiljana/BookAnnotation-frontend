@@ -1,0 +1,37 @@
+<ng-component *ngIf="userId!=0; then loggedIn; else logIn">
+</ng-component>
+
+<ng-template #logIn>
+
+    <mat-card class="login-card">
+      <mat-card-header>
+        <mat-card-title>Login</mat-card-title>
+      </mat-card-header>
+      <br>
+      <mat-card-content>
+        <form (ngSubmit)="login()">
+          <mat-form-field appearance="fill" class="login-field">
+            <mat-label>Username</mat-label>
+            <input matInput [(ngModel)]="username" name="username" required>
+          </mat-form-field>
+    
+          <mat-form-field appearance="fill" class="login-field">
+            <mat-label>Password</mat-label>
+            <input matInput [(ngModel)]="password" name="password" type="password" required>
+          </mat-form-field>
+    
+          <button mat-raised-button class="login-button" type="submit">
+            Login
+          </button>
+        </form>
+    
+        <div *ngIf="errorMessage" class="error">
+          {{ errorMessage }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+</ng-template>
+
+<ng-template #loggedIn>
+    <app-menu-toolbar></app-menu-toolbar>
+</ng-template>

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Version } from 'src/app/models/version';
 import { VersionsService } from 'src/app/services/versions.service';
+import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
   selector: 'app-version-list',
@@ -17,7 +18,7 @@ export class VersionListComponent {
   }
 
   ngOnInit() : void {
-    this.service.getAllVersions()
+    this.service.getVersionsByUserId(getUserId())
       .subscribe(allVersions => this.versions = allVersions);
   }
 }

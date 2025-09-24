@@ -27,6 +27,8 @@ import { AddAnnotationComponent } from './components/add-annotation/add-annotati
 import {MatSelectModule} from '@angular/material/select';
 import { UpdateAnnotationComponent } from './components/update-annotation/update-annotation.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import { LogInComponent } from './components/log-in/log-in.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     VersionUploadComponent,
     AccountUpdateComponent,
     AddAnnotationComponent,
-    UpdateAnnotationComponent
+    UpdateAnnotationComponent,
+    LogInComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +62,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     FormsModule,
     MatTooltipModule,
     MatSelectModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -18,4 +18,8 @@ export class UsersService {
   updateUser(id: number, username: string, email: string, password: string) {
     return this.httpClient.put(`${this.api}/UpdateUser/${id}/${username}/${email}/${password}`, {});
   }
+
+  login(username: string, password: string) {
+    return this.httpClient.get<User>(`${this.api}/Login/${username}/${password}`);
+  }
 }

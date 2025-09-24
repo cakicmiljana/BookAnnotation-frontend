@@ -1,11 +1,15 @@
 .books-list-div {
     display: flex;
     flex-direction: row;
-    /* padding: 20px 0; */
+    flex-wrap: wrap;
+    max-width: 1500px;
+    margin: 0 auto;
+    gap: 20px;
+    padding: 20px;
 }
 
 .book-div {
-    flex: 0 0 auto;
+    flex: 0 0 250px;
 }
 
 .title {

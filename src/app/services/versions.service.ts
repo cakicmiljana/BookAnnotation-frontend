@@ -26,8 +26,12 @@ export class VersionsService {
     return this.httpClient.get<Version>(`${this.api}/GetVersion/${id}`);
   }
 
-  getVersionsByBookId(bookId: number) {
-    return this.httpClient.get<Version[]>(`${this.api}/GetVersionsByBookId/${bookId}`);
+  getVersionsByBookId(userId: number, bookId: number) {
+    return this.httpClient.get<Version[]>(`${this.api}/GetVersionsByBookId/${userId}/${bookId}`);
+  }
+
+  getVersionsByUserId(userId: number) {
+    return this.httpClient.get<Version[]>(`${this.api}/GetVersionsByUserId/${userId}`);
   }
 
   getContentByVersionId(id: number) {

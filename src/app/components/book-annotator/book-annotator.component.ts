@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddAnnotationComponent } from '../add-annotation/add-annotation.component';
 import { UpdateAnnotationComponent } from '../update-annotation/update-annotation.component';
 import { Note } from 'src/app/models/note';
+import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
   selector: 'app-book-annotator',
@@ -26,7 +27,9 @@ export class BookAnnotatorComponent {
   note: Note | undefined = undefined;
   noteContent: string = "";
 
-  userId: number = 1;
+  get userId(): number {
+    return getUserId();
+  }
 
   routerId: string | null = '';
   versionId: number = 0;
@@ -148,7 +151,7 @@ export class BookAnnotatorComponent {
   }
 
   annotationDialog(text: string, start: number, end: number) {
-    this.dialog.open(AddAnnotationComponent, {
+    const dialogRef = this.dialog.open(AddAnnotationComponent, {
       data: {
         userId: this.userId,
         versionId: this.versionId,
@@ -157,6 +160,13 @@ export class BookAnnotatorComponent {
         end
       }
     })
+
+    dialogRef.componentInstance.annotationAdded.subscribe(() => {
+        this.ngOnInit(),
+        dialogRef.close();
+      }
+    )
+
   }
 
   updateAnnotation(event: MouseEvent) {
