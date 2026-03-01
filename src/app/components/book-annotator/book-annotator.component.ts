@@ -16,9 +16,10 @@ import { Note } from 'src/app/models/note';
 import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
-  selector: 'app-book-annotator',
-  templateUrl: './book-annotator.component.html',
-  styleUrls: ['./book-annotator.component.css']
+    selector: 'app-book-annotator',
+    templateUrl: './book-annotator.component.html',
+    styleUrls: ['./book-annotator.component.css'],
+    standalone: false
 })
 export class BookAnnotatorComponent {
   @Input() version: Version | null = null;

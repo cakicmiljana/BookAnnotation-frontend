@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { BookDetails } from 'src/app/models/bookdetails';
+import { Version } from 'src/app/models/version';
 import { VersionsService } from 'src/app/services/versions.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { VersionsService } from 'src/app/services/versions.service';
     standalone: false
 })
 export class VersionPreviewComponent {
-  @Input() version: BookDetails | null = null;
+  @Input() version: Version | null = null;
 
   constructor(private service: VersionsService) {
 
