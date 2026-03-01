@@ -4,9 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { VersionsService } from 'src/app/services/versions.service';
 
 @Component({
-  selector: 'app-add-annotation',
-  templateUrl: './add-annotation.component.html',
-  styleUrls: ['./add-annotation.component.css']
+    selector: 'app-add-annotation',
+    templateUrl: './add-annotation.component.html',
+    styleUrls: ['./add-annotation.component.css'],
+    standalone: false
 })
 export class AddAnnotationComponent {
   @Output() annotationAdded = new EventEmitter<void>();

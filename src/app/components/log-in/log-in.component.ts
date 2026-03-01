@@ -4,9 +4,10 @@ import { UsersService } from 'src/app/services/users.service';
 import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
-  selector: 'app-log-in',
-  templateUrl: './log-in.component.html',
-  styleUrls: ['./log-in.component.css']
+    selector: 'app-log-in',
+    templateUrl: './log-in.component.html',
+    styleUrls: ['./log-in.component.css'],
+    standalone: false
 })
 export class LogInComponent {
   username = '';

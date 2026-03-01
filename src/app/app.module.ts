@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BookListComponent } from './components/book-list/book-list.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BookPreviewComponent } from './components/book-preview/book-preview.component';
 import { BookViewerComponent } from './components/book-viewer/book-viewer.component';
 import { VersionListComponent } from './components/version-list/version-list.component';
@@ -30,42 +30,35 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { LogInComponent } from './components/log-in/log-in.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    BookListComponent,
-    BookPreviewComponent,
-    BookViewerComponent,
-    VersionListComponent,
-    MenuToolbarComponent,
-    AccountComponent,
-    VersionPreviewComponent,
-    BookAnnotatorComponent,
-    VersionUploadComponent,
-    AccountUpdateComponent,
-    AddAnnotationComponent,
-    UpdateAnnotationComponent,
-    LogInComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    MatPaginatorModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    MatInputModule,
-    FormsModule,
-    MatTooltipModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSnackBarModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        BookListComponent,
+        BookPreviewComponent,
+        BookViewerComponent,
+        VersionListComponent,
+        MenuToolbarComponent,
+        AccountComponent,
+        VersionPreviewComponent,
+        BookAnnotatorComponent,
+        VersionUploadComponent,
+        AccountUpdateComponent,
+        AddAnnotationComponent,
+        UpdateAnnotationComponent,
+        LogInComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        MatCardModule,
+        MatPaginatorModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        MatInputModule,
+        FormsModule,
+        MatTooltipModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatSnackBarModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }

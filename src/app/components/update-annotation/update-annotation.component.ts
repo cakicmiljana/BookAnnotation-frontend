@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { VersionsService } from 'src/app/services/versions.service';
 
 @Component({
-  selector: 'app-update-annotation',
-  templateUrl: './update-annotation.component.html',
-  styleUrls: ['./update-annotation.component.css']
+    selector: 'app-update-annotation',
+    templateUrl: './update-annotation.component.html',
+    styleUrls: ['./update-annotation.component.css'],
+    standalone: false
 })
 export class UpdateAnnotationComponent {
   data = inject(MAT_DIALOG_DATA);
