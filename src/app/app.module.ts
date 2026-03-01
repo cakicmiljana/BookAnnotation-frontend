@@ -31,6 +31,8 @@ import { LogInComponent } from './components/log-in/log-in.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { ReactionComponent } from './components/reaction/reaction.component';
 import { FollowersListComponent } from './components/followers-list/followers-list.component';
+import { ThreadComponent } from './components/thread/thread.component';
+import { FeedComponent } from './components/feed/feed.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -48,7 +50,9 @@ import { FollowersListComponent } from './components/followers-list/followers-li
         UpdateAnnotationComponent,
         LogInComponent,
         ReactionComponent,
-        FollowersListComponent
+        FollowersListComponent,
+        ThreadComponent,
+        FeedComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
