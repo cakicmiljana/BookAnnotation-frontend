@@ -29,6 +29,8 @@ import { UpdateAnnotationComponent } from './components/update-annotation/update
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { LogInComponent } from './components/log-in/log-in.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { ReactionComponent } from './components/reaction/reaction.component';
+import { FollowersListComponent } from './components/followers-list/followers-list.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -44,7 +46,9 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
         AccountUpdateComponent,
         AddAnnotationComponent,
         UpdateAnnotationComponent,
-        LogInComponent
+        LogInComponent,
+        ReactionComponent,
+        FollowersListComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
