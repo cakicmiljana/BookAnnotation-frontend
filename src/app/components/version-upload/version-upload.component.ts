@@ -5,9 +5,10 @@ import { VersionsService } from 'src/app/services/versions.service';
 import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
-  selector: 'app-version-upload',
-  templateUrl: './version-upload.component.html',
-  styleUrls: ['./version-upload.component.css']
+    selector: 'app-version-upload',
+    templateUrl: './version-upload.component.html',
+    styleUrls: ['./version-upload.component.css'],
+    standalone: false
 })
 export class VersionUploadComponent {
   @Output() versionUploaded = new EventEmitter<void>();

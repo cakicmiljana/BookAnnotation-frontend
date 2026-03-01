@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-reaction',
-  imports: [],
   templateUrl: './reaction.component.html',
-  styleUrl: './reaction.component.css'
+  styleUrl: './reaction.component.css',
+  standalone: false
 })
 export class ReactionComponent {
 
