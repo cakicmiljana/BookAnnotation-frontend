@@ -34,7 +34,7 @@ export class BookViewerComponent {
 
     if(this.bookId) {
       this.booksService.getBookById(this.bookId)
-        .subscribe(b => this.book=b)
+        .subscribe(b => this.book = b ?? null)
 
       this.versionsService.getVersionsByBookId(getUserId(), this.bookId)
         .subscribe(v => this.versions=v)

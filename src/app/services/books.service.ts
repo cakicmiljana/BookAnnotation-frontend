@@ -1,24 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Book } from '../models/book';
-import { environment } from 'src/environments/environment';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BooksService {
 
-  api: string = environment.api + "/Book"
+  private dataUrl = 'assets/mock-data.json';
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient) {}
 
+  getAllBooks(): Observable<Book[]> {
+    return this.httpClient.get<any>(this.dataUrl).pipe(
+      map(data => data.books)
+    );
   }
 
-  getAllBooks() {
-    return this.httpClient.get<Book[]>(this.api + "/GetAllBooks")
-  }
-
-  getBookById(id: number) {
-    return this.httpClient.get<Book>(`${this.api}/GetBook/${id}`);
+  getBookById(id: number): Observable<Book | undefined> {
+    return this.httpClient.get<any>(this.dataUrl).pipe(
+      map(data => data.books.find((b: Book) => b.id === id))
+    );
   }
 }

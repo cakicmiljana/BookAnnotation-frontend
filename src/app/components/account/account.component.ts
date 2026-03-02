@@ -22,7 +22,7 @@ export class AccountComponent {
 
   ngOnInit() {
     this.service.getUserById(getUserId())
-      .subscribe(u => this.user = u);
+      .subscribe(u => this.user = u || null);
   }
 
   openUserUpdateDialog() {

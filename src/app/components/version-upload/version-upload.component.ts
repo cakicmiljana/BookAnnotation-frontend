@@ -39,25 +39,25 @@ export class VersionUploadComponent {
   uploadVersion() {
     if (!this.file) return;
 
-    this.service.uploadVersionPDF(this.file, getUserId(), this.data.id, this.language)
-      .subscribe({
-        next: () => {
-          this.snackBar.open('You successfully uploaded a new version ✅', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-          });
+    // this.service.uploadVersionPDF(this.file, getUserId(), this.data.id, this.language)
+    //   .subscribe({
+    //     next: () => {
+    //       this.snackBar.open('You successfully uploaded a new version ✅', 'Close', {
+    //         duration: 3000,
+    //         horizontalPosition: 'center',
+    //         verticalPosition: 'bottom',
+    //       });
 
-          this.versionUploaded.emit();
-        },
-        error: (err) => {
-          this.snackBar.open('Version upload failed ❌', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-          });
-          console.error(err);
-        }
-      });
+    //       this.versionUploaded.emit();
+    //     },
+    //     error: (err) => {
+    //       this.snackBar.open('Version upload failed ❌', 'Close', {
+    //         duration: 3000,
+    //         horizontalPosition: 'center',
+    //         verticalPosition: 'bottom',
+    //       });
+    //       console.error(err);
+    //     }
+    //   });
   }
 }

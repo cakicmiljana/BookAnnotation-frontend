@@ -1,4 +1,4 @@
-export interface Connection {
+export interface Follow {
     followerId: number;
     followingId: number;
 }

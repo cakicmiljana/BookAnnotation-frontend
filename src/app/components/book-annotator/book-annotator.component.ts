@@ -74,7 +74,7 @@ export class BookAnnotatorComponent {
       annotations: this.service.getAnnotationsByVersionId(this.versionId),
       content: this.service.getPageContent(this.versionId, this.currentPage, this.pageSize)
     }).subscribe(({ version, annotations, content }) => {
-      this.version = version;
+      this.version = version ?? null;
       this.allAnnotations = annotations ?? [];
       this.pageText = content ?? '';
       
@@ -93,7 +93,9 @@ export class BookAnnotatorComponent {
     this.service.getNoteByVersionId(this.versionId)
       .subscribe(note => {
         this.note = note;
-        this.noteContent = note.content;
+        if (note) {
+          this.noteContent = note.content;
+        }
       })
   }
 

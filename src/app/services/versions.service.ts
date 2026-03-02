@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Book } from '../models/book';
-import { environment } from 'src/environments/environment';
 import { Version } from '../models/version';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Annotation } from '../models/annotation';
 import { Note } from '../models/note';
 
@@ -12,78 +10,98 @@ import { Note } from '../models/note';
 })
 export class VersionsService {
 
-  api: string = environment.api + "/Version"
+  private dataUrl = 'assets/mock-data.json';
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient) {}
 
-  }
-
-  getAllVersions() {
-    return this.httpClient.get<Version[]>(this.api + "/GetAllVersions");
-  }
-
-  getVersionById(id: number) {
-    return this.httpClient.get<Version>(`${this.api}/GetVersion/${id}`);
-  }
-
-  getVersionsByBookId(userId: number, bookId: number) {
-    return this.httpClient.get<Version[]>(`${this.api}/GetVersionsByBookId/${userId}/${bookId}`);
-  }
-
-  getVersionsByUserId(userId: number) {
-    return this.httpClient.get<Version[]>(`${this.api}/GetVersionsByUserId/${userId}`);
-  }
-
-  getContentByVersionId(id: number) {
-    return this.httpClient.get<string>(`${this.api}/GetContentByVersionId/${id}`);
-  }
-
-  getPageContent(id: number, page: number, pageSize: number) {
-    return this.httpClient.get(`${this.api}/GetPage?id=${id}&page=${page}&pageSize=${pageSize}`,
-      {
-        responseType: 'text'
-      }
+  getAllVersions(): Observable<Version[]> {
+    return this.httpClient.get<any>(this.dataUrl).pipe(
+      map(data => data.versions)
     );
   }
 
-  uploadVersionPDF(file: File, userId: number, bookId: number, language: string) {
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    return this.httpClient.post(`${environment.api}/File/UploadPdf/${userId}/${bookId}/${language}`, formData);
+  getVersionById(id: number): Observable<Version | undefined> {
+    return this.httpClient.get<any>(this.dataUrl).pipe(
+      map(data => data.versions.find((v: Version) => v.id === id))
+    );
   }
 
-  getAnnotationsByVersionId(versionId: number) {
-    return this.httpClient.get<Annotation[]>(`${environment.api}/Annotation/GetAnnotationsByVersionId/${versionId}`);
+  getVersionsByBookId(userId: number, bookId: number): Observable<Version[]> {
+    return this.httpClient.get<any>(this.dataUrl).pipe(
+      map(data =>
+        data.versions.filter(
+          (v: Version) => v.bookId === bookId && v.userId === userId
+        )
+      )
+    );
   }
 
-  addAnnotation(bookId: number, userId: number, startOffset: number, endOffset: number, comment: string, tag: string, color: string) {
-    const body = { bookId, userId, startOffset, endOffset, comment, tag, color };
-    return this.httpClient.post(`${environment.api}/Annotation/AddAnnotation`, body);
-    // return this.httpClient.post(`${environment.api}/Annotation/AddAnnotation/${versionId}/${userId}/${start}/${end}/${comment}/${tag}/${color}`, {});
+  getVersionsByUserId(userId: number): Observable<Version[]> {
+    return this.httpClient.get<any>(this.dataUrl).pipe(
+      map(data =>
+        data.versions.filter((v: Version) => v.userId === userId)
+      )
+    );
   }
 
-  updateAnnotation(id: number, startOffset: number, endOffset: number, comment: string, tag: string, color: string) {
-    const body = { id, startOffset, endOffset, comment, tag, color };
-    return this.httpClient.put(`${environment.api}/Annotation/UpdateAnnotation`, body);
-    // return this.httpClient.post(`${environment.api}/Annotation/AddAnnotation/${versionId}/${userId}/${start}/${end}/${comment}/${tag}/${color}`, {});
+  getContentByVersionId(id: number): Observable<string | undefined> {
+    return this.httpClient.get<any>(this.dataUrl).pipe(
+      map(data => data.versions.find((v: Version) => v.id === id)?.content)
+    );
   }
 
-  deleteAnnotation(id: number) {
-    return this.httpClient.delete(`${environment.api}/Annotation/DeleteAnnotation/${id}`);
+  getPageContent(id: number, page: number, pageSize: number): Observable<string> {
+    return this.getContentByVersionId(id).pipe(
+      map(content => {
+        if (!content) return '';
+        const start = page * pageSize;
+        const end = start + pageSize;
+        return content.substring(start, end);
+      })
+    );
   }
 
-  getNoteByVersionId(versionId: number) {
-    return this.httpClient.get<Note>(`${environment.api}/Note/GetNoteByVersionId/${versionId}`);
+  getAnnotationsByVersionId(versionId: number): Observable<Annotation[]> {
+    return this.httpClient.get<any>(this.dataUrl).pipe(
+      map(data =>
+        data.annotations.filter(
+          (a: Annotation) => a.bookId === versionId
+        )
+      )
+    );
   }
 
-  addNote(bookId: number, userId: number, content: string) {
-    const body = { bookId, userId, content };
-    return this.httpClient.post(`${environment.api}/Note/AddNote`, body);
+  getNoteByVersionId(versionId: number): Observable<Note | undefined> {
+    return this.httpClient.get<any>(this.dataUrl).pipe(
+      map(data =>
+        data.notes.find((n: Note) => n.bookId === versionId)
+      )
+    );
   }
 
-  updateNote(id: number, content: string) {
-    const body = { id, content };
-    return this.httpClient.put(`${environment.api}/Note/UpdateNote`, body);
+  // Mock-only actions
+  addAnnotation(versionId: any, userId: any, start: any, end: any, comment: string, tag: string, color: string) {
+    console.warn('Mock mode: addAnnotation does not persist.');
+    return new Observable(observer => observer.next(true));
+  }
+
+  updateAnnotation(id: any, start: any, end: any, comment: string, tag: string, color: string) {
+    console.warn('Mock mode: updateAnnotation does not persist.');
+    return new Observable(observer => observer.next(true));
+  }
+
+  deleteAnnotation(id: any) {
+    console.warn('Mock mode: deleteAnnotation does not persist.');
+    return new Observable(observer => observer.next(true));
+  }
+
+  addNote(versionId: number, userId: number, noteContent: string) {
+    console.warn('Mock mode: addNote does not persist.');
+    return new Observable(observer => observer.next(true));
+  }
+
+  updateNote(id: number, noteContent: string) {
+    console.warn('Mock mode: updateNote does not persist.');
+    return new Observable(observer => observer.next(true));
   }
 }
