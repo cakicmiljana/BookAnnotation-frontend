@@ -4,16 +4,16 @@ import { PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { Version } from 'src/app/models/version';
 import { Annotation } from 'src/app/models/annotation';
 
-import { VersionsService } from 'src/app/services/versions.service';
+import { BooksService } from 'src/app/services/books.service';
 import { TextAnnotator } from 'src/app/helper classes/TextAnnotator';
 import { MatDialog } from '@angular/material/dialog';
 import { AddAnnotationComponent } from '../add-annotation/add-annotation.component';
 import { UpdateAnnotationComponent } from '../update-annotation/update-annotation.component';
 import { Note } from 'src/app/models/note';
 import { setUserId, getUserId } from 'src/environments/userLoggedIn';
+import { Book } from 'src/app/models/book';
 
 @Component({
     selector: 'app-book-annotator',
@@ -22,7 +22,7 @@ import { setUserId, getUserId } from 'src/environments/userLoggedIn';
     standalone: false
 })
 export class BookAnnotatorComponent {
-  @Input() version: Version | null = null;
+  @Input() book: Book | null = null;
 
   showNote: boolean = false;
   note: Note | undefined = undefined;
@@ -33,7 +33,7 @@ export class BookAnnotatorComponent {
   }
 
   routerId: string | null = '';
-  versionId: number = 0;
+  bookId: number = 0;
 
   currentPage = 0;
   pageSize = 3000;
@@ -41,6 +41,7 @@ export class BookAnnotatorComponent {
 
   pageText = '';
   annotatedText: SafeHtml = '';
+  fullContent: string = '';
 
   annotator: TextAnnotator | null = null;
   allAnnotations: Annotation[] = [];
@@ -52,7 +53,7 @@ export class BookAnnotatorComponent {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private service: VersionsService,
+    private service: BooksService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer
   ) {}
@@ -64,33 +65,24 @@ export class BookAnnotatorComponent {
   ngOnInit(): void {
     this.routerId = this.route.snapshot.paramMap.get('id');
     if (this.routerId && this.routerId.startsWith(':')) {
-      this.versionId = Number(this.routerId.slice(1));
+      this.bookId = Number(this.routerId.slice(1));
     }
-    
-    if (!this.versionId) return;
-    
+
+    if (!this.bookId) return;
+
     forkJoin({
-      version: this.service.getVersionById(this.versionId),
-      annotations: this.service.getAnnotationsByVersionId(this.versionId),
-      content: this.service.getPageContent(this.versionId, this.currentPage, this.pageSize)
-    }).subscribe(({ version, annotations, content }) => {
-      this.version = version ?? null;
+      book: this.service.getBookById(this.bookId),
+      annotations: this.service.getAnnotationsByBookId(this.bookId)
+    }).subscribe(({ book, annotations }) => {
+      this.book = book ?? null;
       this.allAnnotations = annotations ?? [];
-      this.pageText = content ?? '';
-      
-      this.totalPages = content.length*this.pageSize
-      
-      this.annotator = new TextAnnotator();
-      const rawAnnotated = this.annotator.annotateText(
-        this.pageText,
-        this.allAnnotations,
-        this.currentPage,
-        this.pageSize
-      );
-      this.annotatedText = this.sanitizer.bypassSecurityTrustHtml(rawAnnotated);
+      this.fullContent = this.book?.content ?? '';
+      this.pageSize = this.book?.pageSize ?? 3000;
+      this.totalPages = Math.ceil(this.fullContent.length / this.pageSize);
+      this.setPageText();
     });
 
-    this.service.getNoteByVersionId(this.versionId)
+    this.service.getNote(this.userId, this.bookId)
       .subscribe(note => {
         this.note = note;
         if (note) {
@@ -99,31 +91,29 @@ export class BookAnnotatorComponent {
       })
   }
 
+  setPageText() {
+    const start = this.currentPage * this.pageSize;
+    const end = start + this.pageSize;
+    this.pageText = this.fullContent.substring(start, end);
+    if (!this.annotator) {
+      this.annotator = new TextAnnotator();
+    }
+    const rawAnnotated = this.annotator.annotateText(
+      this.pageText,
+      this.allAnnotations,
+      this.currentPage,
+      this.pageSize
+    );
+    this.annotatedText = this.sanitizer.bypassSecurityTrustHtml(rawAnnotated);
+  }
+
   getPageData(event: PageEvent) {
-    if (this.versionId === null) return;
+    if (!this.bookId) return;
 
-    const nextPage = event.pageIndex;
-    const nextSize = event.pageSize ?? this.pageSize;
-
-    this.service
-      .getPageContent(this.versionId, nextPage, nextSize)
-      .subscribe(content => {
-        this.pageText = content ?? '';
-        this.pageSize = nextSize;
-        this.currentPage = nextPage;
-
-        if (!this.annotator) {
-          this.annotator = new TextAnnotator();
-        }
-
-        const rawAnnotated = this.annotator.annotateText(
-          this.pageText,
-          this.allAnnotations,
-          this.currentPage,
-          this.pageSize
-        );
-        this.annotatedText = this.sanitizer.bypassSecurityTrustHtml(rawAnnotated);
-      });
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize ?? this.pageSize;
+    this.totalPages = Math.ceil(this.fullContent.length / this.pageSize);
+    this.setPageText();
   }
 
   annotateText(event: MouseEvent) {
@@ -157,7 +147,7 @@ export class BookAnnotatorComponent {
     const dialogRef = this.dialog.open(AddAnnotationComponent, {
       data: {
         userId: this.userId,
-        versionId: this.versionId,
+        bookId: this.bookId,
         text,
         start,
         end
@@ -199,7 +189,7 @@ export class BookAnnotatorComponent {
       this.service.updateNote(this.note.id, this.noteContent).subscribe();
     }
     else {
-      this.service.addNote(this.versionId, this.userId, this.noteContent).subscribe();
+      this.service.addNote(this.bookId, this.userId, this.noteContent).subscribe();
     }
   }
 }

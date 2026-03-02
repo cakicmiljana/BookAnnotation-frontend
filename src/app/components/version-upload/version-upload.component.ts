@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { VersionsService } from 'src/app/services/versions.service';
+import { BooksService } from 'src/app/services/books.service';
 import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
@@ -20,7 +20,7 @@ export class VersionUploadComponent {
   file: File | null = null;
   bookId: number = 0;
 
-  constructor(private service: VersionsService, private snackBar: MatSnackBar) {
+  constructor(private service: BooksService, private snackBar: MatSnackBar) {
 
   }
 

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Version } from 'src/app/models/version';
-import { VersionsService } from 'src/app/services/versions.service';
+import { Book } from 'src/app/models/book';
+import { BooksService } from 'src/app/services/books.service';
 import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
@@ -11,14 +11,14 @@ import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 })
 export class VersionListComponent {
   // @Input() 
-  versions : Version[] | null = null;
+  versions : Book[] | null = null;
 
-  constructor(private service: VersionsService) {
+  constructor(private service: BooksService) {
 
   }
 
   ngOnInit() : void {
-    this.service.getVersionsByUserId(getUserId())
+    this.service.getAllBooks()
       .subscribe(allVersions => this.versions = allVersions);
   }
 }

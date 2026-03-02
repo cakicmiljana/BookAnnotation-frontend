@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { VersionsService } from 'src/app/services/versions.service';
+import { BooksService } from 'src/app/services/books.service';
 
 @Component({
     selector: 'app-add-annotation',
@@ -18,12 +18,12 @@ export class AddAnnotationComponent {
   tag: string = "";
   color: string = "lightblue";
 
-  constructor(private dialogRef: MatDialogRef<AddAnnotationComponent>, private service: VersionsService, private snackBar: MatSnackBar) {
+  constructor(private dialogRef: MatDialogRef<AddAnnotationComponent>, private service: BooksService, private snackBar: MatSnackBar) {
 
   }
 
   addAnnotation() {
-    this.service.addAnnotation(this.data.versionId, this.data.userId, this.data.start, this.data.end, this.comment, this.tag, this.color)
+    this.service.addAnnotation(this.data.bookId, this.data.userId, this.data.start, this.data.end, this.comment, this.tag, this.color)
         .subscribe({
           next: (res) => {
             this.snackBar.open('You successfully annotated this book ✅', 'Close', {

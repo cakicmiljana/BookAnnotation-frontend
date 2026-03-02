@@ -9,4 +9,6 @@ export interface Book {
     publicationYear: number;
     createdAt: Date;
     deletedAt: Date | null;
+    content: string;
+    pageSize: number;
 }

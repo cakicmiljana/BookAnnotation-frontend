@@ -84,3 +84,9 @@ mat-drawer-container {
   height: 100vh !important;
   overflow: hidden !important;        /* prevent container scroll */
 }
+
+.page-info {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  text-align: right;
+}

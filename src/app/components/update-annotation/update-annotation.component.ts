@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { VersionsService } from 'src/app/services/versions.service';
+import { BooksService } from 'src/app/services/books.service';
 
 @Component({
     selector: 'app-update-annotation',
@@ -15,7 +15,7 @@ export class UpdateAnnotationComponent {
   tag: string = "";
   color: string = "lightblue";
 
-  constructor(private service: VersionsService) {
+  constructor(private service: BooksService) {
     this.comment = this.data.comment;
     this.tag = this.data.tag;
     this.color = this.data.color;

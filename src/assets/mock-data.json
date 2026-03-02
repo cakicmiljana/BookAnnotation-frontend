@@ -2,9 +2,9 @@
   "users": [
     {
       "id": 1,
-      "username": "miljana",
+      "username": "",
       "email": "miljana@example.com",
-      "password": "Test123!",
+      "password": "",
       "passwordHash": "$2b$10$hash1",
       "bio": "Frontend dev. Obsessed with marginalia.",
       "avatarUrl": "https://i.pravatar.cc/150?img=1",
@@ -21,98 +21,94 @@
       "avatarUrl": "https://i.pravatar.cc/150?img=2",
       "createdAt": "2026-01-02T10:00:00Z",
       "deletedAt": null
-    },
-    {
-      "id": 3,
-      "username": "ana",
-      "email": "ana@example.com",
-      "password": "Test123!",
-      "passwordHash": "$2b$10$hash3",
-      "bio": "Literature student.",
-      "avatarUrl": "https://i.pravatar.cc/150?img=3",
-      "createdAt": "2026-01-03T11:00:00Z",
-      "deletedAt": null
-    },
-    {
-      "id": 4,
-      "username": "marko",
-      "email": "marko@example.com",
-      "password": "Test123!",
-      "passwordHash": "$2b$10$hash4",
-      "bio": "Philosophy & existentialism.",
-      "avatarUrl": "https://i.pravatar.cc/150?img=4",
-      "createdAt": "2026-01-05T12:00:00Z",
-      "deletedAt": null
     }
   ],
 
   "books": [
-    { "id": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "country": "USA", "language": "English", "pages": 218, "description": "Wealth, illusion, and the American Dream.", "publicationYear": 1925, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 2, "title": "Crime and Punishment", "author": "Fyodor Dostoevsky", "country": "Russia", "language": "Russian", "pages": 671, "description": "A psychological exploration of guilt.", "publicationYear": 1866, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 3, "title": "Pride and Prejudice", "author": "Jane Austen", "country": "UK", "language": "English", "pages": 432, "description": "Love and class in Regency England.", "publicationYear": 1813, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 4, "title": "The Stranger", "author": "Albert Camus", "country": "France", "language": "French", "pages": 184, "description": "Absurdism and alienation.", "publicationYear": 1942, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 5, "title": "1984", "author": "George Orwell", "country": "UK", "language": "English", "pages": 328, "description": "Totalitarianism and surveillance.", "publicationYear": 1949, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 6, "title": "The Trial", "author": "Franz Kafka", "country": "Austria", "language": "German", "pages": 255, "description": "Bureaucracy and existential dread.", "publicationYear": 1925, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 7, "title": "To the Lighthouse", "author": "Virginia Woolf", "country": "UK", "language": "English", "pages": 209, "description": "Stream of consciousness narrative.", "publicationYear": 1927, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 8, "title": "The Brothers Karamazov", "author": "Fyodor Dostoevsky", "country": "Russia", "language": "Russian", "pages": 824, "description": "Faith, doubt, and morality.", "publicationYear": 1880, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 9, "title": "Jane Eyre", "author": "Charlotte Brontë", "country": "UK", "language": "English", "pages": 500, "description": "Independence and passion.", "publicationYear": 1847, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 10, "title": "The Metamorphosis", "author": "Franz Kafka", "country": "Austria", "language": "German", "pages": 201, "description": "Isolation and transformation.", "publicationYear": 1915, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 11, "title": "Anna Karenina", "author": "Leo Tolstoy", "country": "Russia", "language": "Russian", "pages": 864, "description": "Love, betrayal, society.", "publicationYear": 1877, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null },
-    { "id": 12, "title": "Brave New World", "author": "Aldous Huxley", "country": "UK", "language": "English", "pages": 311, "description": "Technological dystopia.", "publicationYear": 1932, "createdAt": "2026-01-01T00:00:00Z", "deletedAt": null }
-  ],
-
-  "versions": [
     {
       "id": 1,
-      "bookId": 1,
-      "userId": 1,
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "country": "USA",
       "language": "English",
-      "fileType": "text/plain",
+      "pages": 218,
+      "description": "Wealth, illusion, and the American Dream.",
+      "publicationYear": 1925,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "deletedAt": null,
       "pageSize": 1200,
-      "content": "In my younger and more vulnerable years my father gave me some advice... \n\nThe story unfolds with quiet elegance, describing parties glowing against the darkness of Long Island nights. Gatsby stands at the edge of the dock, staring toward the green light across the bay. His hope feels infinite, stretched thin between memory and illusion.\n\nThe summer air trembles with expectation. Conversations float across marble halls, laughter dissolves into jazz rhythms, and the American Dream quietly fractures beneath the weight of ambition.\n\n[Repeat paragraphs intentionally for pagination testing]\n\nGatsby believed in the green light, the orgastic future that year by year recedes before us. It eluded us then, but that’s no matter—to-morrow we will run faster, stretch out our arms farther...\n\nSo we beat on, boats against the current, borne back ceaselessly into the past."
+      "content": "In my younger and more vulnerable years my father gave me some advice...\n\nThe story unfolds with quiet elegance. Gatsby stands at the edge of the dock, staring toward the green light across the bay. His hope feels infinite, stretched thin between memory and illusion.\n\n[Extended repeated paragraphs for pagination testing]\n\nGatsby believed in the green light, the orgastic future that year by year recedes before us..."
     },
-
     {
       "id": 2,
-      "bookId": 2,
-      "userId": 1,
+      "title": "Crime and Punishment",
+      "author": "Fyodor Dostoevsky",
+      "country": "Russia",
       "language": "Russian",
-      "fileType": "text/plain",
+      "pages": 671,
+      "description": "A psychological exploration of guilt.",
+      "publicationYear": 1866,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "deletedAt": null,
       "pageSize": 1500,
-      "content": "On an exceptionally hot evening early in July a young man came out of the garret in which he lodged... \n\nRaskolnikov walked slowly, as though each step demanded a moral justification. The oppressive heat mirrored the weight inside his mind. Every thought returned to the same terrible calculation.\n\nHe oscillated between arrogance and despair. The city seemed to close in on him — alleys narrowing, shadows deepening. Petersburg itself became an accomplice to his crime.\n\nThe guilt was not immediate. It arrived slowly, seeping through dreams, conversations, fever. Redemption, however, was distant — waiting somewhere beyond confession."
+      "content": "On an exceptionally hot evening early in July a young man came out of the garret...\n\nRaskolnikov walked slowly, as though each step demanded a moral justification. The oppressive heat mirrored the weight inside his mind...\n\nHe oscillated between arrogance and despair."
     }
   ],
 
   "annotations": [
-    { "id": 1, "bookId": 1, "userId": 1, "startOffset": 120, "endOffset": 300, "comment": "The green light as a metaphor for unreachable desire.", "tag": "symbolism", "color": "#FFD54F", "visibility": "public", "createdAt": "2026-02-01T12:00:00Z", "deletedAt": null },
-    { "id": 2, "bookId": 1, "userId": 2, "startOffset": 400, "endOffset": 520, "comment": "Gatsby is both tragic and delusional.", "tag": "character", "color": "#81C784", "visibility": "followers", "createdAt": "2026-02-01T13:00:00Z", "deletedAt": null },
-    { "id": 3, "bookId": 2, "userId": 3, "startOffset": 200, "endOffset": 400, "comment": "The murder is framed as philosophical experiment.", "tag": "philosophy", "color": "#BA68C8", "visibility": "public", "createdAt": "2026-02-02T14:00:00Z", "deletedAt": null },
-    { "id": 4, "bookId": 2, "userId": 4, "startOffset": 450, "endOffset": 600, "comment": "Guilt manifests physically before spiritually.", "tag": "theme", "color": "#FF8A65", "visibility": "private", "createdAt": "2026-02-02T15:00:00Z", "deletedAt": null }
+    {
+      "id": 1,
+      "bookId": 1,
+      "userId": 1,
+      "startOffset": 120,
+      "endOffset": 300,
+      "comment": "The green light as a metaphor for unreachable desire.",
+      "tag": "symbolism",
+      "color": "#FFD54F",
+      "visibility": "public",
+      "createdAt": "2026-02-01T12:00:00Z",
+      "deletedAt": null
+    },
+    {
+      "id": 2,
+      "bookId": 2,
+      "userId": 2,
+      "startOffset": 200,
+      "endOffset": 400,
+      "comment": "The murder is framed as philosophical experiment.",
+      "tag": "philosophy",
+      "color": "#BA68C8",
+      "visibility": "public",
+      "createdAt": "2026-02-02T14:00:00Z",
+      "deletedAt": null
+    }
   ],
 
   "annotationComments": [
-    { "id": 1, "annotationId": 1, "userId": 2, "content": "Yes! It’s pure longing.", "createdAt": "2026-02-03T10:00:00Z", "deletedAt": null },
-    { "id": 2, "annotationId": 1, "userId": 3, "content": "Or maybe self-deception?", "createdAt": "2026-02-03T11:00:00Z", "deletedAt": null },
-    { "id": 3, "annotationId": 3, "userId": 4, "content": "Exactly, he rationalizes it as theory.", "createdAt": "2026-02-04T09:00:00Z", "deletedAt": null }
+    {
+      "id": 1,
+      "annotationId": 1,
+      "userId": 2,
+      "content": "Yes! It’s pure longing.",
+      "createdAt": "2026-02-03T10:00:00Z",
+      "deletedAt": null
+    }
   ],
 
   "reactions": [
-    { "id": 1, "annotationId": 1, "userId": 2, "type": "like" },
-    { "id": 2, "annotationId": 1, "userId": 3, "type": "love" },
-    { "id": 3, "annotationId": 2, "userId": 1, "type": "disagree" },
-    { "id": 4, "annotationId": 3, "userId": 2, "type": "love" }
+    { "id": 1, "annotationId": 1, "userId": 2, "type": "like" }
   ],
 
   "notes": [
-    { "id": 1, "bookId": 1, "userId": 1, "content": "Compare Gatsby’s illusion with modern influencer culture." },
-    { "id": 2, "bookId": 2, "userId": 2, "content": "Track Raskolnikov’s psychological shifts chapter by chapter." }
+    {
+      "id": 1,
+      "bookId": 1,
+      "userId": 1,
+      "content": "Compare Gatsby’s illusion with modern influencer culture."
+    }
   ],
 
   "follows": [
-    { "followerId": 1, "followingId": 2 },
-    { "followerId": 1, "followingId": 3 },
-    { "followerId": 2, "followingId": 1 },
-    { "followerId": 3, "followingId": 1 },
-    { "followerId": 4, "followingId": 2 }
+    { "followerId": 1, "followingId": 2 }
   ]
 }
