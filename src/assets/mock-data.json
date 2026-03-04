@@ -2,9 +2,9 @@
   "users": [
     {
       "id": 1,
-      "username": "",
+      "username": "miljana",
       "email": "miljana@example.com",
-      "password": "",
+      "password": "a",
       "passwordHash": "$2b$10$hash1",
       "bio": "Frontend dev. Obsessed with marginalia.",
       "avatarUrl": "https://i.pravatar.cc/150?img=1",

@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { UsersService } from 'src/app/services/users.service';
+import { AppState } from 'src/app/store/app.state';
+import { login } from 'src/app/store/users/users.action';
+import { selectAuthError, selectIsLoggedIn, selectLoading } from 'src/app/store/users/users.selector';
 import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
@@ -12,29 +16,18 @@ import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 export class LogInComponent {
   username = '';
   password = '';
-  errorMessage = '';
-  get userId(): number {
-    return getUserId();
-  }
 
-  constructor(private userService: UsersService, private router: Router) {
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
+  loading$ = this.store.select(selectLoading);
+  error$ = this.store.select(selectAuthError);
+
+  constructor(private router: Router, private store: Store<AppState>) {
     
   }
 
   login() {
-    this.userService.login(this.username, this.password)
-      .subscribe({
-        next: (res) => {
-          if (res && res.id) {
-            setUserId(res.id);
-            this.router.navigate(['/all-books']);
-            console.log('Login successful. User ID:', res.id);
-          }
-        },
-        error: (err) => {
-          console.error(err);
-          this.errorMessage = 'Invalid username or password';
-        }
-      });
+    this.store.dispatch(
+      login({ username: this.username, password: this.password })
+    );
   }
 }

@@ -36,6 +36,9 @@ import { FeedComponent } from './components/feed/feed.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { UsersEffects } from './store/users/users.effects';
+import { userReducer } from './store/users/users.reducer';
+import { AppState } from './store/app.state';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -57,7 +60,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
         ThreadComponent,
         FeedComponent
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [AppComponent], 
+    imports: [BrowserModule,
         AppRoutingModule,
         MatToolbarModule,
         MatIconModule,
@@ -72,7 +76,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
         MatSelectModule,
         MatSidenavModule,
         MatSnackBarModule,
-        StoreModule.forRoot({}, {}),
-        EffectsModule.forRoot([]),
+        StoreModule.forRoot({auth: userReducer}, {}),
+        EffectsModule.forRoot([UsersEffects]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
