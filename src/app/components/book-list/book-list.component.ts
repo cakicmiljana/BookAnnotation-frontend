@@ -1,6 +1,10 @@
 import { Component, Input } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Book } from 'src/app/models/book';
 import { BooksService } from 'src/app/services/books.service';
+import { AppState } from 'src/app/store/app.state';
+import { loadBooks } from 'src/app/store/books/books.action';
+import { selectBooks } from 'src/app/store/books/books.selector';
 
 @Component({
   selector: 'app-book-list',
@@ -9,15 +13,15 @@ import { BooksService } from 'src/app/services/books.service';
   standalone: false
 })
 export class BookListComponent {
-  // @Input() 
-  books: Book[] | null = null;
+  // @Input()
+  books$ = this.store.select(selectBooks);
 
-  constructor(private service: BooksService) {
+  ngOnInit() {
+    this.store.dispatch(loadBooks());
+  }
+
+  constructor(private store: Store<AppState>) {
 
   }
 
-  ngOnInit() : void {
-    this.service.getAllBooks()
-      .subscribe(allBooks => this.books = allBooks)
-  }
 }

@@ -3,7 +3,9 @@
     Here you can browse our collection of books.
 </h2>
 <div class="books-list-div">
-    <ul class="book-div" *ngFor="let book of books">
+    <!-- <ul class="book-div" *ngFor="let book of books">
         <app-book-preview [book]="book"></app-book-preview>
-    </ul>
+    </ul> -->
+    <app-book-preview *ngFor="let book of books$ | async" [book]="book">
+    </app-book-preview>
 </div>

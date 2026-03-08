@@ -20,7 +20,7 @@ export class BooksService {
     );
   }
 
-  getBookById(id: number): Observable<Book | undefined> {
+  getBookById(id: number): Observable<Book> {
     return this.httpClient.get<any>(this.dataUrl).pipe(
       map(data => data.books.find((b: Book) => b.id === id))
     );
