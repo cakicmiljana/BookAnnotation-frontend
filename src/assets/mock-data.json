@@ -2,9 +2,9 @@
   "users": [
     {
       "id": 1,
-      "username": "a",
+      "username": "",
       "email": "miljana@example.com",
-      "password": "a",
+      "password": "",
       "passwordHash": "$2b$10$hash1",
       "bio": "Frontend dev. Obsessed with marginalia.",
       "avatarUrl": "https://i.pravatar.cc/150?img=1",
@@ -52,6 +52,20 @@
       "deletedAt": null,
       "pageSize": 1500,
       "content": "On an exceptionally hot evening early in July a young man came out of the garret...\n\nRaskolnikov walked slowly, as though each step demanded a moral justification. The oppressive heat mirrored the weight inside his mind...\n\nHe oscillated between arrogance and despair."
+    },
+    {
+      "id": 3,
+      "title": "The picture of Dorian Gray",
+      "author": "Oscar Wilde",
+      "country": "UK",
+      "language": "English",
+      "pages": 254,
+      "description": "A tale of vanity and moral corruption.",
+      "publicationYear": 1890,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "deletedAt": null,
+      "pageSize": 1500,
+      "content": "The studio was filled with the rich odor of roses, and when the light summer wind stirred amidst the trees of the garden, there came through the open door the heavy scent of the lilac, or the more delicate perfume of the pink-flowering thorn.\n\nDorian Gray had been painted by"
     }
   ],
 

@@ -12,7 +12,7 @@ export const booksReducer = createReducer(
     on(BooksActions.loadBooksSuccess, (state, { books }) => ({
         ...state,
         books
-        })),
+    })),
 
     on(BooksActions.loadBookSuccess, (state, { book }) => ({
         ...state,
