@@ -2,7 +2,7 @@
   "users": [
     {
       "id": 1,
-      "username": "miljana",
+      "username": "a",
       "email": "miljana@example.com",
       "password": "a",
       "passwordHash": "$2b$10$hash1",

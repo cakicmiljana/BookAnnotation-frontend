@@ -8,16 +8,17 @@ import { BookPreviewComponent } from './components/book-preview/book-preview.com
 import { BookViewerComponent } from './components/book-viewer/book-viewer.component';
 import { BookAnnotatorComponent } from './components/book-annotator/book-annotator.component';
 import { LogInComponent } from './components/log-in/log-in.component';
+import { authGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'menu', component: MenuToolbarComponent },
-  { path: 'all-books', component: BookListComponent },
-  { path: 'my-books', component: VersionListComponent },
-  { path: 'account', component: AccountComponent},
-  { path: 'book-preview', component: BookPreviewComponent},
-  { path: 'book/:id', component: BookViewerComponent },
-  { path: 'book-annotator/:id', component: BookAnnotatorComponent },
+  // { path: 'menu', component: MenuToolbarComponent , canActivate: [authGuard]},
+  { path: 'all-books', component: BookListComponent, canActivate: [authGuard] },
+  { path: 'my-books', component: VersionListComponent, canActivate: [authGuard] },
+  { path: 'account', component: AccountComponent, canActivate: [authGuard] },
+  { path: 'book-preview', component: BookPreviewComponent, canActivate: [authGuard] },
+  { path: 'book/:id', component: BookViewerComponent, canActivate: [authGuard] },
+  { path: 'book-annotator/:id', component: BookAnnotatorComponent, canActivate: [authGuard] },
   { path: 'login', component: LogInComponent }
   // { path: 'account/update', component: AccountUpdateComponent },
   // { path: 'signup', component: SignupComponent},

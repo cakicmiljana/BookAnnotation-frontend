@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectIsLoggedIn } from './store/users/users.selector';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +13,9 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'book-annotation-app';
 
-  constructor(private router: Router) {}
+  isLoggedIn$: Observable<boolean>;
 
-  isLoginRoute(): boolean {
-    return this.router.url === '/login';
+  constructor(private store: Store) {
+    this.isLoggedIn$ = this.store.select(selectIsLoggedIn);
   }
 }

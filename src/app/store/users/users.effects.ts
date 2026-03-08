@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, of, switchMap } from "rxjs";
+import { catchError, map, of, switchMap, tap } from "rxjs";
 import { UsersService } from "src/app/services/users.service";
 import * as UsersActions from './users.action';
+import { Router } from "@angular/router";
 
 @Injectable()
 export class UsersEffects {
@@ -25,8 +26,17 @@ export class UsersEffects {
     )
   );
 
+  loginSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.loginSuccess),
+      tap(() => this.router.navigate(['/all-books']))
+    ),
+    { dispatch: false }
+  )
+
   constructor(
     private actions$: Actions,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private router: Router
   ) {}
 }
