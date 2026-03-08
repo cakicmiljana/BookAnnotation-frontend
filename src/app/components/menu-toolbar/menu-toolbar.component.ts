@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.state';
+import { logout } from 'src/app/store/users/users.action';
 import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
@@ -10,9 +13,14 @@ import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 export class MenuToolbarComponent {
   @Output() logoutEvent: EventEmitter<void> = new EventEmitter<void>();
 
-  logOut() {
-    setUserId(0);
-    this.logoutEvent.emit();
+  constructor(private store: Store<AppState>) {
+
   }
+
+  logout() {
+      this.store.dispatch(
+        logout()
+      );
+    }
 
 }
