@@ -1,1 +1,38 @@
-<p>feed works!</p>
+<div class="feed-container">
+
+  <h2 class="feed-title">Activity Feed</h2>
+
+  <div *ngIf="loading$ | async" class="loading">
+    Loading activity...
+  </div>
+
+  <div class="feed-list">
+
+    <div class="feed-card"
+         *ngFor="let item of feed$ | async"
+         [ngClass]="item.type">
+
+      <div class="feed-icon">
+        <mat-icon *ngIf="item.type === 'annotation'">highlight</mat-icon>
+        <mat-icon *ngIf="item.type === 'note'">note</mat-icon>
+        <mat-icon *ngIf="item.type === 'book'">menu_book</mat-icon>
+      </div>
+
+      <div class="feed-content">
+
+        <div class="feed-text">
+          {{ item.content }}
+        </div>
+
+        <div class="feed-meta">
+          <span class="feed-type">{{ item.type }}</span>
+          <span class="feed-date">{{ item.createdAt | date:'medium' }}</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

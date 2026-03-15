@@ -9,6 +9,7 @@ import { BookViewerComponent } from './components/book-viewer/book-viewer.compon
 import { BookAnnotatorComponent } from './components/book-annotator/book-annotator.component';
 import { LogInComponent } from './components/log-in/log-in.component';
 import { authGuard } from './auth/auth.guard';
+import { FeedComponent } from './components/feed/feed.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'book-preview', component: BookPreviewComponent, canActivate: [authGuard] },
   { path: 'book/:id', component: BookViewerComponent, canActivate: [authGuard] },
   { path: 'book-annotator/:id', component: BookAnnotatorComponent, canActivate: [authGuard] },
+  { path: 'feed', component: FeedComponent, canActivate: [authGuard] },
   { path: 'login', component: LogInComponent }
   // { path: 'account/update', component: AccountUpdateComponent },
   // { path: 'signup', component: SignupComponent},

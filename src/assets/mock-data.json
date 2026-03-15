@@ -2,7 +2,7 @@
   "users": [
     {
       "id": 1,
-      "username": "",
+      "username": "miljana",
       "email": "miljana@example.com",
       "password": "",
       "passwordHash": "$2b$10$hash1",
@@ -74,8 +74,8 @@
       "id": 1,
       "bookId": 1,
       "userId": 1,
-      "startOffset": 120,
-      "endOffset": 300,
+      "startOffset": 10,
+      "endOffset": 100,
       "comment": "The green light as a metaphor for unreachable desire.",
       "tag": "symbolism",
       "color": "#FFD54F",
@@ -85,8 +85,8 @@
     },
     {
       "id": 2,
-      "bookId": 2,
-      "userId": 2,
+      "bookId": 1,
+      "userId": 1,
       "startOffset": 200,
       "endOffset": 400,
       "comment": "The murder is framed as philosophical experiment.",
@@ -124,5 +124,10 @@
 
   "follows": [
     { "followerId": 1, "followingId": 2 }
+  ],
+
+  "feed": [
+    { "id": 1, "type": "annotation", "userId": 1, "bookId": 101, "content": "Highlighted 'Angular Basics'", "createdAt": "2026-03-15T12:00:00Z" },
+    { "id": 2, "type": "note", "userId": 1, "bookId": 101, "content": "My note about Observables", "createdAt": "2026-03-14T09:30:00Z" }
   ]
 }

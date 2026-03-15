@@ -1,0 +1,87 @@
+.feed-container {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 10px 20px;
+}
+
+.feed-title {
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+}
+
+.feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* CARD */
+
+.feed-card {
+  display: flex;
+  align-items: flex-start;
+  background: white;
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: all 0.2s ease;
+}
+
+.feed-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+/* ICON */
+
+.feed-icon {
+  margin-right: 14px;
+  margin-top: 3px;
+}
+
+.feed-icon mat-icon {
+  font-size: 22px;
+}
+
+/* CONTENT */
+
+.feed-content {
+  flex: 1;
+}
+
+.feed-text {
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.feed-meta {
+  font-size: 12px;
+  color: #777;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* TYPE COLORS */
+
+.feed-card.annotation mat-icon {
+  color: #1976d2;
+}
+
+.feed-card.note mat-icon {
+  color: #388e3c;
+}
+
+.feed-card.book mat-icon {
+  color: #f57c00;
+}
+
+.feed-type {
+  text-transform: capitalize;
+  font-weight: 500;
+}

@@ -43,6 +43,8 @@ import { AppState } from './store/app.state';
 import { BooksEffects } from './store/books/books.effects';
 import { annotationsReducer } from './store/annotations/annotations.reducer';
 import { AnnotationsEffects } from './store/annotations/annotations.effects';
+import { feedReducer } from './store/feed/feed.reducer';
+import { FeedEffects } from './store/feed/feed.effects';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -80,7 +82,7 @@ import { AnnotationsEffects } from './store/annotations/annotations.effects';
         MatSelectModule,
         MatSidenavModule,
         MatSnackBarModule,
-        StoreModule.forRoot({auth: userReducer, books: booksReducer, annotations: annotationsReducer}),
-        EffectsModule.forRoot([UsersEffects, BooksEffects, AnnotationsEffects]),
+        StoreModule.forRoot({auth: userReducer, books: booksReducer, annotations: annotationsReducer, feed: feedReducer}),
+        EffectsModule.forRoot([UsersEffects, BooksEffects, AnnotationsEffects, FeedEffects]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
