@@ -1,9 +1,10 @@
-import { Component, inject, Input } from '@angular/core';
-import { User } from 'src/app/models/user';
-import { UsersService } from 'src/app/services/users.service';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.state';
+import { selectCurrentUser } from 'src/app/store/users/users.selector';
+import { User } from 'src/app/models/user';
 import { AccountUpdateComponent } from '../account-update/account-update.component';
-import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
   selector: 'app-account',
@@ -11,23 +12,23 @@ import { setUserId, getUserId } from 'src/environments/userLoggedIn';
   styleUrls: ['./account.component.css'],
   standalone: false
 })
-export class AccountComponent {
-  @Input() user: User | null = null;
+export class AccountComponent implements OnInit {
 
+  user: User | null = null;
   dialog = inject(MatDialog);
-
-  constructor(private service: UsersService) {
-    
-  }
+  store = inject(Store<AppState>);
 
   ngOnInit() {
-    this.service.getUserById(getUserId())
-      .subscribe(u => this.user = u || null);
+    this.store.select(selectCurrentUser).subscribe(user => {
+      this.user = user;
+    });
   }
 
   openUserUpdateDialog() {
+    if (!this.user) return;
     this.dialog.open(AccountUpdateComponent, {
       data: this.user
-    })
+    });
   }
+
 }

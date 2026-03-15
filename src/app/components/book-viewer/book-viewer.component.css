@@ -1,117 +1,107 @@
-.book-details h2, h3, h4, div {  
-    font-weight: 200;
+/* Container */
+.book-details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-.book-details {
-    padding: 50px;
+/* Header */
+.book-header {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: flex-start;
 }
 
-.book-item {
-    /* padding-top: 30px; */
-    display: flex;
-    flex-direction: row;
-    font-weight: normal;
+.book-info {
+  display: flex;
+  flex-direction: column;
 }
 
-.details {
-    display: flex;
-    flex-direction: row;
-    /* padding-left: 30px; */
+.book-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
 }
 
-.array-details {
-    display: flex;
-    flex-direction: row;
-    font-style: italic;
+.book-author {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 5px 0;
+  color: #555;
 }
 
-.h4-class {  
-    margin-top: 8px;
-    margin-bottom: 8px;
-    /* padding: 0; */
+.book-meta {
+  font-size: 16px;
+  color: #777;
+  display: flex;
+  gap: 8px;
 }
 
-.description {
-    font-style: italic;
+/* Description / Plot */
+.book-plot {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.plot {
-    padding-top: 30px;
+.section-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 10px;
 }
 
-.dark-accordion {
-    background-color: #1e1e1e;
-    /* border-radius: 10px; */
-    color: #f0f0f0;
-    /* font-family: 'Inter', sans-serif; */
+.plot-text {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #444;
 }
 
-.dark-panel {
-    background-color: #2a2a2a;
-    margin-bottom: 8px;
-    border-radius: 10px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-    overflow: hidden;
-}
-
-.dark-header {
-    background-color: #2e2e2e;
-    color: #ffffff;
-    font-weight: 500;
-    /* padding: 0 16px; */
-    font-size: 16px;
-}
-
-.dark-header.mat-expanded {
-background-color: #383838;
-}
-
-.dark-content {
-    /* padding: 16px; */
-    font-size: 18px;
-    /* color: #cccccc; */
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Optional: Smooth animation */
-mat-expansion-panel {
-transition: all 0.3s ease-in-out;
-}
-
-img {
-    transition: transform 0.3s ease;
-    cursor: pointer;
-
-    &:hover {
-        transform: scale(1.03);
-    }
-}
-
-.versions {
-    padding-top: 20px;
-}
-
-.versions-list {
-    display: flex;
-    flex-direction: row;
-}
-
-.versions button:hover {
-    background-color: rgba(95, 158, 160, 0.9);
-    color: black;
-}
-
-.versions button {
-    background-color: black;
-    color: white;
-}
-
-.versions-list ul {
-  margin-right: 15px;
-  padding: 0;
-  /* list-style: none; optional, removes bullets */
+/* Editions / Versions */
+.book-versions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .upload-button {
-    margin-bottom: 10px;
+  align-self: flex-start;
+  background-color: #000;
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.upload-button:hover {
+  background-color: #5fa09e;
+  color: #fff;
+}
+
+.versions-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* App version previews will fit nicely */
+app-version-preview {
+  flex: 1 1 200px;
+  min-width: 200px;
+}
+
+/* Smooth hover for images */
+img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }

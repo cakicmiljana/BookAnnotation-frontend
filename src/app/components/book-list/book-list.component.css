@@ -1,19 +1,54 @@
-.books-list-div {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    max-width: 1500px;
-    margin: 0 auto;
-    gap: 20px;
-    padding: 20px;
-}
-
-.book-div {
-    flex: 0 0 250px;
-}
-
 .title {
-    margin-top: 40px;
-    margin-left: 40px;
-    font-weight: 550;
+  margin: 40px auto 20px auto;
+  text-align: center;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.3;
+  color: #333;
+}
+
+/* Grid container */
+.books-list-div {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Stretch cards fully inside the grid cell */
+.book-card {
+  width: 100%;
+  background: #fff;
+  border-radius: 0; /* removed rounded corners */
+  overflow: hidden;
+  /* box-shadow: 0 2px 8px rgba(0,0,0,0.08); */
+  transition: all 0.25s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hover effect */
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* Inside preview */
+book-preview {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Optional: remove horizontal gaps on very large screens */
+@media (min-width: 1400px) {
+  .books-list-div {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    max-width: 100%;
+    padding: 20px 10px;
+  }
 }

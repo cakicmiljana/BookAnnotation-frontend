@@ -11,18 +11,18 @@
             <mat-icon color="cadetblue">home</mat-icon>
           </button>
         </a></li>
-        <li><a routerLink="/my-books">
+        <li><a routerLink="/feed">
           <button mat-raised-button class="menu-button">
-            My books
-            <mat-icon>my_library_books</mat-icon>
+            Feed
+            <mat-icon>rss_feed</mat-icon>
           </button>
         </a></li>
-        <li><a routerLink="/account">
-          <button mat-raised-button class="menu-button">
-            Account
-            <mat-icon>account_box</mat-icon>
-          </button>
-        </a></li>
+        <li>
+        <button mat-raised-button class="menu-button" (click)="openAccountDialog()">
+          Account
+          <mat-icon>account_box</mat-icon>
+        </button>
+      </li>
         <span class="spacer"></span>
         <li><a (click)="logout()" routerLink="../login">
           <button mat-raised-button class="menu-button">

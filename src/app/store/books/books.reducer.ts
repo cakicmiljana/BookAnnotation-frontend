@@ -3,19 +3,15 @@ import * as BooksActions from "./books.action";
 import { initialState } from "./books.state";
 
 export const booksReducer = createReducer(
-    initialState,
+  initialState,
 
-    on(BooksActions.loadBooks, (state) => ({
-        ...state
-    })),
+  on(BooksActions.loadBooksSuccess, (state, { books }) => ({
+    ...state,
+    books
+  })),
 
-    on(BooksActions.loadBooksSuccess, (state, { books }) => ({
-        ...state,
-        books
-    })),
-
-    on(BooksActions.loadBookSuccess, (state, { book }) => ({
-        ...state,
-        selectedBook: book
-    }))
+  on(BooksActions.loadBookSuccess, (state, { book }) => ({
+    ...state,
+    selectedBook: book // only update on success, never clear on loadBook
+  }))
 );

@@ -1,14 +1,20 @@
-<div class="account-div">
-    <h3>
-        username: {{user?.username}}
-    </h3>
-    <h3>
-        email: {{user?.email}}
-    </h3>
-    <div>
-        <button class="update-button" mat-raised-button (click)="openUserUpdateDialog()">
-            <mat-icon>manage_accounts</mat-icon>
-            Update information
-        </button>
+<div class="profile-card" *ngIf="user">
+  <div class="profile-header">
+    <mat-icon class="profile-avatar">person</mat-icon>
+    <h2 class="username">{{ user.username }}</h2>
+  </div>
+
+  <div class="profile-info">
+    <div class="info-item">
+      <mat-icon>email</mat-icon>
+      <span>{{ user.email }}</span>
     </div>
+  </div>
+
+  <div class="profile-actions">
+    <button mat-raised-button color="primary" (click)="openUserUpdateDialog()">
+      <mat-icon>manage_accounts</mat-icon>
+      Update Information
+    </button>
+  </div>
 </div>

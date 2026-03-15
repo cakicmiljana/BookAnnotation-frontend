@@ -1,32 +1,45 @@
-.book-item-div h3, h4, h5 {
-    margin: 0;
-    padding: 5px;
-    font-weight: 500;
-}
-
 .book-item-div {
     display: flex;
     flex-direction: column;
-    align-self: center;
+    justify-content: center;
+    align-items: flex-start;
+    width: 220px; /* fixed width for uniformity */
+    height: 100px; /* fixed height like grid cards */
+    padding: 15px;
+    background-color: #000; /* solid black */
+    color: #fff; /* white text */
+    border: none;
+    border-radius: 0; /* no round corners */
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
     position: relative;
-    height: auto;
-    background-color: black;
-    color: white;
 }
 
 .book-item-div:hover {
-    background-color: rgb(95, 158, 160, 0.8);
-    color: rgb(0, 0, 0);
-    cursor: pointer;
+    background-color: rgba(95, 158, 160, 0.8); /* tealish hover */
+    color: #000;
+    transform: translateY(-3px);
 }
 
-.order-button {
-    position: absolute;
-    bottom: 0;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.book-item-div h3, 
+.book-item-div h4 {
+    margin: 0;
+    padding: 5px 0;
+    font-weight: 500;
+    line-height: 1.2;
 }
 
+.book-item-div h3 {
+    font-size: 1.1rem;
+}
+
+.book-item-div h4 {
+    font-size: 0.9rem;
+    color: #ccc; /* subtle secondary text */
+}
+
+/* Optional: overlay for modals */
 #overlay {
     position: fixed;
     display: none;
@@ -34,10 +47,7 @@
     height: 100%;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
     background-color: rgba(0,0,0,0.5);
     z-index: 2;
     cursor: pointer;
-    align-content: center;
-  }
+}
