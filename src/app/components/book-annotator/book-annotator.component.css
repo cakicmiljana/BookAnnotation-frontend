@@ -1,92 +1,129 @@
-.card {
-  margin: 30px;
-  padding: 10px;
-  height: 100vh;
-  overflow: hidden !important;
-}
-
+/* Container & drawer */
 .note-container {
-  overflow: hidden !important;
-}
-
-.book-details h2, h3, h4, h5, div {
-  font-weight: 200;
-}
-
-mat-card {
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-}
-
-/* Highlighted annotation span */
-.annotation {
-  background-color: yellow !important;
-  padding: 2px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-/* Reader styles */
-.book-content {
-  font-family: 'Roboto', sans-serif;
-  white-space: normal;
-  line-height: 1.6;
-}
-
-.side-button {
-  margin-left: 30px;
-  margin-top: 30px;
-}
-
-.note-button {
-  margin-top: 1rem;
-  align-self: flex-end;
-  background-color: black !important;
-  color: white !important;
-  font-weight: 400;
-}
-
-.note-button:hover {
-    background-color: rgba(95, 158, 160, 0.9) !important;
-    color: black !important;
-    font-weight: 500;
-}
-
-.note-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;         /* Fill drawer height */
-  padding: 20px;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f5f5f5;
 }
 
 .note-drawer {
-  height: 100vh;        /* Full page height */
-  width: 320px;         /* Adjust width as you like */
+  width: 320px;
+  height: 100vh;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
   display: flex;
   flex-direction: column;
-  overflow: hidden !important;
+  padding: 20px;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.2);
+}
+
+.note-header h3 {
+  margin: 0 0 15px 0;
+  font-weight: 500;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
 }
 
 .note-form {
-  flex: 1;              /* Take all available vertical space */
+  flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.note-textarea {
-  flex: 1;              /* Expand textarea to fill space */
+.note-textarea textarea {
+  flex: 1;
+  padding: 10px;
+  font-size: 0.95rem;
+  background-color: #2a2a2a;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  resize: none;
+}
+
+.note-button {
+  margin-top: 10px;
+  background-color: #5f9ea0;
+  color: #fff;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
 }
 
-mat-drawer-container {
-  height: 100vh !important;
-  overflow: hidden !important;        /* prevent container scroll */
+.note-button:hover {
+  background-color: #468b8f;
+  color: #fff;
 }
 
+.side-button {
+  position: fixed;
+  top: 80px; /* Move it lower from top */
+  left: 20px; /* Adjust horizontal position */
+  z-index: 100;
+  background-color: #5f9ea0;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.side-button:hover {
+  background-color: #468b8f;
+}
+
+/* Reader card */
+.reader-card {
+  margin: 40px auto;
+  padding: 30px;
+  max-width: 900px;
+  border-radius: 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  background-color: #fff;
+}
+
+.book-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.book-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.book-content {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  margin-top: 20px;
+  font-size: 1rem;
+}
+
+.annotation {
+  background-color: #ffeaa7;
+  padding: 2px 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.annotation:hover {
+  background-color: #ffe066;
+}
+
+/* Paginator and page info */
 .page-info {
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 0.9rem;
+  color: #999;
   text-align: right;
+}
+
+/* Smooth hover effect for cards */
+mat-card {
+  transition: all 0.3s ease-in-out;
 }

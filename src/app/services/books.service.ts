@@ -44,11 +44,11 @@ export class BooksService {
     );
   }
   
-getAnnotationsByBookId(bookId: number): Observable<Annotation[]> {
+getAnnotationsByBookId(bookId: number, userId: number): Observable<Annotation[]> {
     return this.httpClient.get<any>(this.dataUrl).pipe(
       map(data =>
         data.annotations.filter(
-          (a: Annotation) => a.bookId === bookId
+          (a: Annotation) => a.bookId === bookId && a.userId === userId
           )
         )
       );
@@ -63,12 +63,22 @@ getAnnotationsByBookId(bookId: number): Observable<Annotation[]> {
     }
   
     // Mock-only actions
-    addAnnotation(bookId: any, userId: any, start: any, end: any, comment: string, tag: string, color: string) {
+    addAnnotationMock(bookId: any, userId: any, start: any, end: any, comment: string, tag: string, color: string) {
+      console.warn('Mock mode: addAnnotation does not persist.');
+      return new Observable(observer => observer.next(true));
+    }
+
+    addAnnotation(annotation: Annotation) {
       console.warn('Mock mode: addAnnotation does not persist.');
       return new Observable(observer => observer.next(true));
     }
   
-    updateAnnotation(id: any, start: any, end: any, comment: string, tag: string, color: string) {
+    updateAnnotationMock(id: any, start: any, end: any, comment: string, tag: string, color: string) {
+      console.warn('Mock mode: updateAnnotation does not persist.');
+      return new Observable(observer => observer.next(true));
+    }
+  
+    updateAnnotation(annoation: Annotation) {
       console.warn('Mock mode: updateAnnotation does not persist.');
       return new Observable(observer => observer.next(true));
     }

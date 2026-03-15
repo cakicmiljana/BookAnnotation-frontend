@@ -22,7 +22,7 @@ export class UpdateAnnotationComponent {
   }
 
   updateAnnotation() {
-    this.service.updateAnnotation(this.data.id, this.data.start, this.data.end, this.comment, this.tag, this.color)
+    this.service.updateAnnotationMock(this.data.id, this.data.start, this.data.end, this.comment, this.tag, this.color)
         .subscribe();
   }
 
