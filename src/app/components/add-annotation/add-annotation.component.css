@@ -1,40 +1,61 @@
-.upload-form {
-    padding: 20px;
-    width: fit-content;
-}
-
-.upload-item {
-    color: cadetblue !important;
-    margin: 5px;
-    width: fit-content;
-}
-
-.file-upload-group {
+.annotation-container {
+  padding: 24px;
+  /* background-color: #1e1e1e; */
+  /* color: #f0f0f0; */
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  width: 500px;
+  max-width: 400px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 16px;
-
-  mat-form-field {
-    flex: 1;
-  }
+  font-family: 'Roboto', sans-serif;
 }
 
-.upload-form button {
-    background-color: black !important;
-    color: white !important;
-    font-weight: 400;
+.annotation-title {
+  margin: 0;
+  font-weight: 500;
+  font-size: 17px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 6px;
 }
 
-.upload-form button:hover {
-    background-color: rgba(95, 158, 160, 0.9) !important;
-    color: black !important;
-    font-weight: 500;
+.highlighted-text {
+  /* background-color: #333; */
+  /* color: #fff; */
+  /* padding: 10px; */
+  border-radius: 4px;
+  font-style: italic;
+  font-size: 15px;
+  word-break: break-word;
 }
 
-::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+.form-field {
+  width: 100%;
+}
+
+.annotation-button {
+  background-color: #000;
+  color: #fff;
+  font-weight: 500;
+  align-self: flex-end;
+  transition: all 0.3s ease;
+}
+
+.annotation-button mat-icon {
+  margin-right: 6px;
+}
+
+.annotation-button:hover {
+  background-color: rgba(95, 158, 160, 0.9);
+  color: black;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
   stroke: cadetblue !important;
 }
 
 ::ng-deep .mat-form-field-appearance-outline:hover .mat-form-field-outline-thick {
   stroke: lightblue !important;
 }
+

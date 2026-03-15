@@ -78,7 +78,7 @@
       "endOffset": 100,
       "comment": "The green light as a metaphor for unreachable desire.",
       "tag": "symbolism",
-      "color": "#FFD54F",
+      "color": "lightblue",
       "visibility": "public",
       "createdAt": "2026-02-01T12:00:00Z",
       "deletedAt": null
@@ -90,8 +90,8 @@
       "startOffset": 200,
       "endOffset": 400,
       "comment": "The murder is framed as philosophical experiment.",
-      "tag": "philosophy",
-      "color": "#BA68C8",
+      "tag": "analysis",
+      "color": "lightcoral",
       "visibility": "public",
       "createdAt": "2026-02-02T14:00:00Z",
       "deletedAt": null
