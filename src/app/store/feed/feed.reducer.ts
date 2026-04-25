@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { initialFeedState } from './feed.state';
+import { initialFeedState, adapter } from './feed.state';
 import * as FeedActions from './feed.action';
 
 export const feedReducer = createReducer(
@@ -7,13 +7,11 @@ export const feedReducer = createReducer(
   on(FeedActions.loadFeed, state => ({ 
     ...state, 
     loading: true 
-})),
-  on(FeedActions.loadFeedSuccess, (state, { feed }) => ({ 
-    ...state, 
-    feed, 
-    loading: false 
   })),
-  on(FeedActions.addFeedItem, (state, { item }) => ({ ...state, 
-    feed: [item, ...state.feed] 
-  }))
+  on(FeedActions.loadFeedSuccess, (state, { feed }) =>
+    adapter.setAll(feed, { ...state, loading: false })
+  ),
+  on(FeedActions.addFeedItem, (state, { item }) =>
+    adapter.addOne(item, { ...state, loading: false })
+  )
 );
