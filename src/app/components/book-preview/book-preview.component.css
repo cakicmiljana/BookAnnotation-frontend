@@ -1,53 +1,54 @@
 .book-item-div {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    width: 220px; /* fixed width for uniformity */
-    height: 100px; /* fixed height like grid cards */
-    padding: 15px;
-    background-color: #000; /* solid black */
-    color: #fff; /* white text */
+    width: 220px;
+    height: 400px;
+    background-color: #111;
+    color: #fff;
     border: none;
-    border-radius: 0; /* no round corners */
-    text-align: left;
     cursor: pointer;
-    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
-    position: relative;
+    overflow: hidden;
+    padding: 0;
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .book-item-div:hover {
-    background-color: rgba(95, 158, 160, 0.8); /* tealish hover */
-    color: #000;
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
-.book-item-div h3, 
-.book-item-div h4 {
+/* COVER */
+.book-cover {
+    width: 100%;
+    height: 70%;
+    overflow: hidden;
+}
+
+.book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* CONTENT */
+.book-content {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 30%;
+}
+
+.book-content h3 {
+    font-size: 16px;
     margin: 0;
-    padding: 5px 0;
-    font-weight: 500;
     line-height: 1.2;
 }
 
-.book-item-div h3 {
-    font-size: 1.1rem;
-}
-
-.book-item-div h4 {
-    font-size: 0.9rem;
-    color: #ccc; /* subtle secondary text */
-}
-
-/* Optional: overlay for modals */
-#overlay {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 2;
-    cursor: pointer;
+.book-content h4 {
+    font-size: 14px;
+    margin: 4px 0 0;
+    color: #aaa;
 }

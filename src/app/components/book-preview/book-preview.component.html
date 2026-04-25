@@ -5,6 +5,11 @@
     *ngIf="book" 
     (click)="selectBook(book.id)"
 >
+
+    <div class="book-cover">
+        <img [src]="'.././assets/' + book.id + '.jpg'" alt="Book cover" />
+    </div>
+
     <div class="book-content">
         <h3>{{ book.title }}</h3>
         <h4>{{ book.author }}</h4>

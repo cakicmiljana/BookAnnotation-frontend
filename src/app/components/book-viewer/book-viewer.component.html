@@ -2,6 +2,9 @@
 
   <!-- Book Header -->
   <div class="book-header">
+    <div class="book-cover">
+      <img [src]="'.././assets/' + book?.id + '.jpg'" alt="Book cover" />
+    </div>
     <div class="book-info">
       <h1 class="book-title">{{ book?.title }}</h1>
       <p class="book-author">{{ book?.author }}</p>
@@ -13,7 +16,6 @@
     </div>
   </div>
 
-  <!-- Description -->
   <div class="book-plot">
     <h2 class="section-title">DESCRIPTION</h2>
     <p class="plot-text">
@@ -21,7 +23,6 @@
     </p>
   </div>
 
-  <!-- Editions / Versions -->
   <div class="book-versions">
     <h2 class="section-title">EDITIONS</h2>
     <button mat-raised-button class="upload-button" (click)="openVersionUploadDialog()">
