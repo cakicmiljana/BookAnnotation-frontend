@@ -23,5 +23,9 @@ export const annotationsReducer = createReducer(
     annotations: state.annotations.map(a =>
       a.id === annotation.id ? annotation : a
     )
+  })),
+  on(AnnotationsActions.deleteAnnotationSuccess, (state, { id }) => ({
+    ...state,
+    annotations: state.annotations.filter(a => a.id !== id)
   }))
 );

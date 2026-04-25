@@ -9,12 +9,13 @@ import { selectAnnotations } from 'src/app/store/annotations/annotations.selecto
 import { loadAnnotations } from 'src/app/store/annotations/annotations.actions';
 import { selectUserId } from 'src/app/store/users/users.selector';
 import { selectSelectedBook } from 'src/app/store/books/books.selector';
+import { selectNoteByBookAndUser } from 'src/app/store/notes/notes.selector';
+import * as NotesActions from 'src/app/store/notes/notes.actions';
 
 import { Annotation } from 'src/app/models/annotation';
 import { Book } from 'src/app/models/book';
 import { Note } from 'src/app/models/note';
 
-import { BooksService } from 'src/app/services/books.service';
 import { TextAnnotator } from 'src/app/helper classes/TextAnnotator';
 import { AddAnnotationComponent } from '../add-annotation/add-annotation.component';
 import { UpdateAnnotationComponent } from '../update-annotation/update-annotation.component';
@@ -46,7 +47,7 @@ export class BookAnnotatorComponent implements OnInit {
   selectedText = '';
   dialog = inject(MatDialog);
 
-  constructor(private store: Store<AppState>, private sanitizer: DomSanitizer, private service: BooksService) {}
+  constructor(private store: Store<AppState>, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     // Subscribe to user and selected book from state
@@ -65,10 +66,13 @@ export class BookAnnotatorComponent implements OnInit {
         // Dispatch to load annotations now that we have bookId and userId
         this.store.dispatch(loadAnnotations({ bookId: book.id, userId: this.userId }));
 
+        // Dispatch to load note for this book and user
+        this.store.dispatch(NotesActions.getNote({ bookId: book.id, userId: this.userId }));
+
         this.setPageText();
 
-        // Load note for user/book
-        this.service.getNote(book.id, this.userId).subscribe(note => {
+        // Load note from state for this book and user
+        this.store.select(selectNoteByBookAndUser(book.id, this.userId)).subscribe(note => {
           this.note = note;
           this.noteContent = note?.content ?? '';
         });
@@ -142,7 +146,17 @@ export class BookAnnotatorComponent implements OnInit {
 
   saveNote() {
     if (!this.book) return;
-    if (this.note) this.service.updateNote(this.note.id, this.noteContent).subscribe();
-    else this.service.addNote(this.book.id, this.userId, this.noteContent).subscribe();
+    if (this.note) {
+      const updatedNote: Note = { ...this.note, content: this.noteContent };
+      this.store.dispatch(NotesActions.updateNoteSuccess({ note: updatedNote }));
+    } else {
+      const newNote: Note = {
+        id: 0,
+        bookId: this.book.id,
+        userId: this.userId,
+        content: this.noteContent
+      };
+      this.store.dispatch(NotesActions.createNoteSuccess({ note: newNote }));
+    }
   }
 }

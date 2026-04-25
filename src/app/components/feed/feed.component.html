@@ -20,6 +20,11 @@
 
       <div class="feed-content">
 
+        <div class="feed-book-info">
+          <span class="book-title" *ngIf="item.bookTitle">{{ item.bookTitle }}</span>
+          <span class="book-author" *ngIf="item.bookAuthor"> by {{ item.bookAuthor }}</span>
+        </div>
+
         <div class="feed-text">
           {{ item.content }}
         </div>

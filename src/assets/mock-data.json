@@ -127,7 +127,93 @@
   ],
 
   "feed": [
-    { "id": 1, "type": "annotation", "userId": 1, "bookId": 101, "content": "Highlighted 'Angular Basics'", "createdAt": "2026-03-15T12:00:00Z" },
-    { "id": 2, "type": "note", "userId": 1, "bookId": 101, "content": "My note about Observables", "createdAt": "2026-03-14T09:30:00Z" }
+    {
+      "id": 1,
+      "type": "annotation",
+      "userId": 1,
+      "bookId": 1,
+      "content": "The green light as a metaphor for unreachable desire.",
+      "createdAt": "2026-02-01T12:00:00Z",
+      "deletedAt": null,
+      "bookTitle": "The Great Gatsby",
+      "bookAuthor": "F. Scott Fitzgerald"
+    },
+    {
+      "id": 2,
+      "type": "annotation",
+      "userId": 1,
+      "bookId": 1,
+      "content": "The murder is framed as philosophical experiment.",
+      "createdAt": "2026-02-02T14:00:00Z",
+      "deletedAt": null,
+      "bookTitle": "The Great Gatsby",
+      "bookAuthor": "F. Scott Fitzgerald"
+    },
+    {
+      "id": 3,
+      "type": "note",
+      "userId": 1,
+      "bookId": 1,
+      "content": "Compare Gatsby's illusion with modern influencer culture.",
+      "createdAt": "2026-02-03T10:30:00Z",
+      "deletedAt": null,
+      "bookTitle": "The Great Gatsby",
+      "bookAuthor": "F. Scott Fitzgerald"
+    },
+    {
+      "id": 4,
+      "type": "book",
+      "userId": 2,
+      "bookId": 2,
+      "content": "Crime and Punishment",
+      "createdAt": "2026-02-01T08:00:00Z",
+      "deletedAt": null,
+      "bookTitle": "Crime and Punishment",
+      "bookAuthor": "Fyodor Dostoevsky"
+    },
+    {
+      "id": 5,
+      "type": "annotation",
+      "userId": 2,
+      "bookId": 2,
+      "content": "Raskolnikov's internal moral conflict throughout the novel.",
+      "createdAt": "2026-02-04T11:00:00Z",
+      "deletedAt": null,
+      "bookTitle": "Crime and Punishment",
+      "bookAuthor": "Fyodor Dostoevsky"
+    },
+    {
+      "id": 6,
+      "type": "note",
+      "userId": 2,
+      "bookId": 2,
+      "content": "Themes of redemption and confession.",
+      "createdAt": "2026-02-05T09:00:00Z",
+      "deletedAt": null,
+      "bookTitle": "Crime and Punishment",
+      "bookAuthor": "Fyodor Dostoevsky"
+    },
+    {
+      "id": 7,
+      "type": "book",
+      "userId": 1,
+      "bookId": 3,
+      "content": "The picture of Dorian Gray",
+      "createdAt": "2026-02-06T10:00:00Z",
+      "deletedAt": null,
+      "bookTitle": "The picture of Dorian Gray",
+      "bookAuthor": "Oscar Wilde"
+    },
+    {
+      "id": 8,
+      "type": "annotation",
+      "userId": 1,
+      "bookId": 3,
+      "content": "Wilde's exploration of aestheticism vs. morality.",
+      "createdAt": "2026-02-07T13:00:00Z",
+      "deletedAt": null,
+      "bookTitle": "The picture of Dorian Gray",
+      "bookAuthor": "Oscar Wilde"
+    }
   ]
 }

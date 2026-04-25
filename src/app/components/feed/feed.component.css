@@ -56,7 +56,6 @@
 }
 
 .feed-text {
-  font-size: 15px;
   margin-bottom: 6px;
 }
 
@@ -84,4 +83,9 @@
 .feed-type {
   text-transform: capitalize;
   font-weight: 500;
+}
+
+.feed-book-info {
+  font-size: 13px;
+  margin-bottom: 6px;
 }

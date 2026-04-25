@@ -11,5 +11,9 @@ export const booksReducer = createReducer(
 
   on(BooksActions.loadBookSuccess, (state, { book }) =>
     adapter.upsertOne(book, { ...state, selectedBook: book })
+  ),
+
+  on(BooksActions.uploadBookSuccess, (state, { book }) =>
+    adapter.addOne(book, { ...state, selectedBook: book })
   )
 );

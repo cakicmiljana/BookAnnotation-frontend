@@ -6,4 +6,6 @@ export interface FeedItem {
   content: string;
   createdAt: Date;
   deletedAt: Date | null;
+  bookTitle?: string;
+  bookAuthor?: string;
 }
