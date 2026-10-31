@@ -38,7 +38,7 @@
         {{ excerpt.before }}<mark *ngIf="excerpt.match">{{ excerpt.match }}</mark>{{ excerpt.after }}
       </p>
       <div class="actions spread">
-        <span class="chip">{{ book?.language }} edition</span>
+        <span></span>
         <div class="actions">
           <button class="text-link" (click)="analyzePassage.emit(result)">
             <mat-icon>auto_awesome</mat-icon>Analyze

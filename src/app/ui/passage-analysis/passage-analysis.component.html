@@ -12,11 +12,8 @@
   <blockquote class="selected-passage">
     {{ passage || 'Select a passage in the reader to explore it here.' }}
   </blockquote>
-  <p class="source">
-    <mat-icon>menu_book</mat-icon>{{ bookTitle }}
-  </p>
   <fieldset>
-    <legend>Choose a lens</legend>
+    <legend>Choose an analysis lens</legend>
     <div class="lenses">
       <button *ngFor="let item of lenses" [class.active]="lens === item" [attr.aria-pressed]="lens === item" (click)="lens = item; generated = false; saved = false">
         {{ item }}

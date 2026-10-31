@@ -70,9 +70,6 @@
         <label class="field">
           Text size<select [(ngModel)]="preferredSize"><option>Comfortable · 21px</option><option>Compact · 18px</option><option>Large · 25px</option></select>
         </label>
-        <div class="type-preview" [class.dark-preview]="preferredTheme === 'Night'" [style.font-family]="preferredFont === 'Literary serif' ? 'var(--serif)' : 'var(--sans)'" [style.font-size.px]="preferredSize.startsWith('Large') ? 25 : preferredSize.startsWith('Compact') ? 18 : 21">
-          A quiet page. A little space to think.
-        </div>
         <p class="preview-label">
           Preferences preview locally. Reader controls are available in each book.
         </p>

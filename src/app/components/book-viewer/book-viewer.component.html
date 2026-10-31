@@ -11,9 +11,6 @@
       <p class="detail-author">
         {{ book.author }}
       </p>
-      <div class="actions metadata">
-        <span>{{ book.publicationYear }}</span><span>·</span><span>{{ book.country }}</span><span>·</span><span>{{ book.pages }} pages</span>
-      </div>
       <p class="detail-description">
         {{ book.description }}
       </p>
@@ -106,9 +103,6 @@
           Choose the text you want to read and annotate.
         </p>
       </div>
-      <button class="button" (click)="openVersionUploadDialog()">
-        <mat-icon>add</mat-icon>Add edition
-      </button>
     </div>
     <app-version-preview *ngFor="let version of versions" [version]="version">
     </app-version-preview>

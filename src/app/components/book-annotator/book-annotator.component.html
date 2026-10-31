@@ -109,7 +109,6 @@
             <h3>
               Thoughts in the margins
             </h3>
-            <span class="chip"><mat-icon>lock_outline</mat-icon>Personal note</span>
           </div>
           <label class="sr-only" for="full-note">
             Book note
@@ -248,7 +247,7 @@
           </section>
           <ng-template #annotationList>
             <div class="annotation-filter">
-              <span class="small muted">Your collected passages</span><select [(ngModel)]="tagFilter" aria-label="Filter annotations by tag"><option value="">All tags</option><option *ngFor="let tag of ['important','analysis','quote','definition','question','symbolism','motif','criticism']" [value]="tag">{{ tag | titlecase }}</option></select>
+              <span class="small muted"></span><select [(ngModel)]="tagFilter" aria-label="Filter annotations by tag"><option value="">All tags</option><option *ngFor="let tag of ['important','analysis','quote','definition','question','symbolism','motif','criticism']" [value]="tag">{{ tag | titlecase }}</option></select>
             </div>
             <article *ngFor="let item of filteredAnnotations" class="annotation-note panel">
               <div class="actions spread">

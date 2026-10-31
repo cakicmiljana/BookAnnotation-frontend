@@ -27,14 +27,9 @@
       <p class="featured-description">
         {{ books![0].description }}
       </p>
-      <a class="button primary" [routerLink]="ui.link('book-annotator', books![0].id)">Open reading workspace<mat-icon>arrow_forward</mat-icon></a>
     </div>
-    <div class="featured-aside">
-      <mat-icon>edit_note</mat-icon>
-      <p>
-        Good books invite<br>another look.
-      </p>
-      <span>READ · NOTICE · REFLECT</span>
+    <div class="featured-aside">  
+      <a class="button primary" [routerLink]="ui.link('book-annotator', books![0].id)">Open reading workspace<mat-icon>arrow_forward</mat-icon></a>
     </div>
   </article>
   <div class="collection-heading">
@@ -71,6 +66,5 @@
   <app-empty-state *ngIf="!visibleBooks.length" [title]="query ? 'No books on this shelf' : 'Your library begins here'" [message]="query ? 'Try a different title or author.' : 'Add an edition and start a conversation with the text.'" [action]="query ? 'Clear filter' : 'Upload an edition'" (actionClick)="query ? query = '' : upload()">
   </app-empty-state>
   <footer class="library-footer">
-    <span>Every reading leaves a trace.</span><span>Made for the life of the mind.</span>
   </footer>
 </section>
