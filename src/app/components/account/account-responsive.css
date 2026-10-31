@@ -1,0 +1,41 @@
+@media(max-width:800px) {
+  .account-layout {
+    grid-template-columns:1fr;
+    gap:24px
+  }
+  .account-nav {
+    flex-direction:row;
+    overflow:auto
+  }
+  .account-nav button {
+    white-space:nowrap;
+    font-size:11px;
+    padding:10px
+  }
+  .settings-card {
+    padding:24px
+  }
+  .signout-card {
+    padding:24px
+  }
+}
+
+@media(max-width:500px) {
+  .account-nav mat-icon {
+    display:none
+  }
+  .account-nav button {
+    font-size:10px
+  }
+  .signout-card {
+    flex-direction:column;
+    align-items:flex-start
+  }
+  .profile-details>div {
+    flex-direction:column;
+    gap:6px
+  }
+  .profile-details p {
+    max-width:none
+  }
+}

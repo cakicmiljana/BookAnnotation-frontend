@@ -1,3 +1,14 @@
-<button mat-raised-button routerLink="../../book-annotator/:{{[version.id]}}" class="version-item-div" *ngIf="version">
-    <h3>{{ version.language }}</h3>
-</button>
+<article class="edition-row panel" *ngIf="version">
+  <div class="edition-symbol">
+    <mat-icon>menu_book</mat-icon>
+  </div>
+  <div class="edition-info">
+    <h3>
+      {{ version.language }} edition
+    </h3>
+    <p>
+      {{ version.title }} <span>· {{ version.author }}</span>
+    </p>
+  </div>
+  <span class="chip">{{ version.language }}</span><a class="button primary" [routerLink]="ui.link('book-annotator', version.id)">Read edition<mat-icon>arrow_forward</mat-icon></a>
+</article>

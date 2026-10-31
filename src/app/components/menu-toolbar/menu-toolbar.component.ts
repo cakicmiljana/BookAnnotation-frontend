@@ -5,7 +5,7 @@ import { AppState } from 'src/app/store/app.state';
 import { logout } from 'src/app/store/users/users.action';
 import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 import { AccountComponent } from '../account/account.component';
-
+import { PresentationService } from '../../ui/presentation.service';
 @Component({
     selector: 'app-menu-toolbar',
     templateUrl: './menu-toolbar.component.html',
@@ -13,26 +13,21 @@ import { AccountComponent } from '../account/account.component';
     standalone: false
 })
 export class MenuToolbarComponent {
-  @Output() logoutEvent: EventEmitter<void> = new EventEmitter<void>();
-  dialog = inject(MatDialog);
-
-  constructor(private store: Store<AppState>) {
-
-  }
-
-  logout() {
-      this.store.dispatch(
-        logout()
-      );
+    @Output()
+    logoutEvent: EventEmitter<void> = new EventEmitter<void>();
+    dialog = inject(MatDialog);
+    constructor(private store: Store<AppState>, public ui: PresentationService) {
     }
-
-  openAccountDialog() {
-    this.dialog.open(AccountComponent, {
-  width: '400px',
-  position: { top: '70px', right: '20px' },
-  panelClass: 'account-dialog',  // custom class
-  hasBackdrop: true,
-  backdropClass: 'custom-backdrop'
-});
-  }
+    logout() {
+        this.store.dispatch(logout());
+    }
+    openAccountDialog() {
+        this.dialog.open(AccountComponent, {
+            width: '400px',
+            position: { top: '70px', right: '20px' },
+            panelClass: 'account-dialog', // custom class
+            hasBackdrop: true,
+            backdropClass: 'custom-backdrop'
+        });
+    }
 }

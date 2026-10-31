@@ -1,81 +1,112 @@
-.menu-bar {
-    /* padding: 10px; */
-    font-size: 14px;
-    font-weight: bold;
-    /* margin: 0 16px 0 8px; */
-    min-width: 120px;
-    background-color: black;
-    color: cadetblue;
-    display: flex;
+:host {
+  display:block;
+  position:sticky;
+  top:0;
+  z-index:30
 }
 
-.menu-bar mat-toolbar {
-    background-color: black !important;
-    color: white !important;
-}
-  
-.menu-bar ul {
-    margin: 0;
-    padding: 0;
-}
-
-.menu-bar li {
-    display: inline;
-    margin-right: 20px;
-    /* color: cadetblue; */
-    background-color: black;
+.app-header {
+  display:flex;
+  align-items:center;
+  gap:54px;
+  min-height:76px;
+  padding:0 48px;
+  background:var(--paper);
+  border-bottom:1px solid var(--line)
 }
 
-.menu-bar a {
-    /* color: cadetblue; */
-    font-size: 14px;
-    /* font-weight: bold; */
+.wordmark {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font:500 26px var(--serif);
+  letter-spacing:-.05em;
+  color:var(--ink)
 }
 
-button:hover {
-    background-color: rgba(95, 158, 160, 0.9) !important;
-    color: black !important;
-    font-weight: 500;
+.wordmark mat-icon {
+  color:var(--accent);
+  width:27px!important;
+  height:27px!important;
+  font-size:27px!important
 }
 
-.spacer {
-  flex: 1 1 auto;
+.wordmark-dot {
+  color:var(--accent)
 }
 
-.menu-icon {
-    margin-right: 30px;
+nav {
+  display:flex;
+  gap:30px;
+  align-self:stretch
 }
 
-.menu-button {
-    background-color: black !important;
-    color: white !important;
-    font-weight: 400;
+nav a {
+  display:flex;
+  align-items:center;
+  border-bottom:2px solid transparent;
+  color:var(--muted);
+  font-size:12px;
+  white-space:nowrap
 }
 
-/* Remove default white background and padding */
-.account-dialog .mat-dialog-container {
-  background-color: #1e1e1e;  /* dark background */
-  color: #f0f0f0;             /* text color */
-  padding: 0;                  /* remove white padding */
-  border-radius: 8px;          /* optional small rounding */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  overflow: hidden;
+nav a.active {
+  color:var(--accent);
+  border-color:var(--accent)
 }
 
-/* Optional: style inside AccountComponent */
-.account-div {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.header-end {
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-left:auto
 }
 
-.update-button {
-  background-color: black;
-  color: white;
+.preview-dot {
+  height:5px;
+  width:5px;
+  border-radius:50%;
+  background:var(--accent)
 }
 
-.update-button:hover {
-  background-color: rgba(95, 158, 160, 0.9);
-  color: black;
+.exit-preview {
+  color:var(--muted)
+}
+
+@media(max-width:1000px) {
+  .app-header {
+    gap:28px;
+    padding:0 24px
+  }
+  nav {
+    gap:20px
+  }
+  .preview-label {
+    display:none
+  }
+}
+
+@media(max-width:680px) {
+  .app-header {
+    padding:14px 18px 0;
+    gap:12px;
+    flex-wrap:wrap
+  }
+  .wordmark {
+    font-size:24px
+  }
+  .header-end {
+    gap:12px
+  }
+  nav {
+    order:3;
+    width:100%;
+    justify-content:space-between;
+    gap:15px;
+    overflow-x:auto
+  }
+  nav a {
+    padding:15px 0;
+    font-size:11px
+  }
 }

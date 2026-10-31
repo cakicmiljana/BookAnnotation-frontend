@@ -1,66 +1,312 @@
-<mat-drawer-container class="note-container" autosize>
-
-  <mat-drawer #drawer mode="over" position="start" class="note-drawer">
-    <div class="note-header">
-      <h3>My Notes</h3>
-    </div>
-
-    <form class="note-form">
-      <mat-form-field appearance="outline" class="note-textarea">
-        <textarea 
-          matInput 
-          [(ngModel)]="noteContent" 
-          name="noteContent"
-          placeholder="Write your note here...">
-        </textarea>
-      </mat-form-field>
-
-      <button mat-raised-button class="note-button" (click)="saveNote()">
-        <mat-icon>edit_note</mat-icon>
-        Save
+<div *ngIf="book; else readerUnavailable" class="reader-workspace" [class.night]="theme === 'night'" [class.light]="theme === 'light'" [class.focus-mode]="focusMode">
+  <header class="reader-toolbar">
+    <a class="reader-back" [routerLink]="ui.link('book', book.id)" aria-label="Back to book details"><mat-icon>arrow_back</mat-icon></a><span class="toolbar-book">{{ book.title }}</span>
+    <div class="reader-mode-switch">
+      <button [class.active]="mode === 'read'" (click)="mode = 'read'">
+        Read
       </button>
-    </form>
-  </mat-drawer>
-
-  <mat-drawer-content>
-    <button mat-fab class="side-button" (click)="drawer.toggle()" matTooltip="Toggle Notes">
-      <mat-icon>sticky_note_2</mat-icon>
+      <button [class.active]="mode === 'search'" (click)="mode = 'search'">
+        <mat-icon>search</mat-icon>Search this book
+      </button>
+      <button [class.active]="mode === 'notes'" (click)="mode = 'notes'">
+        Book notes
+      </button>
+    </div>
+    <div class="reader-tools">
+      <button class="icon-button" [class.active]="showContents" (click)="showContents = !showContents" aria-label="Toggle reading locations" [attr.aria-expanded]="showContents" matTooltip="Reading locations">
+        <mat-icon>format_list_bulleted</mat-icon>
+      </button>
+      <button class="icon-button type-control" [class.active]="showAppearance" (click)="showAppearance = !showAppearance" aria-label="Reading appearance" [attr.aria-expanded]="showAppearance">
+        Aa
+      </button>
+      <button class="icon-button" [class.active]="bookmarked" (click)="bookmarked = !bookmarked" [attr.aria-pressed]="bookmarked" aria-label="Bookmark this location" matTooltip="Bookmark">
+        <mat-icon>{{ bookmarked ? 'bookmark' : 'bookmark_border' }}</mat-icon>
+      </button>
+      <button class="icon-button" [class.active]="showPanel" (click)="showPanel = !showPanel" aria-label="Toggle study panel" [attr.aria-expanded]="showPanel" matTooltip="Study panel">
+        <mat-icon>view_sidebar</mat-icon>
+      </button>
+    </div>
+  </header>
+  <section *ngIf="showAppearance" class="appearance panel" aria-label="Reading appearance">
+    <div class="actions spread">
+      <h3>
+        Reading appearance
+      </h3>
+      <button class="icon-button" (click)="showAppearance = false" aria-label="Close appearance">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <label class="field">
+      Typeface<select [(ngModel)]="font"><option value="serif">Literary serif</option><option value="sans">Clean sans-serif</option></select>
+    </label>
+    <div class="appearance-row">
+      <span>Font size</span>
+      <div class="actions">
+        <button class="icon-button" (click)="fontSize = fontSize - 1" [disabled]="fontSize <= 16" aria-label="Decrease text size">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <span>{{ fontSize }}px</span>
+        <button class="icon-button" (click)="fontSize = fontSize + 1" [disabled]="fontSize >= 30" aria-label="Increase text size">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <label class="field">
+      Line spacing · {{ lineHeight }}<input type="range" min="1.4" max="2.2" step=".05" [(ngModel)]="lineHeight">
+    </label>
+    <label class="field">
+      Reading width<select [(ngModel)]="readingWidth"><option value="narrow">Narrow</option><option value="comfortable">Comfortable</option><option value="wide">Wide</option></select>
+    </label>
+    <div class="segmented theme-choices">
+      <button *ngFor="let value of ['paper', 'light', 'night']" [class.active]="theme === value" (click)="theme = value">
+        {{ value | titlecase }}
+      </button>
+    </div>
+    <label class="check-row">
+      <span>Show highlights</span><input type="checkbox" [(ngModel)]="showHighlights">
+    </label>
+    <label class="check-row">
+      <span>Focus mode</span><input type="checkbox" [(ngModel)]="focusMode">
+    </label>
+    <button class="text-link" (click)="resetAppearance()">
+      Reset defaults
     </button>
-
-    <mat-card class="reader-card">
-      <mat-card-header>
-        <mat-card-title>
-          <div class="book-header">
-            <h2>{{ book?.title }}</h2>
-            <div class="book-details">
-              <span>{{ book?.author }}</span>
-              <span>{{ book?.pages }} pages</span>
-              <span>{{ book?.country }}, {{ book?.publicationYear }}</span>
-            </div>
+  </section>
+  <div class="reader-layout" [class.with-contents]="showContents && !focusMode" [class.with-panel]="showPanel && !focusMode && mode !== 'search' && mode !== 'notes'">
+    <aside *ngIf="showContents && !focusMode" class="contents-panel">
+      <span class="eyebrow">Your place in the text</span>
+      <app-book-cover [book]="book">
+      </app-book-cover>
+      <h3>
+        {{ book.title }}
+      </h3>
+      <p>
+        {{ book.author }}
+      </p>
+      <div class="contents-heading">
+        Reading locations
+      </div>
+      <button *ngFor="let location of locations" [class.active]="currentPage === location" (click)="getPageData({pageIndex: location}); mode = 'read'">
+        <mat-icon>short_text</mat-icon>Part {{ location + 1 }}<span *ngIf="currentPage === location">Reading</span>
+      </button>
+      <p class="small muted">
+        Locations follow the source text, independent of font size.
+      </p>
+    </aside>
+    <div class="reader-main">
+      <app-book-search [hidden]="mode !== 'search'" [book]="book" (openPassage)="openResult($event)" (analyzePassage)="analyze($event)">
+      </app-book-search>
+      <section *ngIf="mode === 'notes'" class="notes-workspace">
+        <span class="eyebrow">A conversation with the text</span>
+        <h1>
+          Your book notes
+        </h1>
+        <p class="muted">
+          {{ book.title }} · {{ book.author }}
+        </p>
+        <div class="notes-editor panel">
+          <div class="actions spread">
+            <h3>
+              Thoughts in the margins
+            </h3>
+            <span class="chip"><mat-icon>lock_outline</mat-icon>Personal note</span>
           </div>
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div class="book-content" 
-             [innerHTML]="annotatedText" 
-             (mouseup)="annotateText($event)" 
-             (click)="updateAnnotation($event)">
+          <label class="sr-only" for="full-note">
+            Book note
+          </label>
+          <textarea id="full-note" [(ngModel)]="noteContent" (ngModelChange)="noteStatus = 'Unsaved draft'" placeholder="Gather a thought, follow a theme, make a connection…"></textarea>
+          <footer class="actions spread">
+            <span class="preview-label" role="status">{{ noteStatus }} · local preview</span>
+            <button class="button primary" (click)="saveNote()">
+              <mat-icon>check</mat-icon>Keep draft
+            </button>
+          </footer>
         </div>
-
-        <mat-paginator
-          [length]="fullContent.length"
-          [pageSize]="pageSize"
-          [pageIndex]="currentPage"
-          aria-label="Select page"
-          (page)="getPageData($event)">
-        </mat-paginator>
-
-        <div class="page-info">
-          Page {{ currentPage + 1 }} of {{ totalPages }}
+        <a class="text-link" [routerLink]="ui.link('notes')"><mat-icon>arrow_back</mat-icon>All book notes</a>
+      </section>
+      <section *ngIf="mode === 'read'" class="reading-surface" [class.narrow]="readingWidth === 'narrow'" [class.wide]="readingWidth === 'wide'">
+        <div *ngIf="focusMode" class="focus-exit">
+          <button class="button" (click)="focusMode = false">
+            <mat-icon>fullscreen_exit</mat-icon>Leave focus mode
+          </button>
         </div>
-      </mat-card-content>
-    </mat-card>
-  </mat-drawer-content>
-
-</mat-drawer-container>
+        <div class="reading-title">
+          <span class="eyebrow">The reading room · Part {{ currentPage + 1 }}</span>
+          <h1>
+            {{ book.title }}
+          </h1>
+          <p>
+            {{ book.author }}
+          </p>
+          <div class="ornament">
+            ✦
+          </div>
+        </div>
+        <div *ngIf="activePassage" class="match-notice">
+          <span><mat-icon>search</mat-icon>Passage from your search</span>
+          <button class="text-link" (click)="mode = 'search'">
+            Back to results
+          </button>
+          <button class="icon-button" (click)="activePassage = null" aria-label="Clear search marker">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div *ngIf="selectionReady" class="selection-toolbar panel">
+          <div class="selection-colors">
+            <span *ngFor="let color of colors" [style.background]="color.swatch"></span>
+          </div>
+          <button class="text-link" (mousedown)="$event.preventDefault()" (click)="annotationDialog(selectedText, selectedStart, selectedEnd)">
+            <mat-icon>edit_note</mat-icon>Annotate
+          </button>
+          <button class="text-link" (mousedown)="$event.preventDefault()" (click)="analyze()">
+            <mat-icon>auto_awesome</mat-icon>Analyze
+          </button>
+          <button class="icon-button" (click)="selectionReady = false" aria-label="Close selection tools">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="book-content" tabindex="0" aria-label="Book text. Select a passage to annotate or analyze." [style.font-size.px]="fontSize" [style.line-height]="lineHeight" [style.font-family]="font === 'serif' ? 'var(--serif)' : 'var(--sans)'" (mouseup)="annotateText($event)" (keyup)="annotateText($event)" (touchend)="annotateText($event)">
+          <span *ngFor="let segment of segments; trackBy: trackSegment" [class.annotation]="!!segment.annotation" [class.search-match]="segment.match" [style.background-color]="showHighlights && segment.annotation ? displayColor(segment.annotation.color) : null" [attr.title]="segment.annotation?.comment || null" (click)="updateAnnotation(segment.annotation)">{{ segment.text }}</span>
+        </div>
+        <app-empty-state *ngIf="!pageText" title="This edition has no text yet" message="Choose another edition or upload a reading copy.">
+        </app-empty-state>
+        <div class="reading-end">
+          <span></span><mat-icon>auto_stories</mat-icon><span></span>
+        </div>
+        <footer class="reader-pagination">
+          <button class="button quiet" [disabled]="currentPage === 0" (click)="getPageData({pageIndex: currentPage - 1})">
+            <mat-icon>arrow_back</mat-icon>Previous
+          </button>
+          <span>Part {{ currentPage + 1 }} of {{ totalPages }}</span>
+          <button class="button quiet" [disabled]="currentPage + 1 >= totalPages" (click)="getPageData({pageIndex: currentPage + 1})">
+            Next<mat-icon>arrow_forward</mat-icon>
+          </button>
+        </footer>
+      </section>
+    </div>
+    <aside *ngIf="showPanel && !focusMode && mode === 'read'" class="study-panel">
+      <header class="study-heading">
+        <h2>
+          In the margins
+        </h2>
+        <button class="icon-button" (click)="showPanel = false" aria-label="Close study panel">
+          <mat-icon>close</mat-icon>
+        </button>
+      </header>
+      <div class="tabs study-tabs">
+        <button [class.active]="panel === 'annotations'" (click)="panel = 'annotations'">
+          Annotations <span>{{ allAnnotations.length }}</span>
+        </button>
+        <button [class.active]="panel === 'notes'" (click)="panel = 'notes'">
+          Notes
+        </button>
+        <button [class.active]="panel === 'analysis'" (click)="panel = 'analysis'">
+          <mat-icon>auto_awesome</mat-icon>Analysis
+        </button>
+      </div>
+      <div class="study-body">
+        <ng-container *ngIf="panel === 'annotations'">
+          <section *ngIf="editorOpen; else annotationList">
+            <div class="actions spread">
+              <span class="eyebrow">{{ selectedAnnotation ? 'Edit annotation' : 'A thought worth keeping' }}</span>
+              <button class="icon-button" (click)="editorOpen = false" aria-label="Close annotation editor">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <blockquote class="annotation-quote">
+              {{ selectedText }}
+            </blockquote>
+            <app-annotation-fields [(color)]="draftColor" [(tag)]="draftTag" [(comment)]="draftComment">
+            </app-annotation-fields>
+            <div class="actions spread">
+              <button class="button quiet" (click)="editorOpen = false">
+                Cancel
+              </button>
+              <button class="button primary" (click)="saveAnnotation()">
+                Keep annotation
+              </button>
+            </div>
+            <p class="preview-label">
+              Edits stay in this workspace for this visit.
+            </p>
+            <button *ngIf="selectedAnnotation" class="text-link delete-link" (click)="confirmDelete = true">
+              <mat-icon>delete_outline</mat-icon>Remove annotation
+            </button>
+            <div *ngIf="confirmDelete" class="status">
+              <p>
+                Remove this annotation from the preview?
+              </p>
+              <div class="actions">
+                <button class="button" (click)="confirmDelete = false">
+                  Cancel
+                </button>
+                <button class="button danger" (click)="deleteAnnotation()">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </section>
+          <ng-template #annotationList>
+            <div class="annotation-filter">
+              <span class="small muted">Your collected passages</span><select [(ngModel)]="tagFilter" aria-label="Filter annotations by tag"><option value="">All tags</option><option *ngFor="let tag of ['important','analysis','quote','definition','question','symbolism','motif','criticism']" [value]="tag">{{ tag | titlecase }}</option></select>
+            </div>
+            <article *ngFor="let item of filteredAnnotations" class="annotation-note panel">
+              <div class="actions spread">
+                <span class="annotation-location"><i [style.background]="displayColor(item.color)"></i>Character {{ item.startOffset + 1 }}</span>
+                <button class="icon-button" (click)="edit(item)" aria-label="Edit annotation">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+              </div>
+              <button class="passage-quote" (click)="edit(item)">
+                “{{ excerpt(item) }}”
+              </button>
+              <span *ngIf="item.tag" class="chip accent">{{ item.tag | titlecase }}</span>
+              <p>
+                {{ item.comment }}
+              </p>
+            </article>
+            <app-empty-state *ngIf="!filteredAnnotations.length" icon="border_color" title="A margin waiting for you" message="Select a passage in the text to add a highlight, tag, or thought.">
+            </app-empty-state>
+            <div class="sidebar-tip">
+              <mat-icon>gesture</mat-icon>
+              <p>
+                Select a few words to begin.<br>Your next thought belongs here.
+              </p>
+            </div>
+          </ng-template>
+        </ng-container>
+        <section *ngIf="panel === 'notes'">
+          <span class="eyebrow">Personal book note</span>
+          <h3>
+            Thoughts as you read
+          </h3>
+          <p class="small muted">
+            One quiet place for everything this book brings to mind.
+          </p>
+          <label class="field">
+            <span class="sr-only">Write your book note</span><textarea class="sidebar-note" rows="13" [(ngModel)]="noteContent" (ngModelChange)="noteStatus = 'Unsaved draft'" placeholder="Start with a question, an image, a connection…"></textarea>
+          </label>
+          <div class="actions spread">
+            <span class="preview-label" role="status">{{ noteStatus }}</span>
+            <button class="button primary" (click)="saveNote()">
+              Keep draft
+            </button>
+          </div>
+          <p class="preview-label">
+            Drafts are local to this visit.
+          </p>
+          <button class="text-link" (click)="mode = 'notes'">
+            Open writing view<mat-icon>north_east</mat-icon>
+          </button>
+        </section>
+        <app-passage-analysis *ngIf="panel === 'analysis'" [passage]="analysisPassage" [bookTitle]="book.title" (saveToNotes)="addAnalysis($event)">
+        </app-passage-analysis>
+      </div>
+    </aside>
+  </div>
+</div>
+<ng-template #readerUnavailable>
+  <app-empty-state [title]="loading ? 'Preparing your reading room…' : 'This edition is unavailable'" [message]="loading ? 'A moment of quiet before the first page.' : 'Return to your library and open another book.'">
+    <a class="button" [routerLink]="ui.link('my-books')">Back to library</a>
+  </app-empty-state>
+</ng-template>

@@ -1,129 +1,90 @@
-/* Container & drawer */
-.note-container {
-  height: 100vh;
-  overflow: hidden;
-  background-color: #f5f5f5;
+:host {
+  display:block
 }
 
-.note-drawer {
-  width: 320px;
-  height: 100vh;
-  background-color: #1e1e1e;
-  color: #f0f0f0;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  box-shadow: 2px 0 12px rgba(0,0,0,0.2);
+.reader-workspace {
+  background:var(--paper);
+  min-height:calc(100dvh - 76px);
+  position:relative
 }
 
-.note-header h3 {
-  margin: 0 0 15px 0;
-  font-weight: 500;
-  font-size: 1.3rem;
-  letter-spacing: 0.5px;
+.reader-toolbar {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:64px;
+  padding:10px 28px;
+  border-bottom:1px solid var(--line)
 }
 
-.note-form {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+.reader-back {
+  color:var(--muted)
 }
 
-.note-textarea textarea {
-  flex: 1;
-  padding: 10px;
-  font-size: 0.95rem;
-  background-color: #2a2a2a;
-  color: #fff;
-  border-radius: 6px;
-  border: none;
-  resize: none;
+.toolbar-book {
+  font:16px var(--serif);
+  max-width:220px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap
 }
 
-.note-button {
-  margin-top: 10px;
-  background-color: #5f9ea0;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 500;
+.reader-mode-switch {
+  display:flex;
+  gap:5px;
+  margin-left:26px
 }
 
-.note-button:hover {
-  background-color: #468b8f;
-  color: #fff;
+.reader-mode-switch button {
+  display:flex;
+  gap:5px;
+  align-items:center;
+  padding:8px 12px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:11px;
+  border-radius:4px
 }
 
-.side-button {
-  position: fixed;
-  top: 80px; /* Move it lower from top */
-  left: 20px; /* Adjust horizontal position */
-  z-index: 100;
-  background-color: #5f9ea0;
-  color: #fff;
-  transition: all 0.3s ease;
+.reader-mode-switch .active {
+  background:var(--accent-soft);
+  color:var(--accent)
 }
 
-.side-button:hover {
-  background-color: #468b8f;
+.reader-mode-switch mat-icon {
+  font-size:15px!important;
+  width:15px!important;
+  height:15px!important
 }
 
-/* Reader card */
-.reader-card {
-  margin: 40px auto;
-  padding: 30px;
-  max-width: 900px;
-  border-radius: 0;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  background-color: #fff;
+.reader-tools {
+  margin-left:auto;
+  display:flex;
+  gap:3px
 }
 
-.book-header h2 {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 600;
-  color: #333;
+.type-control {
+  font:19px var(--serif)
 }
 
-.book-details {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 10px;
-  font-size: 0.95rem;
-  color: #666;
+.reader-layout {
+  display:grid;
+  grid-template-columns:minmax(0,1fr)
 }
 
-.book-content {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.6;
-  margin-top: 20px;
-  font-size: 1rem;
+.reader-layout.with-panel {
+  grid-template-columns:minmax(0,1fr) 345px
 }
 
-.annotation {
-  background-color: #ffeaa7;
-  padding: 2px 4px;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.reader-layout.with-contents {
+  grid-template-columns:205px minmax(0,1fr)
 }
 
-.annotation:hover {
-  background-color: #ffe066;
+.reader-layout.with-contents.with-panel {
+  grid-template-columns:190px minmax(0,1fr) 330px
 }
 
-/* Paginator and page info */
-.page-info {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #999;
-  text-align: right;
-}
-
-/* Smooth hover effect for cards */
-mat-card {
-  transition: all 0.3s ease-in-out;
+.reader-main {
+  min-width:0
 }

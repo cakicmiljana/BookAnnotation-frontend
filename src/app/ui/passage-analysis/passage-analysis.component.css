@@ -1,0 +1,133 @@
+.analysis-intro p {
+  font-size:12px;
+  color:var(--muted)
+}
+
+.analysis-intro h3 {
+  font-size:25px
+}
+
+.label,legend {
+  font:500 11px var(--sans);
+  margin-bottom:10px;
+  display:block
+}
+
+.selected-passage {
+  margin:12px 0;
+  background:var(--ochre);
+  padding:16px;
+  border-radius:4px;
+  font:17px/1.65 var(--serif);
+  max-height:220px;
+  overflow:auto
+}
+
+.source {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--muted);
+  font-size:10px
+}
+
+.source mat-icon {
+  font-size:14px!important;
+  width:14px!important;
+  height:14px!important
+}
+
+fieldset {
+  padding:0;
+  border:0;
+  margin:24px 0 18px
+}
+
+.lenses {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px
+}
+
+.lenses button {
+  font-size:10px;
+  background:transparent;
+  color:var(--muted);
+  border:1px solid var(--line);
+  padding:8px 10px;
+  border-radius:4px
+}
+
+.lenses button.active {
+  color:var(--accent);
+  background:var(--accent-soft);
+  border-color:var(--accent)
+}
+
+.analyze-button,.save-analysis {
+  width:100%
+}
+
+.preview-note {
+  font-size:10px;
+  color:var(--muted);
+  display:flex;
+  gap:6px;
+  margin:12px 0 24px
+}
+
+.preview-note mat-icon {
+  font-size:13px!important;
+  width:13px!important;
+  height:13px!important
+}
+
+.analysis-response {
+  border-top:1px solid var(--line);
+  padding-top:24px
+}
+
+.analysis-response h3 {
+  margin-top:18px;
+  font-size:24px
+}
+
+.analysis-response p {
+  font:15px/1.75 var(--serif)
+}
+
+.analysis-response h4 {
+  font-size:11px;
+  margin:24px 0 8px
+}
+
+.theme-group {
+  margin:20px 0
+}
+
+.analysis-response blockquote {
+  margin:12px 0 22px;
+  border-left:2px solid var(--accent);
+  padding-left:14px;
+  color:var(--accent);
+  font:15px/1.7 var(--serif)
+}
+
+.follow-up {
+  position:relative;
+  margin-top:24px
+}
+
+.follow-up input {
+  padding-right:40px
+}
+
+.follow-up .icon-button {
+  position:absolute;
+  right:3px;
+  bottom:2px
+}
+
+.follow-up .field {
+  margin:0
+}

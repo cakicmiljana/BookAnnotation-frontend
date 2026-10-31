@@ -1,42 +1,61 @@
-
-  <mat-card class="login-card">
-    <mat-card-header>
-      <mat-card-title>Login</mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content>
-      <form (ngSubmit)="login()">
-
-        <mat-form-field appearance="fill" class="login-field">
-          <mat-label>Email</mat-label>
-          <input matInput [(ngModel)]="username" name="username" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="login-field">
-          <mat-label>Password</mat-label>
-          <input matInput [(ngModel)]="password" name="password" type="password" required>
-        </mat-form-field>
-
-        <button 
-          mat-raised-button 
-          class="login-button" 
-          type="submit"
-          [disabled]="loading$ | async">
-
-          <ng-container *ngIf="!(loading$ | async); else loadingTpl">
-            Login
-          </ng-container>
-
-          <ng-template #loadingTpl>
-            Logging in...
-          </ng-template>
+<div class="login-shell">
+  <section class="login-editorial">
+    <a class="login-brand" routerLink="/login"><mat-icon>auto_stories</mat-icon>marginalia.</a>
+    <div class="editorial-copy">
+      <span class="eyebrow">A space for close reading</span>
+      <h1>
+        Read closely.<br><i>Think freely.</i>
+      </h1>
+      <p>
+        For the passages that stay with you,<br>and the thoughts they leave behind.
+      </p>
+    </div>
+    <div class="book-composition" aria-hidden="true">
+      <img src="assets/2.jpg" alt=""><img src="assets/1.jpg" alt=""><img src="assets/3.jpg" alt="">
+    </div>
+    <footer>
+      YOUR BOOKS. YOUR THOUGHTS. ROOM TO EXPLORE.
+    </footer>
+  </section>
+  <section class="login-form-area">
+    <div class="login-form-inner">
+      <span class="eyebrow">Return to your reading room</span>
+      <h2>
+        Welcome back.
+      </h2>
+      <p class="muted">
+        Your next thought is waiting in the margins.
+      </p>
+      <form #loginForm="ngForm" (ngSubmit)="loginForm.valid && login()">
+        <label class="field">
+          Username<input [(ngModel)]="username" name="username" autocomplete="username" required placeholder="Your username">
+        </label>
+        <label class="field">
+          Password
+          <div class="password-input">
+            <input [(ngModel)]="password" name="password" [type]="showPassword ? 'text' : 'password'" autocomplete="current-password" required placeholder="Your password">
+            <button type="button" class="icon-button" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'" (click)="showPassword = !showPassword">
+              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+        </label>
+        <div *ngIf="(error$ | async) as error" class="status error" role="alert">
+          <mat-icon>error_outline</mat-icon>{{ error }}
+        </div>
+        <button class="button primary login-submit" type="submit" [disabled]="!loginForm.valid || (loading$ | async)">
+          {{ (loading$ | async) ? 'Signing in…' : 'Enter your reading room' }}<mat-icon>arrow_forward</mat-icon>
         </button>
-
       </form>
-
-      <div *ngIf="(error$ | async) as error" class="error">
-        {{ error }}
+      <div class="preview-divider">
+        <span></span><span>A first look</span><span></span>
       </div>
-
-    </mat-card-content>
-  </mat-card>
+      <a class="button preview-button" routerLink="/preview"><mat-icon>auto_stories</mat-icon>Explore the UI preview</a>
+      <p class="preview-explanation">
+        Browse the library and reading tools without signing in.
+      </p>
+      <p class="login-footnote">
+        Read. Notice. Make it your own.
+      </p>
+    </div>
+  </section>
+</div>

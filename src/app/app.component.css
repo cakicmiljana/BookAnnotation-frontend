@@ -1,4 +1,8 @@
-body {
-    display: flex;
-    /* flex-direction: column; */
+:host  {
+  display: block;
+  min-height: 100dvh;
+}
+
+main:focus  {
+  outline: none;
 }

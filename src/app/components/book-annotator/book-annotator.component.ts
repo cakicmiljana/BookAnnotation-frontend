@@ -1,162 +1,222 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { take } from 'rxjs/operators';
-
-import { AppState } from 'src/app/store/app.state';
-import { selectAnnotations } from 'src/app/store/annotations/annotations.selector';
-import { loadAnnotations } from 'src/app/store/annotations/annotations.actions';
-import { selectUserId } from 'src/app/store/users/users.selector';
-import { selectSelectedBook } from 'src/app/store/books/books.selector';
-import { selectNoteByBookAndUser } from 'src/app/store/notes/notes.selector';
-import * as NotesActions from 'src/app/store/notes/notes.actions';
-
-import { Annotation } from 'src/app/models/annotation';
-import { Book } from 'src/app/models/book';
-import { Note } from 'src/app/models/note';
-
-import { TextAnnotator } from 'src/app/helper classes/TextAnnotator';
-import { AddAnnotationComponent } from '../add-annotation/add-annotation.component';
-import { UpdateAnnotationComponent } from '../update-annotation/update-annotation.component';
-
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, of, switchMap, take } from 'rxjs';
+import { AppState } from '../../store/app.state';
+import { selectAnnotations } from '../../store/annotations/annotations.selector';
+import { loadAnnotations } from '../../store/annotations/annotations.actions';
+import { selectUserId } from '../../store/users/users.selector';
+import { selectNoteByBookAndUser } from '../../store/notes/notes.selector';
+import * as NotesActions from '../../store/notes/notes.actions';
+import { Book } from '../../models/book';
+import { Annotation } from '../../models/annotation';
+import { Note } from '../../models/note';
+import { BooksService } from '../../services/books.service';
+import { PresentationService } from '../../ui/presentation.service';
+import { TextAnnotator } from '../../helper classes/TextAnnotator';
+import { ANNOTATION_COLORS } from '../../ui/annotation-fields.component';
+import { PassagePreview } from '../../ui/book-search/book-search.component';
+interface ReadingSegment {
+    text: string;
+    annotation?: Annotation;
+    match: boolean;
+}
 @Component({
-  selector: 'app-book-annotator',
-  templateUrl: './book-annotator.component.html',
-  styleUrls: ['./book-annotator.component.css'],
-  standalone: false
+    selector: 'app-book-annotator', templateUrl: './book-annotator.component.html',
+    styleUrls: ['./book-annotator.component.css', './reader-surface.css', './reader-panels.css', './reader-annotations.css', './reader-appearance.css', './reader-responsive.css'], standalone: false
 })
 export class BookAnnotatorComponent implements OnInit {
-  book: Book | null = null;
-  allAnnotations: Annotation[] = [];
-
-  note: Note | undefined;
-  noteContent = '';
-
-  userId = 0;
-
-  currentPage = 0;
-  pageSize = 3000;
-  totalPages = 0;
-
-  pageText = '';
-  fullContent = '';
-  annotatedText: SafeHtml = '';
-  annotator: TextAnnotator | null = null;
-
-  selectedText = '';
-  dialog = inject(MatDialog);
-
-  constructor(private store: Store<AppState>, private sanitizer: DomSanitizer) {}
-
-  ngOnInit(): void {
-    // Subscribe to user and selected book from state
-    this.store.select(selectUserId).pipe(take(1)).subscribe(userId => {
-      if (!userId) return;
-      this.userId = userId;
-
-      this.store.select(selectSelectedBook).subscribe(book => {
-        if (!book) return;
-        this.book = book;
-
-        this.fullContent = book.content ?? '';
-        this.pageSize = book.pageSize ?? 3000;
-        this.totalPages = Math.ceil(this.fullContent.length / this.pageSize);
-
-        // Dispatch to load annotations now that we have bookId and userId
-        this.store.dispatch(loadAnnotations({ bookId: book.id, userId: this.userId }));
-
-        // Dispatch to load note for this book and user
-        this.store.dispatch(NotesActions.getNote({ bookId: book.id, userId: this.userId }));
-
-        this.setPageText();
-
-        // Load note from state for this book and user
-        this.store.select(selectNoteByBookAndUser(book.id, this.userId)).subscribe(note => {
-          this.note = note;
-          this.noteContent = note?.content ?? '';
+    book: Book | null = null;
+    allAnnotations: Annotation[] = [];
+    note: Note | undefined;
+    noteContent = '';
+    noteStatus = 'Draft in this workspace';
+    userId = 0;
+    currentPage = 0;
+    pageSize = 3000;
+    totalPages = 0;
+    pageText = '';
+    fullContent = '';
+    selectedText = '';
+    selectedStart = 0;
+    selectedEnd = 0;
+    selectedAnnotation: Annotation | null = null;
+    mode: 'read' | 'search' | 'notes' = 'read';
+    panel: 'annotations' | 'notes' | 'analysis' = 'annotations';
+    showPanel = window.matchMedia('(min-width: 801px)').matches;
+    showContents = false;
+    showAppearance = false;
+    focusMode = false;
+    fontSize = 21;
+    lineHeight = 1.85;
+    readingWidth = 'comfortable';
+    font = 'serif';
+    theme = 'paper';
+    showHighlights = true;
+    bookmarked = false;
+    tagFilter = '';
+    editorOpen = false;
+    draftColor = 'lightyellow';
+    draftTag = '';
+    draftComment = '';
+    confirmDelete = false;
+    loadError = false;
+    loading = true;
+    selectionReady = false;
+    activePassage: PassagePreview | null = null;
+    colors = ANNOTATION_COLORS;
+    private annotator = new TextAnnotator();
+    private destroyRef = inject(DestroyRef);
+    constructor(private store: Store<AppState>, private booksService: BooksService, private route: ActivatedRoute, public ui: PresentationService) { }
+    ngOnInit(): void {
+        this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+            const mode = params.get('mode');
+            const panel = params.get('panel');
+            this.mode = mode === 'search' || mode === 'notes' ? mode : 'read';
+            if (panel === 'notes' || panel === 'analysis') {
+                this.panel = panel;
+                this.showPanel = true;
+            }
         });
-      });
-
-      // Subscribe to annotations
-      this.store.select(selectAnnotations).subscribe(annotations => {
-        this.allAnnotations = annotations.filter(a => a.userId === this.userId);
-        if (this.fullContent) this.setPageText();
-      });
-    });
-  }
-
-  setPageText() {
-    const start = this.currentPage * this.pageSize;
-    const end = start + this.pageSize;
-    this.pageText = this.fullContent.substring(start, end);
-
-    if (!this.annotator) this.annotator = new TextAnnotator();
-
-    const rawAnnotated = this.annotator.annotateText(this.pageText, this.allAnnotations, this.currentPage, this.pageSize);
-    this.annotatedText = this.sanitizer.bypassSecurityTrustHtml(rawAnnotated);
-  }
-
-  getPageData(event: any) {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize ?? this.pageSize;
-    this.totalPages = Math.ceil(this.fullContent.length / this.pageSize);
-    this.setPageText();
-  }
-
-  annotateText(event: MouseEvent) {
-    const selection = window.getSelection();
-    if (!selection || selection.isCollapsed) return;
-
-    this.selectedText = selection.toString();
-    const range = selection.getRangeAt(0);
-    const textContainer = event.currentTarget as HTMLElement;
-
-    const startOffset = this.annotator?.getOffset(textContainer, range.startContainer, range.startOffset);
-    const endOffset = this.annotator?.getOffset(textContainer, range.endContainer, range.endOffset);
-
-    if (startOffset !== undefined && endOffset !== undefined) {
-      this.annotationDialog(this.selectedText, startOffset + this.currentPage * this.pageSize, endOffset + this.currentPage * this.pageSize);
+        this.store.select(selectUserId).pipe(take(1)).subscribe(id => this.userId = this.ui.preview ? 1 : (id || 0));
+        this.route.paramMap.pipe(switchMap(params => { this.loading = true; return this.booksService.getBookById(Number((params.get('id') || '').replace(/^:/, ''))).pipe(catchError(() => of(null))); }), takeUntilDestroyed(this.destroyRef)).subscribe(book => {
+            this.loading = false;
+            this.loadError = !book;
+            this.book = book || null;
+            this.allAnnotations = [];
+            this.noteContent = '';
+            this.note = undefined;
+            this.currentPage = 0;
+            this.editorOpen = false;
+            this.activePassage = null;
+            this.selectionReady = false;
+            this.selectedText = '';
+            if (!book)
+                return;
+            this.fullContent = book.content || '';
+            this.pageSize = book.pageSize || 3000;
+            this.totalPages = Math.max(1, Math.ceil(this.fullContent.length / this.pageSize));
+            this.setPageText();
+            if (this.ui.preview) {
+                this.booksService.getAnnotationsByBookId(book.id, 1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(items => this.allAnnotations = items.map(item => ({ ...item })));
+                this.booksService.getNote(book.id, 1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(note => { this.note = note; this.noteContent = this.ui.getNoteDraft(book.id, 1) ?? note?.content ?? ''; });
+            }
+            else {
+                this.store.dispatch(loadAnnotations({ bookId: book.id, userId: this.userId }));
+                this.store.dispatch(NotesActions.getNote({ bookId: book.id, userId: this.userId }));
+            }
+        });
+        this.store.select(selectAnnotations).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(items => {
+            if (!this.ui.preview)
+                this.allAnnotations = items.filter(item => item.userId === this.userId && item.bookId === this.book?.id).map(item => ({ ...item }));
+        });
+        this.store.select(state => state.notes).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+            if (!this.ui.preview && this.book)
+                this.store.select(selectNoteByBookAndUser(this.book.id, this.userId)).pipe(take(1)).subscribe(note => { this.note = note; this.noteContent = this.ui.getNoteDraft(this.book!.id, this.userId) ?? note?.content ?? ''; });
+        });
     }
-  }
-
-  annotationDialog(text: string, start: number, end: number) {
-    const dialogRef = this.dialog.open(AddAnnotationComponent, { data: { userId: this.userId, bookId: this.book!.id, text, start, end } });
-    dialogRef.componentInstance.annotationAdded.subscribe(() => {
-      this.store.dispatch(loadAnnotations({ bookId: this.book!.id, userId: this.userId }));
-      dialogRef.close();
-    });
-  }
-
-  updateAnnotation(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (!target.classList.contains('annotation')) return;
-
-    this.dialog.open(UpdateAnnotationComponent, {
-      data: {
-        id: target.getAttribute('data-id'),
-        start: target.getAttribute('data-start'),
-        end: target.getAttribute('data-end'),
-        comment: target.getAttribute('data-comment'),
-        tag: target.getAttribute('data-tag'),
-        color: target.getAttribute('data-color')
-      }
-    });
-  }
-
-  saveNote() {
-    if (!this.book) return;
-    if (this.note) {
-      const updatedNote: Note = { ...this.note, content: this.noteContent };
-      this.store.dispatch(NotesActions.updateNoteSuccess({ note: updatedNote }));
-    } else {
-      const newNote: Note = {
-        id: 0,
-        bookId: this.book.id,
-        userId: this.userId,
-        content: this.noteContent
-      };
-      this.store.dispatch(NotesActions.createNoteSuccess({ note: newNote }));
+    setPageText(): void { this.pageText = this.fullContent.substring(this.currentPage * this.pageSize, (this.currentPage + 1) * this.pageSize); }
+    getPageData(event: {
+        pageIndex: number;
+        pageSize?: number;
+    }): void {
+        this.pageSize = event.pageSize ?? this.pageSize;
+        this.totalPages = Math.max(1, Math.ceil(this.fullContent.length / this.pageSize));
+        this.currentPage = Math.max(0, Math.min(this.totalPages - 1, event.pageIndex));
+        this.setPageText();
+        this.selectionReady = false;
     }
-  }
+    get locations(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i); }
+    trackSegment(index: number): number { return index; }
+    get filteredAnnotations(): Annotation[] { return this.allAnnotations.filter(item => !this.tagFilter || item.tag === this.tagFilter); }
+    get analysisPassage(): string { return this.selectedText || this.activePassage?.text || this.fullContent.split('\n\n')[0] || ''; }
+    get segments(): ReadingSegment[] {
+        const start = this.currentPage * this.pageSize;
+        const end = start + this.pageText.length;
+        const annotations = this.allAnnotations.filter(item => item.startOffset < end && item.endOffset > start);
+        const boundaries = new Set<number>([start, end]);
+        annotations.forEach(item => { boundaries.add(Math.max(start, item.startOffset)); boundaries.add(Math.min(end, item.endOffset)); });
+        if (this.activePassage) {
+            boundaries.add(Math.max(start, Math.min(end, this.activePassage.offset)));
+            boundaries.add(Math.max(start, Math.min(end, this.activePassage.offset + this.activePassage.text.length)));
+        }
+        const points = [...boundaries].sort((a, b) => a - b);
+        return points.slice(0, -1).map((point, i) => ({
+            text: this.fullContent.slice(point, points[i + 1]),
+            annotation: annotations.find(item => item.startOffset <= point && item.endOffset > point),
+            match: !!this.activePassage && point >= this.activePassage.offset && point < this.activePassage.offset + this.activePassage.text.length
+        }));
+    }
+    displayColor(color: string): string { return this.colors.find(item => item.value === color)?.swatch || (color === 'lightcoral' ? '#f2dcdc' : color); }
+    excerpt(annotation: Annotation): string { return this.fullContent.slice(annotation.startOffset, annotation.endOffset); }
+    annotateText(event: Event): void {
+        const selection = window.getSelection();
+        const container = event.currentTarget as HTMLElement;
+        if (!selection || selection.isCollapsed || !selection.rangeCount)
+            return;
+        const range = selection.getRangeAt(0);
+        if (!container.contains(range.startContainer) || !container.contains(range.endContainer))
+            return;
+        this.selectedText = selection.toString();
+        this.selectedStart = this.annotator.getOffset(container, range.startContainer, range.startOffset) + this.currentPage * this.pageSize;
+        this.selectedEnd = this.annotator.getOffset(container, range.endContainer, range.endOffset) + this.currentPage * this.pageSize;
+        this.selectionReady = !!this.selectedText.trim();
+    }
+    annotationDialog(text: string, start: number, end: number): void {
+        this.selectedText = text;
+        this.selectedStart = start;
+        this.selectedEnd = end;
+        this.selectedAnnotation = null;
+        this.draftComment = '';
+        this.draftTag = '';
+        this.draftColor = 'lightyellow';
+        this.editorOpen = true;
+        this.panel = 'annotations';
+        this.showPanel = true;
+        this.selectionReady = false;
+    }
+    edit(annotation: Annotation): void {
+        this.selectedAnnotation = annotation;
+        this.selectedText = this.excerpt(annotation);
+        this.selectedStart = annotation.startOffset;
+        this.selectedEnd = annotation.endOffset;
+        this.draftComment = annotation.comment;
+        this.draftTag = annotation.tag;
+        this.draftColor = annotation.color;
+        this.editorOpen = true;
+        this.confirmDelete = false;
+        this.panel = 'annotations';
+        this.showPanel = true;
+        this.getPageData({ pageIndex: Math.floor(annotation.startOffset / this.pageSize) });
+    }
+    updateAnnotation(annotation: Annotation | undefined): void { if (annotation && window.getSelection()?.isCollapsed !== false)
+        this.edit(annotation); }
+    saveAnnotation(): void {
+        if (!this.book)
+            return;
+        const item: Annotation = {
+            id: this.selectedAnnotation?.id ?? -Date.now(), bookId: this.book.id, userId: this.userId,
+            startOffset: this.selectedStart, endOffset: this.selectedEnd, comment: this.draftComment, tag: this.draftTag, color: this.draftColor,
+            createdAt: this.selectedAnnotation?.createdAt ?? new Date(), deletedAt: null
+        };
+        this.allAnnotations = this.selectedAnnotation ? this.allAnnotations.map(annotation => annotation.id === item.id ? item : annotation) : [...this.allAnnotations, item];
+        this.editorOpen = false;
+        this.selectionReady = false;
+    }
+    deleteAnnotation(): void { this.allAnnotations = this.allAnnotations.filter(item => item.id !== this.selectedAnnotation?.id); this.editorOpen = false; this.confirmDelete = false; }
+    saveNote(): void { if (this.book)
+        this.ui.keepNoteDraft(this.book.id, this.userId, this.noteContent); this.noteStatus = 'Draft kept for this visit'; }
+    openResult(result: PassagePreview): void { this.activePassage = result; this.mode = 'read'; this.getPageData({ pageIndex: Math.floor(result.offset / this.pageSize) }); }
+    analyze(result?: PassagePreview): void {
+        if (result) {
+            this.openResult(result);
+            this.selectedText = result.text;
+        }
+        this.panel = 'analysis';
+        this.showPanel = true;
+        this.selectionReady = false;
+    }
+    addAnalysis(text: string): void { this.noteContent += (this.noteContent ? '\n\n' : '') + text; this.noteStatus = 'Unsaved draft'; }
+    resetAppearance(): void { this.fontSize = 21; this.lineHeight = 1.85; this.readingWidth = 'comfortable'; this.font = 'serif'; this.theme = 'paper'; this.showHighlights = true; this.focusMode = false; }
 }

@@ -1,0 +1,142 @@
+.reading-surface {
+  max-width:780px;
+  margin:auto;
+  padding:48px 54px 20px;
+  position:relative
+}
+
+.reading-surface.narrow {
+  max-width:640px
+}
+
+.reading-surface.wide {
+  max-width:1000px
+}
+
+.reading-title h1 {
+  font-size:38px;
+  margin-bottom:9px
+}
+
+.reading-title>p {
+  font:19px var(--serif);
+  color:var(--muted)
+}
+
+.reading-title .eyebrow {
+  font-size:9px
+}
+
+.ornament {
+  color:#a89b8b;
+  font-size:11px;
+  margin:32px 0
+}
+
+.book-content {
+  font-family:var(--serif);
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  min-height:260px
+}
+
+.book-content:focus-visible {
+  outline-offset:12px
+}
+
+.reading-end {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  color:#b0a18c;
+  margin:40px 0 20px
+}
+
+.reading-end span {
+  height:1px;
+  width:42px;
+  background:var(--line)
+}
+
+.reader-pagination {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  color:var(--muted);
+  font-size:10px;
+  border-top:1px solid var(--line);
+  padding-top:12px
+}
+
+.reader-pagination .button {
+  padding:8px 4px;
+  font-size:10px
+}
+
+.search-match {
+  box-shadow:0 0 0 1px var(--accent);
+  background:var(--accent-soft)!important
+}
+
+.match-notice {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:22px;
+  font-size:10px;
+  color:var(--accent);
+  background:var(--accent-soft);
+  padding:4px 10px;
+  border-radius:4px
+}
+
+.match-notice>span {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-right:auto
+}
+
+.selection-toolbar {
+  position:sticky;
+  top:90px;
+  z-index:15;
+  padding:6px 8px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:16px;
+  box-shadow:var(--shadow);
+  margin-bottom:20px
+}
+
+.selection-colors {
+  display:flex;
+  gap:5px
+}
+
+.selection-colors span {
+  width:12px;
+  height:12px;
+  border-radius:50%
+}
+
+.selection-toolbar .text-link {
+  font-size:10px
+}
+
+.focus-exit {
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:24px
+}
+
+.focus-mode .reader-toolbar {
+  display:none
+}
+
+.focus-mode .reading-surface {
+  padding-top:25px
+}

@@ -1,49 +1,61 @@
-<div class="upload-form">
-    <h3>Upload edition</h3>
-
-    <mat-form-field class="upload-item">
-    <mat-label>Book name</mat-label>
-    <input disabled matInput type="text" [value]="data.title">
-    </mat-form-field>
-
-    <mat-form-field class="upload-item">
-    <mat-label>Author</mat-label>
-    <input disabled matInput type="text" [value]="data.author">
-    </mat-form-field>
-
-    <br>
-
-    <mat-form-field class="upload-item">
-    <mat-label>ISBN</mat-label>
-    <input class="input-item" matInput type="number" [(ngModel)]="isbn">
-    </mat-form-field>
-    
-    <mat-form-field class="upload-item">
-    <mat-label>Language</mat-label>
-    <input class="input-item" matInput type="text" [(ngModel)]="language">
-    </mat-form-field>
-
-    <div class="file-upload-group">
-    <mat-form-field appearance="fill" class="upload-item">
-        <mat-label>File path</mat-label>
-        <input matInput [value]="fileName" disabled>
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" (click)="fileInput.click()">
-        Choose File
-        <mat-icon>attach_file</mat-icon>
-    </button>
-    <input
-        #fileInput
-        type="file"
-        accept="application/pdf"
-        (change)="onFileSelected($event)"
-        hidden
-    />
+<section class="dialog-content">
+  <header class="dialog-heading">
+    <div>
+      <span class="eyebrow">A new reading copy</span>
+      <h2>
+        Upload an edition
+      </h2>
     </div>
-    <br>
-    <button mat-raised-button color="primary" (click)="uploadVersion()">
-        Upload edition
-        <mat-icon>upload_file</mat-icon>
+    <button class="icon-button" mat-dialog-close aria-label="Close upload dialog">
+      <mat-icon>close</mat-icon>
     </button>
-</div>
+  </header>
+  <p class="small muted">
+    Bring a text to your reading desk.
+  </p>
+  <div class="upload-dropzone" (dragover)="$event.preventDefault()" (drop)="onDrop($event)">
+    <mat-icon>{{ file ? 'description' : 'upload_file' }}</mat-icon>
+    <h3>
+      {{ fileName || 'Choose your reading copy' }}
+    </h3>
+    <p>
+      {{ file ? 'Selected locally. No file has been uploaded.' : 'Drop a file here, or browse your files.' }}
+    </p>
+    <button class="button" (click)="fileInput.click()">
+      {{ file ? 'Choose another file' : 'Browse files' }}
+    </button>
+    <span>PDF or plain text · UI preview</span><input #fileInput type="file" accept="application/pdf,text/plain,.txt" (change)="onFileSelected($event)" hidden>
+  </div>
+  <p *ngIf="fileError" class="status error" role="alert">
+    {{ fileError }}
+  </p>
+  <form #editionForm="ngForm" (ngSubmit)="uploadVersion()">
+    <div class="field-row">
+      <label class="field">
+        Book title<input [ngModel]="data?.title || ''" name="title" placeholder="Book title" required>
+      </label>
+      <label class="field">
+        Author<input [ngModel]="data?.author || ''" name="author" placeholder="Author's name" required>
+      </label>
+    </div>
+    <div class="field-row">
+      <label class="field">
+        Language<input [(ngModel)]="language" name="language" placeholder="English" required>
+      </label>
+      <label class="field">
+        ISBN <span class="optional">Optional</span><input [(ngModel)]="isbn" name="isbn" placeholder="Edition ISBN">
+      </label>
+    </div>
+    <p *ngIf="previewReady" class="status" role="status">
+      <mat-icon>check_circle_outline</mat-icon>Edition preview ready. Uploading will be connected in a later phase.
+    </p>
+    <footer class="dialog-footer">
+      <button type="button" class="button quiet" mat-dialog-close>
+        Cancel
+      </button>
+      <button class="button primary" type="submit" [disabled]="!file || !!fileError || !editionForm.valid">
+        <mat-icon>upload_file</mat-icon>Prepare edition
+      </button>
+    </footer>
+  </form>
+</section>

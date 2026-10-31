@@ -1,17 +1,33 @@
-<button 
-    mat-raised-button 
-    routerLink="../book/:{{[book.id]}}"
-    class="book-item-div" 
-    *ngIf="book" 
-    (click)="selectBook(book.id)"
->
-
-    <div class="book-cover">
-        <img [src]="'.././assets/' + book.id + '.jpg'" alt="Book cover" />
+<article *ngIf="book; else noBook" class="book-card" [class.compact]="compact">
+  <a class="cover-link" [routerLink]="ui.link('book', book.id)" (click)="selectBook(book.id)" [attr.aria-label]="'View ' + book.title">
+  <div class="cover-stage" [class.stage-two]="book.id % 3 === 2" [class.stage-three]="book.id % 3 === 0">
+    <app-book-cover [book]="book">
+    </app-book-cover>
+    <span class="cover-caption">{{ book.publicationYear }} · {{ book.language }}</span>
+  </div>
+  </a>
+  <div class="book-copy">
+    <div class="book-heading">
+      <span class="eyebrow">{{ book.country }} · {{ book.publicationYear }}</span><a [routerLink]="ui.link('book', book.id)" (click)="selectBook(book.id)" class="details-icon" aria-label="Book details"><mat-icon>north_east</mat-icon></a>
     </div>
-
-    <div class="book-content">
-        <h3>{{ book.title }}</h3>
-        <h4>{{ book.author }}</h4>
+    <a [routerLink]="ui.link('book', book.id)" (click)="selectBook(book.id)">
+    <h3>
+      {{ book.title }}
+    </h3>
+    </a>
+    <p class="book-author">
+      {{ book.author }}
+    </p>
+    <p class="book-description">
+      {{ book.description }}
+    </p>
+    <div class="book-footer">
+      <span>{{ book.language }} <span class="dot">·</span> {{ book.pages }} pages</span><a [routerLink]="ui.link('book-annotator', book.id)" (click)="selectBook(book.id)" class="text-link">Read<mat-icon>arrow_forward</mat-icon></a>
     </div>
-</button>
+  </div>
+</article>
+<ng-template #noBook>
+  <app-empty-state title="Choose a book to begin" message="Find your next read in the collection.">
+    <a class="button primary" [routerLink]="ui.link('all-books')">Explore books</a>
+  </app-empty-state>
+</ng-template>

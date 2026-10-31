@@ -1,30 +1,45 @@
-<div class="upload-form">
-    <h3>Update information</h3>
-
-    <mat-form-field class="upload-item">
-    <mat-label>Username</mat-label>
-    <input matInput type="text" [(ngModel)]="username">
-    </mat-form-field>
-
-    <mat-form-field class="upload-item">
-    <mat-label>Email</mat-label>
-    <input disabled matInput type="text" [value]="data.email">
-    </mat-form-field>
-
-    <br>
-
-    <mat-form-field class="upload-item">
-    <mat-label>Password</mat-label>
-    <input class="input-item" matInput type="text" [(ngModel)]="password">
-    </mat-form-field>
-    
-    <mat-form-field class="upload-item">
-    <mat-label>Repeat password</mat-label>
-    <input class="input-item" matInput type="text" [(ngModel)]="password">
-    </mat-form-field>
-    <br>
-    <button mat-raised-button color="primary" (click)="updateUser()">
-        Update
-        <mat-icon>manage_accounts</mat-icon>
+<section class="dialog-content">
+  <header class="dialog-heading">
+    <div>
+      <span class="eyebrow">The person behind the page</span>
+      <h2>
+        Edit your profile
+      </h2>
+    </div>
+    <button class="icon-button" mat-dialog-close aria-label="Close profile editor">
+      <mat-icon>close</mat-icon>
     </button>
-</div>
+  </header>
+  <form #profileForm="ngForm" (ngSubmit)="submitProfile()">
+    <label class="field">
+      Username<input [(ngModel)]="username" name="username" autocomplete="username" required>
+    </label>
+    <label class="field">
+      Email address<input [value]="email" readonly type="email">
+    </label>
+    <hr class="divider">
+    <p class="small muted">
+      Leave password fields empty to keep your current password.
+    </p>
+    <label class="field">
+      New password<input type="password" [(ngModel)]="password" name="newPassword" autocomplete="new-password" placeholder="A new password">
+    </label>
+    <label class="field">
+      Confirm new password<input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" autocomplete="new-password" placeholder="Repeat your new password">
+    </label>
+    <p *ngIf="password !== confirmPassword" class="status error" role="alert">
+      The passwords do not match.
+    </p>
+    <p *ngIf="previewSaved" class="status" role="status">
+      Profile preview updated. Changes are not persisted.
+    </p>
+    <footer class="dialog-footer">
+      <button type="button" class="button quiet" mat-dialog-close>
+        Cancel
+      </button>
+      <button class="button primary" type="submit" [disabled]="!profileForm.valid || password !== confirmPassword">
+        Save changes<mat-icon>check</mat-icon>
+      </button>
+    </footer>
+  </form>
+</section>

@@ -1,11 +1,2 @@
-<h2 class="title">
-  Browse our collection of books.
-</h2>
-
-<div class="books-list-div">
-  <app-book-preview 
-    *ngFor="let book of books$ | async" 
-    [book]="book"
-    class="book-card">
-  </app-book-preview>
-</div>
+<app-library-view [books]="books$ | async">
+</app-library-view>

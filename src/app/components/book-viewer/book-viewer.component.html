@@ -1,36 +1,121 @@
-<div class="book-details-container">
-
-  <!-- Book Header -->
-  <div class="book-header">
-    <div class="book-cover">
-      <img [src]="'.././assets/' + book?.id + '.jpg'" alt="Book cover" />
-    </div>
-    <div class="book-info">
-      <h1 class="book-title">{{ book?.title }}</h1>
-      <p class="book-author">{{ book?.author }}</p>
-      <div class="book-meta">
-        <span>{{ book?.pages }} pages</span>
-        <span>•</span>
-        <span>{{ book?.country }}, {{ book?.publicationYear }}</span>
+<section class="page" *ngIf="book; else unavailable">
+  <a class="text-link back-link" [routerLink]="ui.link('my-books')"><mat-icon>arrow_back</mat-icon>Back to library</a>
+  <div class="book-detail-header">
+    <app-book-cover [book]="book">
+    </app-book-cover>
+    <div class="detail-copy">
+      <span class="eyebrow">A closer look</span>
+      <h1>
+        {{ book.title }}
+      </h1>
+      <p class="detail-author">
+        {{ book.author }}
+      </p>
+      <div class="actions metadata">
+        <span>{{ book.publicationYear }}</span><span>·</span><span>{{ book.country }}</span><span>·</span><span>{{ book.pages }} pages</span>
+      </div>
+      <p class="detail-description">
+        {{ book.description }}
+      </p>
+      <div class="actions">
+        <a class="button primary" [routerLink]="ui.link('book-annotator', book.id)">Read this edition<mat-icon>arrow_forward</mat-icon></a>
+        <button class="button" (click)="openVersionUploadDialog()">
+          <mat-icon>upload_file</mat-icon>Upload edition
+        </button>
       </div>
     </div>
   </div>
-
-  <div class="book-plot">
-    <h2 class="section-title">DESCRIPTION</h2>
-    <p class="plot-text">
-      {{ book?.description || 'No plot available' }}
-    </p>
-  </div>
-
-  <div class="book-versions">
-    <h2 class="section-title">EDITIONS</h2>
-    <button mat-raised-button class="upload-button" (click)="openVersionUploadDialog()">
-      <mat-icon>upload_file</mat-icon> Upload edition
+  <nav class="tabs" aria-label="Book details">
+    <button [class.active]="tab === 'about'" (click)="tab = 'about'">
+      About this book
     </button>
-    <div class="versions-list">
-      <app-version-preview *ngFor="let version of versions" [version]="version"></app-version-preview>
-    </div>
+    <button [class.active]="tab === 'editions'" (click)="tab = 'editions'">
+      Editions <span class="small">({{ versions?.length || 0 }})</span>
+    </button>
+    <a [routerLink]="ui.link('book-annotator', book.id)" [queryParams]="{panel: 'notes'}">My book notes<mat-icon>north_east</mat-icon></a>
+  </nav>
+  <div *ngIf="tab === 'about'" class="about-layout">
+    <article>
+      <span class="eyebrow">Between the covers</span>
+      <h2>
+        A work to return to.
+      </h2>
+      <p class="serif about-description">
+        {{ book.description }}
+      </p>
+      <p class="muted">
+        Read at your own pace. Highlight the passages that stay with you, gather your thoughts, and explore the ideas beneath the words.
+      </p>
+      <a class="text-link" [routerLink]="ui.link('book-annotator', book.id)" [queryParams]="{mode: 'search'}"><mat-icon>search</mat-icon>Search inside this book</a>
+    </article>
+    <aside class="book-facts">
+      <h3>
+        Edition details
+      </h3>
+      <dl>
+        <div>
+          <dt>
+            Author
+          </dt>
+          <dd>
+            {{ book.author }}
+          </dd>
+        </div>
+        <div>
+          <dt>
+            First published
+          </dt>
+          <dd>
+            {{ book.publicationYear }}
+          </dd>
+        </div>
+        <div>
+          <dt>
+            Language
+          </dt>
+          <dd>
+            {{ book.language }}
+          </dd>
+        </div>
+        <div>
+          <dt>
+            Country
+          </dt>
+          <dd>
+            {{ book.country }}
+          </dd>
+        </div>
+        <div>
+          <dt>
+            Length
+          </dt>
+          <dd>
+            {{ book.pages }} pages
+          </dd>
+        </div>
+      </dl>
+    </aside>
   </div>
-
-</div>
+  <section *ngIf="tab === 'editions'" class="editions-section">
+    <div class="page-heading">
+      <div>
+        <h2>
+          Your reading editions
+        </h2>
+        <p>
+          Choose the text you want to read and annotate.
+        </p>
+      </div>
+      <button class="button" (click)="openVersionUploadDialog()">
+        <mat-icon>add</mat-icon>Add edition
+      </button>
+    </div>
+    <app-version-preview *ngFor="let version of versions" [version]="version">
+    </app-version-preview>
+  </section>
+</section>
+<ng-template #unavailable>
+  <app-empty-state [title]="loadError ? 'This book is unavailable' : 'Opening the book…'" [message]="loadError ? 'Return to the collection and choose another edition.' : 'Preparing your reading desk.'">
+    <a class="button" [routerLink]="ui.link('all-books')">Browse the collection</a>
+  </app-empty-state>
+</ng-template>

@@ -1,0 +1,76 @@
+<section class="page">
+  <header class="page-heading">
+    <div>
+      <span class="eyebrow">{{ personal ? 'Your reading life, collected' : 'The literary collection' }}</span>
+      <h1>
+        {{ personal ? 'Your library' : 'A world between the pages.' }}
+      </h1>
+      <p>
+        {{ personal ? 'Return to a familiar voice. Discover something in the margins.' : 'Literature to read slowly, think deeply, and make your own.' }}
+      </p>
+    </div>
+    <button class="button primary" (click)="upload()">
+      <mat-icon>add</mat-icon>Upload edition
+    </button>
+  </header>
+  <article *ngIf="personal && books?.length" class="featured panel">
+    <app-book-cover [book]="books![0]">
+    </app-book-cover>
+    <div class="featured-copy">
+      <span class="eyebrow">On your reading desk</span>
+      <h2>
+        {{ books![0].title }}
+      </h2>
+      <p class="muted">
+        {{ books![0].author }}
+      </p>
+      <p class="featured-description">
+        {{ books![0].description }}
+      </p>
+      <a class="button primary" [routerLink]="ui.link('book-annotator', books![0].id)">Open reading workspace<mat-icon>arrow_forward</mat-icon></a>
+    </div>
+    <div class="featured-aside">
+      <mat-icon>edit_note</mat-icon>
+      <p>
+        Good books invite<br>another look.
+      </p>
+      <span>READ · NOTICE · REFLECT</span>
+    </div>
+  </article>
+  <div class="collection-heading">
+    <h2>
+      {{ personal ? 'On your shelves' : 'Browse the collection' }}
+    </h2>
+    <span class="small muted">{{ books?.length || 0 }} editions</span>
+  </div>
+  <div class="library-toolbar">
+    <label class="input-icon">
+      <mat-icon>search</mat-icon><span class="sr-only">Filter titles or authors</span><input [(ngModel)]="query" placeholder="Filter titles or authors…">
+      <button *ngIf="query" class="icon-button" (click)="query = ''" aria-label="Clear filter">
+        <mat-icon>close</mat-icon>
+      </button>
+    </label>
+    <div class="toolbar-options">
+      <label class="sort-label">
+        Sort by<select class="sort-select" [(ngModel)]="sort" aria-label="Sort books"><option value="title">Title</option><option value="author">Author</option><option value="year">Publication year</option></select>
+      </label>
+      <div class="view-controls">
+        <button class="icon-button" [class.active]="view === 'grid'" [attr.aria-pressed]="view === 'grid'" (click)="view = 'grid'" aria-label="Grid view">
+          <mat-icon>grid_view</mat-icon>
+        </button>
+        <button class="icon-button" [class.active]="view === 'list'" [attr.aria-pressed]="view === 'list'" (click)="view = 'list'" aria-label="List view">
+          <mat-icon>view_list</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="book-grid" [class.list-view]="view === 'list'">
+    <app-book-preview *ngFor="let book of visibleBooks" [book]="book" [compact]="view === 'list'">
+    </app-book-preview>
+  </div>
+  <app-empty-state *ngIf="!visibleBooks.length" [title]="query ? 'No books on this shelf' : 'Your library begins here'" [message]="query ? 'Try a different title or author.' : 'Add an edition and start a conversation with the text.'" [action]="query ? 'Clear filter' : 'Upload an edition'" (actionClick)="query ? query = '' : upload()">
+  </app-empty-state>
+  <footer class="library-footer">
+    <span>Every reading leaves a trace.</span><span>Made for the life of the mind.</span>
+  </footer>
+</section>

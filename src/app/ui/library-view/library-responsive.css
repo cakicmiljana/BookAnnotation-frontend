@@ -1,0 +1,53 @@
+@media(max-width:1000px) {
+  .featured-aside {
+    display:none
+  }
+  .book-grid {
+    gap:18px
+  }
+}
+
+@media(max-width:700px) {
+  .featured {
+    padding:24px;
+    gap:20px
+  }
+  .featured app-book-cover {
+    width:80px
+  }
+  .featured h2 {
+    font-size:27px
+  }
+  .featured-description {
+    display:none
+  }
+  .library-toolbar {
+    flex-direction:column;
+    gap:12px
+  }
+  .input-icon {
+    max-width:none
+  }
+  .toolbar-options {
+    justify-content:space-between
+  }
+  .book-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+  .library-footer span:last-child {
+    display:none
+  }
+}
+
+@media(max-width:420px) {
+  .book-grid {
+    grid-template-columns:1fr
+  }
+  .featured {
+    padding:20px 16px
+  }
+  .featured-copy .button {
+    font-size:10px;
+    padding:9px
+  }
+}

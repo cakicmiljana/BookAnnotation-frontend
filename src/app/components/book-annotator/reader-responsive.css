@@ -1,0 +1,124 @@
+@media(min-width:1500px) {
+  .reader-layout.with-panel {
+    grid-template-columns:minmax(0,1fr) 380px
+  }
+  .reader-layout.with-contents.with-panel {
+    grid-template-columns:220px minmax(0,1fr) 370px
+  }
+}
+
+@media(max-width:1100px) {
+  .toolbar-book {
+    max-width:150px
+  }
+  .reader-mode-switch {
+    margin-left:5px
+  }
+  .reader-layout.with-contents.with-panel {
+    grid-template-columns:minmax(0,1fr) 320px
+  }
+  .with-contents.with-panel .contents-panel {
+    display:none
+  }
+  .reading-surface {
+    padding:36px 32px 20px
+  }
+}
+
+@media(max-width:800px) {
+  .reader-toolbar {
+    padding:10px 16px;
+    flex-wrap:wrap;
+    gap:6px
+  }
+  .reader-mode-switch {
+    order:3;
+    justify-content:center;
+    width:100%;
+    margin:0
+  }
+  .toolbar-book {
+    max-width:calc(100vw - 240px)
+  }
+  .reader-layout.with-panel,.reader-layout.with-contents.with-panel {
+    grid-template-columns:minmax(0,1fr)
+  }
+  .study-panel {
+    position:fixed;
+    right:0;
+    top:160px;
+    bottom:0;
+    width:min(390px,100vw);
+    z-index:26;
+    overflow:auto;
+    box-shadow:-16px 0 45px #302b2820;
+    border-top:1px solid var(--line)
+  }
+  .reader-layout.with-contents {
+    grid-template-columns:160px minmax(0,1fr)
+  }
+  .contents-panel {
+    padding:20px 15px
+  }
+  .reading-surface {
+    padding:32px 24px 18px
+  }
+  .reading-title h1 {
+    font-size:32px
+  }
+  .notes-workspace {
+    padding:30px 20px
+  }
+  .notes-editor {
+    padding:20px
+  }
+  .appearance {
+    right:15px;
+    top:105px
+  }
+}
+
+@media(max-width:500px) {
+  .study-panel {
+    top: auto;
+    height: 78dvh;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+  }
+  .reader-layout.with-contents {
+    grid-template-columns:minmax(0,1fr)
+  }
+  .contents-panel {
+    border-bottom:1px solid var(--line);
+    border-right:0
+  }
+  .contents-panel app-book-cover,.contents-panel h3,.contents-panel>p {
+    display:none
+  }
+  .contents-panel .eyebrow,.contents-heading {
+    margin:0 0 8px
+  }
+  .reader-tools .icon-button {
+    width:32px;
+    height:36px
+  }
+  .toolbar-book {
+    max-width:calc(100vw - 190px)
+  }
+  .selection-toolbar {
+    gap:12px;
+    top:130px
+  }
+  .selection-colors {
+    display:none
+  }
+  .reader-mode-switch button {
+    font-size:10px
+  }
+  .notes-editor .actions {
+    align-items:flex-start
+  }
+  .match-notice {
+    flex-wrap:wrap
+  }
+}

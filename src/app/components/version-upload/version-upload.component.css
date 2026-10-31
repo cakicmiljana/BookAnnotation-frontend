@@ -1,40 +1,43 @@
-.upload-form {
-    padding: 20px;
-    width: fit-content;
+.upload-dropzone {
+  padding:26px 20px;
+  text-align:center;
+  border:1px dashed var(--control-line);
+  border-radius:6px;
+  background:var(--canvas);
+  margin:24px 0
 }
 
-.upload-item {
-    color: cadetblue !important;
-    margin: 5px;
-    width: fit-content;
+.upload-dropzone>mat-icon {
+  font-size:34px!important;
+  width:34px!important;
+  height:34px!important;
+  color:var(--accent);
+  margin-bottom:14px
 }
 
-.file-upload-group {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  mat-form-field {
-    flex: 1;
-  }
+.upload-dropzone h3 {
+  font-size:24px;
+  overflow-wrap:anywhere
 }
 
-.upload-form button {
-    background-color: black !important;
-    color: white !important;
-    font-weight: 400;
+.upload-dropzone p {
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:15px
 }
 
-.upload-form button:hover {
-    background-color: rgba(95, 158, 160, 0.9) !important;
-    color: black !important;
-    font-weight: 500;
+.upload-dropzone>span {
+  display:block;
+  margin-top:13px;
+  font-size:9px;
+  color:var(--muted)
 }
 
-::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-  stroke: cadetblue !important;
+.optional {
+  font-size:9px;
+  color:var(--muted)
 }
 
-::ng-deep .mat-form-field-appearance-outline:hover .mat-form-field-outline-thick {
-  stroke: lightblue !important;
+.status mat-icon {
+  margin-right:6px
 }

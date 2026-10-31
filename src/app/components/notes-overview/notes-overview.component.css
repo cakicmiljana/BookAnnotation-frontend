@@ -1,0 +1,153 @@
+.notebook-mark {
+  display:grid;
+  place-items:center;
+  width:64px;
+  height:64px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  color:var(--accent)
+}
+
+.notebook-mark mat-icon {
+  font-size:30px!important;
+  width:30px!important;
+  height:30px!important
+}
+
+.notebook-toolbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  gap:28px
+}
+
+.notebook-toolbar .tabs {
+  border:0
+}
+
+.tabs span {
+  font-size:10px;
+  margin-left:6px;
+  color:var(--muted)
+}
+
+.input-icon {
+  min-width:280px
+}
+
+.notebook-hint {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:20px 0 30px;
+  font-size:10px
+}
+
+.notebook-hint mat-icon {
+  font-size:14px!important;
+  width:14px!important;
+  height:14px!important
+}
+
+.note-grid,.annotation-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:24px
+}
+
+.note-card {
+  padding:25px;
+  display:flex;
+  flex-direction:column
+}
+
+.note-book {
+  display:flex;
+  gap:15px;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+  padding-bottom:20px;
+  margin-bottom:24px
+}
+
+.note-book app-book-cover {
+  width:42px
+}
+
+.note-book h3 {
+  font-size:22px;
+  margin-bottom:6px
+}
+
+.note-book p {
+  font-size:11px;
+  color:var(--muted);
+  margin:0
+}
+
+.note-excerpt {
+  font:19px/1.7 var(--serif);
+  min-height:140px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  max-height:245px;
+  overflow:auto
+}
+
+.unwritten {
+  color:var(--muted);
+  font-style:italic
+}
+
+.note-card>.text-link {
+  margin-top:auto;
+  align-self:flex-start
+}
+
+.annotation-group {
+  margin:35px 0
+}
+
+.annotation-group h2 {
+  font-size:25px
+}
+
+.collected-annotation {
+  padding:24px;
+  color:var(--ink)
+}
+
+.collected-annotation blockquote {
+  font:19px/1.65 var(--serif);
+  margin:20px 0
+}
+
+.collected-annotation>p {
+  font-size:12px;
+  color:var(--muted)
+}
+
+@media(max-width:1000px) {
+  .note-grid,.annotation-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+}
+
+@media(max-width:650px) {
+  .notebook-toolbar {
+    flex-direction:column;
+    align-items:stretch;
+    gap:15px;
+    padding-bottom:18px
+  }
+  .note-grid,.annotation-grid {
+    grid-template-columns:1fr
+  }
+  .notebook-mark {
+    display:none
+  }
+  .input-icon {
+    min-width:0
+  }
+}

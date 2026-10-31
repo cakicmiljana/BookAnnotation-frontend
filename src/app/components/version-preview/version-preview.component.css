@@ -1,52 +1,50 @@
-.version-item-div body {
-    width: fit-content;
-    display: flex;
-    flex-direction: row;
-    /* margin-top: 20px; */
-    /* margin-bottom: 20px; */
+.edition-row {
+  display:flex;
+  align-items:center;
+  gap:24px;
+  padding:22px;
+  margin-bottom:14px
 }
 
-.version-item-div h3, h4, h5 {
-    margin: 0;
-    padding: 5px;
-    font-weight: 500;
+.edition-symbol {
+  display:grid;
+  place-items:center;
+  background:var(--surface);
+  color:var(--accent);
+  width:46px;
+  height:54px
 }
 
-.version-item-div h2 {
-    margin: 20px;
+.edition-info {
+  flex:1
 }
 
-.version-item-div {
-    display: flex;
-    flex-direction: column;
-    /* align-self: center; */
-    /* position: relative; */
+h3 {
+  font-size:20px;
+  margin-bottom:5px
 }
 
-.version-item-div:hover {
-    background-color: rgba(16, 77, 120, 0.3);
-    cursor: pointer;
+p {
+  font-size:11px;
+  color:var(--muted);
+  margin:0
 }
 
-.order-button {
-    position: absolute;
-    bottom: 0;
-    /* // background-color: antiquewhite; */
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-#overlay {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 2;
-    cursor: pointer;
-    align-content: center;
+@media(max-width:600px) {
+  .edition-row {
+    gap:15px;
+    flex-wrap:wrap
   }
+  .edition-info {
+    min-width:65%
+  }
+  .chip {
+    display:none
+  }
+  .edition-row .button {
+    margin-left:auto
+  }
+  p span {
+    display:none
+  }
+}

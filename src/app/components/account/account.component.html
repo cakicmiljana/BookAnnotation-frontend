@@ -1,20 +1,101 @@
-<div class="profile-card" *ngIf="user">
-  <div class="profile-header">
-    <mat-icon class="profile-avatar">person</mat-icon>
-    <h2 class="username">{{ user.username }}</h2>
-  </div>
-
-  <div class="profile-info">
-    <div class="info-item">
-      <mat-icon>email</mat-icon>
-      <span>{{ user.email }}</span>
+<section class="page account-page">
+  <header class="page-heading">
+    <div>
+      <span class="eyebrow">Make yourself at home</span>
+      <h1>
+        Your account
+      </h1>
+      <p>
+        A few details about the person behind the margins.
+      </p>
     </div>
+  </header>
+  <div class="account-layout">
+    <nav class="account-nav" aria-label="Account settings">
+      <button [class.active]="section === 'profile'" (click)="section = 'profile'">
+        <mat-icon>person_outline</mat-icon>Profile
+      </button>
+      <button [class.active]="section === 'preferences'" (click)="section = 'preferences'">
+        <mat-icon>tune</mat-icon>Reading preferences
+      </button>
+    </nav>
+    <div class="account-content" *ngIf="user; else noUser">
+      <article *ngIf="section === 'profile'" class="settings-card panel">
+        <span class="eyebrow">Your profile</span>
+        <div class="profile-identity">
+          <span class="avatar profile-avatar">{{ user.username.slice(0, 2) | uppercase }}</span>
+          <div>
+            <h2>
+              {{ user.username }}
+            </h2>
+            <p class="muted">
+              {{ user.email }}
+            </p>
+          </div>
+        </div>
+        <div class="profile-details">
+          <div>
+            <span>Username</span><strong>{{ user.username }}</strong>
+          </div>
+          <div>
+            <span>Email address</span><strong>{{ user.email }}</strong>
+          </div>
+          <div *ngIf="user.bio">
+            <span>A little about you</span>
+            <p>
+              {{ user.bio }}
+            </p>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="button primary" (click)="openUserUpdateDialog()">
+            <mat-icon>edit</mat-icon>Edit profile
+          </button>
+        </div>
+      </article>
+      <article *ngIf="section === 'preferences'" class="settings-card panel">
+        <span class="eyebrow">A comfortable page</span>
+        <h2>
+          Your reading preferences
+        </h2>
+        <p class="muted small">
+          Preview your preferred reading experience.
+        </p>
+        <label class="field">
+          Reading typeface<select [(ngModel)]="preferredFont"><option>Literary serif</option><option>Clean sans-serif</option></select>
+        </label>
+        <label class="field">
+          Preferred appearance<select [(ngModel)]="preferredTheme"><option>Warm paper</option><option>Light</option><option>Night</option></select>
+        </label>
+        <label class="field">
+          Text size<select [(ngModel)]="preferredSize"><option>Comfortable · 21px</option><option>Compact · 18px</option><option>Large · 25px</option></select>
+        </label>
+        <div class="type-preview" [class.dark-preview]="preferredTheme === 'Night'" [style.font-family]="preferredFont === 'Literary serif' ? 'var(--serif)' : 'var(--sans)'" [style.font-size.px]="preferredSize.startsWith('Large') ? 25 : preferredSize.startsWith('Compact') ? 18 : 21">
+          A quiet page. A little space to think.
+        </div>
+        <p class="preview-label">
+          Preferences preview locally. Reader controls are available in each book.
+        </p>
+      </article>
+      <article class="signout-card panel">
+        <div>
+          <h3>
+            {{ ui.preview ? 'Leave the preview' : 'Until the next chapter.' }}
+          </h3>
+          <p class="small muted">
+            {{ ui.preview ? 'Return to the sign-in screen.' : 'Sign out of your reading room on this device.' }}
+          </p>
+        </div>
+        <a *ngIf="ui.preview" class="button" routerLink="/login">Exit preview<mat-icon>logout</mat-icon></a>
+        <button *ngIf="!ui.preview" class="button" (click)="signOut()">
+          Sign out<mat-icon>logout</mat-icon>
+        </button>
+      </article>
+    </div>
+    <ng-template #noUser>
+      <app-empty-state title="Your profile is unavailable" message="Return to the sign-in screen to continue.">
+        <a class="button" routerLink="/login">Sign in</a>
+      </app-empty-state>
+    </ng-template>
   </div>
-
-  <div class="profile-actions">
-    <button mat-raised-button color="primary" (click)="openUserUpdateDialog()">
-      <mat-icon>manage_accounts</mat-icon>
-      Update Information
-    </button>
-  </div>
-</div>
+</section>

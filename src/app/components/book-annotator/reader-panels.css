@@ -1,0 +1,100 @@
+.study-panel {
+  border-left:1px solid var(--line);
+  background:var(--canvas);
+  min-width:0
+}
+
+.study-heading {
+  padding:24px 20px 0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px
+}
+
+.study-heading h2 {
+  font-size:26px;
+  margin:0
+}
+
+.study-tabs {
+  margin:0 20px;
+  gap:20px
+}
+
+.study-tabs button {
+  font-size:10px;
+  display:flex;
+  align-items:center;
+  gap:5px
+}
+
+.study-tabs span {
+  font-size:9px;
+  color:var(--muted)
+}
+
+.study-tabs mat-icon {
+  font-size:13px!important;
+  width:13px!important;
+  height:13px!important
+}
+
+.study-body {
+  padding:24px 20px 32px
+}
+
+.contents-panel {
+  padding:28px 22px;
+  border-right:1px solid var(--line);
+  background:var(--canvas)
+}
+
+.contents-panel app-book-cover {
+  width:70px;
+  margin:20px 0
+}
+
+.contents-panel h3 {
+  font-size:21px
+}
+
+.contents-panel>p {
+  font-size:11px;
+  color:var(--muted)
+}
+
+.contents-heading {
+  font-size:10px;
+  font-weight:600;
+  margin:28px 0 14px
+}
+
+.contents-panel>button {
+  border:0;
+  background:transparent;
+  border-radius:3px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  width:100%;
+  padding:10px 6px;
+  text-align:left;
+  font-size:11px;
+  color:var(--muted)
+}
+
+.contents-panel>button.active {
+  color:var(--accent);
+  background:var(--accent-soft)
+}
+
+.contents-panel>button span {
+  margin-left:auto;
+  font-size:8px
+}
+
+.contents-panel>p:last-child {
+  margin-top:24px;
+  font-size:10px
+}

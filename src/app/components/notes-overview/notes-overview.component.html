@@ -1,0 +1,76 @@
+<section class="page">
+  <header class="page-heading">
+    <div>
+      <span class="eyebrow">The ideas you take with you</span>
+      <h1>
+        Your notebook
+      </h1>
+      <p>
+        A collection of observations, questions, and connections.
+      </p>
+    </div>
+    <span class="notebook-mark"><mat-icon>edit_note</mat-icon></span>
+  </header>
+  <div class="notebook-toolbar">
+    <div class="tabs">
+      <button [class.active]="tab === 'notes'" (click)="tab = 'notes'">
+        Book notes <span>{{ noteCount }}</span>
+      </button>
+      <button [class.active]="tab === 'annotations'" (click)="tab = 'annotations'">
+        Annotations <span>{{ annotationCount }}</span>
+      </button>
+    </div>
+    <label class="input-icon">
+      <mat-icon>search</mat-icon><span class="sr-only">Filter notebook</span><input [(ngModel)]="query" placeholder="Find a book or thought…">
+    </label>
+  </div>
+  <p class="small muted notebook-hint">
+    <mat-icon>lock_outline</mat-icon>Your personal writing space. New drafts are kept for this visit only.
+  </p>
+  <div class="note-grid" *ngIf="!loading && tab === 'notes'">
+    <article *ngFor="let entry of visibleEntries" class="note-card panel">
+      <div class="note-book">
+        <app-book-cover [book]="entry.book">
+        </app-book-cover>
+        <div>
+          <h3>
+            {{ entry.book.title }}
+          </h3>
+          <p>
+            {{ entry.book.author }}
+          </p>
+        </div>
+      </div>
+      <span class="eyebrow">{{ entry.content ? 'Your book note' : 'An unwritten page' }}</span>
+      <p class="note-excerpt" [class.unwritten]="!entry.content">
+        {{ entry.content || 'What stayed with you? Start with a thought, a question, a passage worth returning to.' }}
+      </p>
+      <a class="text-link" [routerLink]="ui.link('book-annotator', entry.book.id)" [queryParams]="{mode: 'notes'}">{{ entry.content ? 'Continue writing' : 'Start a book note' }}<mat-icon>arrow_forward</mat-icon></a>
+    </article>
+  </div>
+  <ng-container *ngIf="!loading && tab === 'annotations'">
+    <section class="annotation-group" *ngFor="let entry of visibleEntries">
+      <h2>
+        {{ entry.book.title }}
+      </h2>
+      <div class="annotation-grid">
+        <a *ngFor="let annotation of entry.annotations" class="collected-annotation panel" [routerLink]="ui.link('book-annotator', entry.book.id)"><span class="chip accent">{{ annotation.tag | titlecase }}</span>
+        <blockquote>
+          “{{ entry.book.content.slice(annotation.startOffset, annotation.endOffset) }}”
+        </blockquote>
+        <p>
+          {{ annotation.comment }}
+        </p>
+        <span class="text-link">Return to passage<mat-icon>arrow_forward</mat-icon></span></a>
+      </div>
+      <p *ngIf="!entry.annotations.length" class="small muted">
+        No annotations in this edition yet.
+      </p>
+    </section>
+  </ng-container>
+  <app-empty-state *ngIf="loading" title="Opening your notebook…" message="Gathering your thoughts and passages.">
+  </app-empty-state>
+  <app-empty-state *ngIf="!loading && !visibleEntries.length" [title]="error ? 'Your notebook could not be opened' : 'No matching notes'" message="Try another phrase or return to your library.">
+    <a class="button" [routerLink]="ui.link('my-books')">Back to library</a>
+  </app-empty-state>
+</section>
