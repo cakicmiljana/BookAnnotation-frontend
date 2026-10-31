@@ -7,7 +7,6 @@ export interface Annotation {
     comment: string;
     tag: string;
     color: string;
-    visibility: 'public' | 'followers' | 'private';
     createdAt: Date;
     deletedAt: Date | null;
 }
