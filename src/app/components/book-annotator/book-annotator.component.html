@@ -5,8 +5,8 @@
       <button [class.active]="mode === 'read'" (click)="mode = 'read'">
         Read
       </button>
-      <button [class.active]="mode === 'search'" (click)="mode = 'search'">
-        <mat-icon>search</mat-icon>Search this book
+      <button [class.active]="mode === 'search'" (click)="openResearchTool('search')">
+        <mat-icon>manage_search</mat-icon>Semantic Search
       </button>
       <button [class.active]="mode === 'notes'" (click)="mode = 'notes'">
         Book notes
@@ -22,7 +22,7 @@
       <button class="icon-button" [class.active]="bookmarked" (click)="bookmarked = !bookmarked" [attr.aria-pressed]="bookmarked" aria-label="Bookmark this location" matTooltip="Bookmark">
         <mat-icon>{{ bookmarked ? 'bookmark' : 'bookmark_border' }}</mat-icon>
       </button>
-      <button class="icon-button" [class.active]="showPanel" (click)="showPanel = !showPanel" aria-label="Toggle study panel" [attr.aria-expanded]="showPanel" matTooltip="Study panel">
+      <button class="icon-button" [class.active]="showPanel && mode === 'read'" [disabled]="mode !== 'read'" (click)="showPanel = !showPanel" aria-label="Toggle study panel" [attr.aria-expanded]="showPanel && mode === 'read'" matTooltip="Study panel">
         <mat-icon>view_sidebar</mat-icon>
       </button>
     </div>
@@ -72,8 +72,8 @@
       Reset defaults
     </button>
   </section>
-  <div class="reader-layout" [class.with-contents]="showContents && !focusMode" [class.with-panel]="showPanel && !focusMode && mode !== 'search' && mode !== 'notes'">
-    <aside *ngIf="showContents && !focusMode" class="contents-panel">
+  <div class="reader-layout" [class.with-contents]="showContents && !focusMode && mode === 'read'" [class.with-panel]="showPanel && !focusMode && mode === 'read'">
+    <aside *ngIf="showContents && !focusMode && mode === 'read'" class="contents-panel">
       <span class="eyebrow">Your place in the text</span>
       <app-book-cover [book]="book">
       </app-book-cover>
@@ -157,8 +157,8 @@
           <button class="text-link" (mousedown)="$event.preventDefault()" (click)="annotationDialog(selectedText, selectedStart, selectedEnd)">
             <mat-icon>edit_note</mat-icon>Annotate
           </button>
-          <button class="text-link" (mousedown)="$event.preventDefault()" (click)="analyze()">
-            <mat-icon>auto_awesome</mat-icon>Analyze
+          <button class="button primary" (mousedown)="$event.preventDefault()" (click)="analyze()">
+            <mat-icon>auto_awesome</mat-icon>Analyze with AI
           </button>
           <button class="icon-button" (click)="selectionReady = false" aria-label="Close selection tools">
             <mat-icon>close</mat-icon>
@@ -199,11 +199,12 @@
         <button [class.active]="panel === 'notes'" (click)="panel = 'notes'">
           Notes
         </button>
-        <button [class.active]="panel === 'analysis'" (click)="panel = 'analysis'">
-          <mat-icon>auto_awesome</mat-icon>Analysis
+        <button class="analysis-tab" [class.active]="panel === 'analysis'" [attr.aria-pressed]="panel === 'analysis'" (click)="panel = 'analysis'">
+          <mat-icon>auto_awesome</mat-icon>AI Analysis
         </button>
       </div>
       <div class="study-body">
+        <app-passage-analysis *ngIf="panel === 'analysis'" [passage]="analysisPassage" [bookTitle]="book.title" (saveToNotes)="addAnalysis($event)"></app-passage-analysis>
         <ng-container *ngIf="panel === 'annotations'">
           <section *ngIf="editorOpen; else annotationList">
             <div class="actions spread">
@@ -298,8 +299,6 @@
             Open writing view<mat-icon>north_east</mat-icon>
           </button>
         </section>
-        <app-passage-analysis *ngIf="panel === 'analysis'" [passage]="analysisPassage" [bookTitle]="book.title" (saveToNotes)="addAnalysis($event)">
-        </app-passage-analysis>
       </div>
     </aside>
   </div>

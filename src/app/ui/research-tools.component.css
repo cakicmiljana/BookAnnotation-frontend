@@ -1,0 +1,15 @@
+:host { display: block; }
+.research-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.research-tool { display: flex; align-items: center; gap: 16px; padding: 22px; width: 100%; text-align: left; border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 6px; background: var(--paper); color: var(--ink); }
+.research-tool:hover, .research-tool.active { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+.tool-icon { display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border-radius: 50%; color: var(--accent); background: var(--accent-soft); }
+.tool-icon mat-icon { font-size: 24px !important; width: 24px !important; height: 24px !important; }
+.tool-copy { display: flex; flex-direction: column; gap: 6px; }
+.tool-copy strong { font: 500 24px/1.2 var(--serif); letter-spacing: -.025em; }
+.tool-copy > span { font: 11px/1.6 var(--sans); color: var(--muted); }
+.tool-arrow { color: var(--accent); margin-left: auto; }
+@media (max-width: 700px) {
+  .research-tools { grid-template-columns: 1fr; gap: 10px; }
+  .research-tool { padding: 16px; gap: 12px; }
+  .tool-copy strong { font-size: 22px; }
+}

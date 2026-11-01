@@ -22,6 +22,7 @@
       </div>
     </div>
   </div>
+  <div class="book-research"><app-research-tools [bookId]="book.id"></app-research-tools></div>
   <nav class="tabs" aria-label="Book details">
     <button [class.active]="tab === 'about'" (click)="tab = 'about'">
       About this book

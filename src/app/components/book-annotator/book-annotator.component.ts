@@ -24,7 +24,7 @@ interface ReadingSegment {
 }
 @Component({
     selector: 'app-book-annotator', templateUrl: './book-annotator.component.html',
-    styleUrls: ['./book-annotator.component.css', './reader-surface.css', './reader-panels.css', './reader-annotations.css', './reader-appearance.css', './reader-responsive.css'], standalone: false
+    styleUrls: ['./book-annotator.component.css', './reader-surface.css', './reader-panels.css', './reader-annotations.css', './reader-appearance.css', './reader-responsive.css', './reader-analysis-tab.css'], standalone: false
 })
 export class BookAnnotatorComponent implements OnInit {
     book: Book | null = null;
@@ -74,7 +74,8 @@ export class BookAnnotatorComponent implements OnInit {
             const mode = params.get('mode');
             const panel = params.get('panel');
             this.mode = mode === 'search' || mode === 'notes' ? mode : 'read';
-            if (panel === 'notes' || panel === 'analysis') {
+            if (panel === 'analysis' || mode === 'analysis') this.openResearchTool('analysis');
+            if (panel === 'notes') {
                 this.panel = panel;
                 this.showPanel = true;
             }
@@ -130,7 +131,7 @@ export class BookAnnotatorComponent implements OnInit {
     get locations(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i); }
     trackSegment(index: number): number { return index; }
     get filteredAnnotations(): Annotation[] { return this.allAnnotations.filter(item => !this.tagFilter || item.tag === this.tagFilter); }
-    get analysisPassage(): string { return this.selectedText || this.activePassage?.text || this.fullContent.split('\n\n')[0] || ''; }
+    get analysisPassage(): string { return this.selectedText || this.activePassage?.text || this.pageText.split('\n\n')[0] || ''; }
     get segments(): ReadingSegment[] {
         const start = this.currentPage * this.pageSize;
         const end = start + this.pageText.length;
@@ -213,10 +214,19 @@ export class BookAnnotatorComponent implements OnInit {
             this.openResult(result);
             this.selectedText = result.text;
         }
-        this.panel = 'analysis';
-        this.showPanel = true;
+        this.openResearchTool('analysis');
         this.selectionReady = false;
     }
     addAnalysis(text: string): void { this.noteContent += (this.noteContent ? '\n\n' : '') + text; this.noteStatus = 'Unsaved draft'; }
+    openResearchTool(tool: 'search' | 'analysis'): void {
+        this.mode = tool === 'analysis' ? 'read' : 'search';
+        if (tool === 'analysis') {
+            this.panel = 'analysis';
+            this.showPanel = true;
+        }
+        this.focusMode = false;
+        this.showAppearance = false;
+        this.selectionReady = false;
+    }
     resetAppearance(): void { this.fontSize = 21; this.lineHeight = 1.85; this.readingWidth = 'comfortable'; this.font = 'serif'; this.theme = 'paper'; this.showHighlights = true; this.focusMode = false; }
 }

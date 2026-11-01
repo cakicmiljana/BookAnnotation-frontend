@@ -5,7 +5,7 @@ import { PresentationService } from '../presentation.service';
 import { VersionUploadComponent } from '../../components/version-upload/version-upload.component';
 @Component({
     selector: 'app-library-view', standalone: false,
-    templateUrl: './library-view.component.html', styleUrls: ['./library-view.component.css', './library-responsive.css']
+    templateUrl: './library-view.component.html', styleUrls: ['./library-view.component.css', './library-responsive.css', './library-research.css']
 })
 export class LibraryViewComponent {
     @Input()

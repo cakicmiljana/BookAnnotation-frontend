@@ -1,4 +1,5 @@
-<section class="analysis">
+<section class="analysis" [class.workspace]="workspace">
+  <div class="analysis-controls">
   <div class="analysis-intro">
     <span class="eyebrow">Read beneath the surface</span>
     <h3>
@@ -12,6 +13,7 @@
   <blockquote class="selected-passage">
     {{ passage || 'Select a passage in the reader to explore it here.' }}
   </blockquote>
+  <p class="source"><mat-icon>menu_book</mat-icon>{{ bookTitle }}</p>
   <fieldset>
     <legend>Choose an analysis lens</legend>
     <div class="lenses">
@@ -26,7 +28,8 @@
   <p class="preview-note">
     <mat-icon>info_outline</mat-icon>Illustrative preview. No AI service is connected.
   </p>
-  <div *ngIf="generated" class="analysis-response">
+  </div>
+  <div *ngIf="generated; else analysisEmpty" class="analysis-response">
     <span class="chip accent">Example AI response</span>
     <h3>
       {{ lens === 'Themes' ? 'Appearance and inner life' : lens === 'Symbolism' ? 'The meaning within an image' : 'Between observation and interpretation' }}
@@ -73,4 +76,14 @@
       Your question is ready. Follow-up analysis will be available when the AI service is connected.
     </p>
   </div>
+  <ng-template #analysisEmpty>
+    <div *ngIf="workspace" class="analysis-empty">
+      <mat-icon>auto_awesome</mat-icon>
+      <span class="eyebrow">A closer reading begins here</span>
+      <h2>Discover what the words reveal.</h2>
+      <p>Choose a passage and a reading lens. Explore the themes, imagery, and narrative choices that give the text its meaning.</p>
+      <div class="analysis-prompts"><span>Themes & motifs</span><span>Symbolism & imagery</span><span>Narrative voice</span></div>
+      <p class="small muted">Your interpretation will appear here. This interface currently uses an illustrative response.</p>
+    </div>
+  </ng-template>
 </section>

@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 @Component({
     selector: 'app-passage-analysis', standalone: false,
-    templateUrl: './passage-analysis.component.html', styleUrls: ['./passage-analysis.component.css']
+    templateUrl: './passage-analysis.component.html', styleUrls: ['./passage-analysis.component.css', './analysis-workspace.css']
 })
 export class PassageAnalysisComponent implements OnChanges {
+    @Input() workspace = false;
     @Input()
     passage = '';
     @Input()

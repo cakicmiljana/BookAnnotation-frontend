@@ -1,0 +1,10 @@
+﻿.featured-aside { display: flex; flex-direction: column; gap: 12px; }
+.featured-aside .button { width: 100%; }
+@media (max-width: 900px) {
+  .featured { flex-wrap: wrap; }
+  .featured-aside { flex-basis: 100%; flex-direction: row; margin-left: 0; border-left: 0; border-top: 1px solid var(--line); padding: 20px 0 0; }
+  .featured-aside .button { flex: 1; width: auto; }
+}
+@media (max-width: 520px) {
+  .featured-aside { flex-direction: column; }
+}

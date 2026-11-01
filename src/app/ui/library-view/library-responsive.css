@@ -1,6 +1,6 @@
 @media(max-width:1000px) {
   .featured-aside {
-    display:none
+    padding-left:24px
   }
   .book-grid {
     gap:18px

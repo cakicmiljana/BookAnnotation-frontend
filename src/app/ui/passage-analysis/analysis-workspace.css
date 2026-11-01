@@ -1,0 +1,19 @@
+.workspace { display: grid; grid-template-columns: minmax(280px, .85fr) minmax(0, 1.15fr); gap: 36px; align-items: start; }
+.workspace .analysis-controls { padding: 26px; border: 1px solid var(--line); border-radius: 6px; background: var(--canvas); }
+.workspace .selected-passage { max-height: 340px; font-size: 19px; }
+.workspace .lenses button { font-size: 12px; padding: 10px 12px; }
+.workspace .analysis-response { padding: 0 0 0 28px; border-top: 0; border-left: 1px solid var(--line); }
+.workspace .analysis-response p { font-size: 18px; }
+.workspace .analysis-response h3 { font-size: 29px; }
+.analysis-empty { padding: 36px 20px; }
+.analysis-empty > mat-icon { width: 36px !important; height: 36px !important; font-size: 36px !important; color: var(--accent); margin-bottom: 28px; }
+.analysis-empty h2 { font-size: 34px; }
+.analysis-empty > p { font: 18px/1.8 var(--serif); color: var(--muted); }
+.analysis-empty > p.small { font: 11px/1.8 var(--sans); }
+.analysis-prompts { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0; }
+.analysis-prompts span { padding: 8px 12px; border: 1px solid var(--line); border-radius: 4px; font-size: 11px; }
+@media (max-width: 850px) {
+  .workspace { grid-template-columns: 1fr; gap: 24px; }
+  .workspace .analysis-response { padding: 24px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+  .analysis-empty { padding: 16px 4px; }
+}
