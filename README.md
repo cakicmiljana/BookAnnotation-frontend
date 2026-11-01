@@ -10,12 +10,11 @@ use `npm.cmd start` if PowerShell blocks the npm script.
 
 The `/preview` routes are a presentation sandbox using existing mock data. They do
 not sign you in or change the authentication guard on the existing application routes.
-Search passages within an open book, explore the analysis sample, and try the reader
+Find words within an open book and try the reader
 appearance and annotation controls. Annotation edits are local to the workspace;
 kept book-note drafts remain in memory until the page is refreshed.
 
-Semantic results and literary analysis are illustrative. Upload preparation, profile
-editing, and reading preferences are UI previews. No new backend integrations
+Upload preparation, profile editing, and reading preferences are UI previews. No new backend integrations
 or persistence are included.
 
 See [the UI implementation guide](docs/ui-implementation.md) for screen coverage,

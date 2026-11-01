@@ -1,58 +1,14 @@
-<section class="book-search">
-  <span class="eyebrow">Follow an idea through the text</span>
-  <h1>
-    Search this book
-  </h1>
-  <p class="muted scope-title">
-    {{ book?.title }} <span>· {{ book?.language }} edition</span>
-  </p>
-  <form class="search-form" (ngSubmit)="submitted = true">
-    <label class="input-icon">
-      <mat-icon>search</mat-icon><span class="sr-only">Search passages in this book</span><input [(ngModel)]="query" name="query" [placeholder]="mode === 'semantic' ? 'An idea, a theme, a question…' : 'A word or phrase in this book…'">
-    </label>
-    <button class="button primary" type="submit" [disabled]="!query.trim()">
-      Find passages<mat-icon>arrow_forward</mat-icon>
-    </button>
-  </form>
-  <div class="search-options">
-    <div class="segmented" aria-label="Search mode">
-      <button [class.active]="mode === 'semantic'" [attr.aria-pressed]="mode === 'semantic'" (click)="mode = 'semantic'; submitted = false">
-        <mat-icon>auto_awesome</mat-icon>Semantic
-      </button>
-      <button [class.active]="mode === 'exact'" [attr.aria-pressed]="mode === 'exact'" (click)="mode = 'exact'; submitted = false">
-        Exact text
-      </button>
-    </div>
-    <select class="control" [(ngModel)]="scope" aria-label="Search location"><option value="all">All locations in this book</option><option value="opening">Opening passage</option></select>
+﻿<div class="find-bar" role="search" aria-label="Find text in this book">
+  <label class="find-input">
+    <mat-icon>search</mat-icon>
+    <span class="sr-only">Find a word or phrase in this book</span>
+    <input #findInput [ngModel]="query" (ngModelChange)="query = $event; search()" placeholder="Find in this book…" autocomplete="off"
+      (keydown)="onKeydown($event)">
+  </label>
+  <span class="match-count" role="status" aria-live="polite">{{ matches.length ? (activeIndex + 1) + ' of ' + matches.length : query.trim() ? 'No matches' : 'Find text' }}</span>
+  <div class="find-actions">
+    <button type="button" class="icon-button" [disabled]="!matches.length" (click)="moveMatch(-1)" aria-label="Previous match" matTooltip="Previous match (Shift+Enter)"><mat-icon>keyboard_arrow_up</mat-icon></button>
+    <button type="button" class="icon-button" [disabled]="!matches.length" (click)="moveMatch(1)" aria-label="Next match" matTooltip="Next match (Enter)"><mat-icon>keyboard_arrow_down</mat-icon></button>
+    <button type="button" class="icon-button" (click)="closed.emit()" aria-label="Close text search" matTooltip="Close (Escape)"><mat-icon>close</mat-icon></button>
   </div>
-  <div class="search-summary">
-    <span>{{ submitted && mode === 'exact' ? results.length + ' matching passages' : 'Example passages' }}</span><span class="preview-label"><mat-icon>info_outline</mat-icon>{{ mode === 'semantic' ? 'Semantic search preview · sample results' : 'Local text preview' }}</span>
-  </div>
-  <article class="passage-result" *ngFor="let result of results; let i = index">
-    <div class="result-number">
-      {{ (i + 1).toString().padStart(2, '0') }}
-    </div>
-    <div class="result-copy">
-      <span class="result-location">{{ book?.title }} <span>· Character {{ result.offset + 1 }}</span></span>
-      <p *ngIf="parts(result.text) as excerpt">
-        {{ excerpt.before }}<mark *ngIf="excerpt.match">{{ excerpt.match }}</mark>{{ excerpt.after }}
-      </p>
-      <div class="actions spread">
-        <span></span>
-        <div class="actions">
-          <button class="text-link" (click)="analyzePassage.emit(result)">
-            <mat-icon>auto_awesome</mat-icon>Analyze
-          </button>
-          <button class="text-link" (click)="openPassage.emit(result)">
-            Open passage<mat-icon>arrow_forward</mat-icon>
-          </button>
-        </div>
-      </div>
-    </div>
-  </article>
-  <app-empty-state *ngIf="!results.length" icon="search_off" title="No passages found" message="Try a shorter phrase or explore an idea with semantic search." action="Clear search" (actionClick)="query = ''; submitted = false">
-  </app-empty-state>
-  <p class="search-footnote">
-    <mat-icon>lock_outline</mat-icon>Passage search stays within this book and edition.
-  </p>
-</section>
+</div>

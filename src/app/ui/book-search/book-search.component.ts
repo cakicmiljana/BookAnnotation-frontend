@@ -1,51 +1,47 @@
-import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
-import { Book } from '../../models/book';
-export interface PassagePreview {
-    text: string;
-    offset: number;
-}
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, OnChanges, ViewChild } from '@angular/core';
+import { findTextMatches, TextMatch } from './text-search';
 @Component({
     selector: 'app-book-search', standalone: false,
     templateUrl: './book-search.component.html', styleUrls: ['./book-search.component.css']
 })
-export class BookSearchComponent implements OnChanges {
-    @Input()
-    book: Book | null = null;
-    @Output()
-    openPassage = new EventEmitter<PassagePreview>();
-    @Output()
-    analyzePassage = new EventEmitter<PassagePreview>();
+export class BookSearchComponent implements OnChanges, AfterViewInit {
+    @Input() text = '';
+    @Output() matchSelected = new EventEmitter<TextMatch | null>();
+    @Output() closed = new EventEmitter<void>();
+    @ViewChild('findInput') findInput?: ElementRef<HTMLInputElement>;
     query = '';
-    mode = 'semantic';
-    submitted = false;
-    scope = 'all';
+    matches: TextMatch[] = [];
+    activeIndex = -1;
+
     ngOnChanges(): void {
         this.query = '';
-        this.submitted = false;
-        this.scope = 'all';
+        this.search();
     }
-    get passages(): PassagePreview[] {
-        const content = this.book?.content || '';
-        let cursor = 0;
-        return content.split(/\n\s*\n/).filter(Boolean).map(text => {
-            const offset = content.indexOf(text, cursor);
-            cursor = offset + text.length;
-            return { text: text.slice(0, 360), offset };
-        });
+
+    ngAfterViewInit(): void {
+        this.findInput?.nativeElement.focus();
     }
-    get results(): PassagePreview[] {
-        const passages = this.scope === 'opening' ? this.passages.slice(0, 1) : this.passages;
-        if (!this.submitted || this.mode === 'semantic')
-            return passages.slice(0, 5);
-        return passages.filter(item => item.text.toLowerCase().includes(this.query.toLowerCase().trim()));
+
+    search(): void {
+        this.matches = findTextMatches(this.text, this.query);
+        this.activeIndex = this.matches.length ? 0 : -1;
+        this.matchSelected.emit(this.matches[this.activeIndex] ?? null);
     }
-    parts(text: string): {
-        before: string;
-        match: string;
-        after: string;
-    } {
-        const query = this.query.trim();
-        const index = query ? text.toLowerCase().indexOf(query.toLowerCase()) : -1;
-        return index < 0 ? { before: text, match: '', after: '' } : { before: text.slice(0, index), match: text.slice(index, index + query.length), after: text.slice(index + query.length) };
+
+    moveMatch(direction: number): void {
+        if (!this.matches.length) return;
+        this.activeIndex = (this.activeIndex + direction + this.matches.length) % this.matches.length;
+        this.matchSelected.emit(this.matches[this.activeIndex]);
+    }
+
+    onKeydown(event: Event): void {
+        const key = event as KeyboardEvent;
+        if (key.key === 'Enter') {
+            event.preventDefault();
+            this.moveMatch(key.shiftKey ? -1 : 1);
+        } else if (key.key === 'Escape') {
+            event.preventDefault();
+            this.closed.emit();
+        }
     }
 }

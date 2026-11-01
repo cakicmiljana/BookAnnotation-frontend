@@ -5,7 +5,7 @@
       <button [class.active]="mode === 'read'" (click)="mode = 'read'">
         Read
       </button>
-      <button [class.active]="mode === 'search'" (click)="mode = 'search'">
+      <button #searchToggle [class.active]="showSearch && mode === 'read'" [attr.aria-expanded]="showSearch && mode === 'read'" (click)="toggleSearch()">
         <mat-icon>search</mat-icon>Search this book
       </button>
       <button [class.active]="mode === 'notes'" (click)="mode = 'notes'">
@@ -72,7 +72,7 @@
       Reset defaults
     </button>
   </section>
-  <div class="reader-layout" [class.with-contents]="showContents && !focusMode" [class.with-panel]="showPanel && !focusMode && mode !== 'search' && mode !== 'notes'">
+  <div class="reader-layout" [class.with-contents]="showContents && !focusMode" [class.with-panel]="showPanel && !focusMode && mode === 'read'">
     <aside *ngIf="showContents && !focusMode" class="contents-panel">
       <span class="eyebrow">Your place in the text</span>
       <app-book-cover [book]="book">
@@ -94,7 +94,7 @@
       </p>
     </aside>
     <div class="reader-main">
-      <app-book-search [hidden]="mode !== 'search'" [book]="book" (openPassage)="openResult($event)" (analyzePassage)="analyze($event)">
+      <app-book-search *ngIf="showSearch" [hidden]="mode !== 'read'" [text]="fullContent" (matchSelected)="goToMatch($event)" (closed)="closeSearch()">
       </app-book-search>
       <section *ngIf="mode === 'notes'" class="notes-workspace">
         <span class="eyebrow">A conversation with the text</span>
@@ -141,15 +141,6 @@
             ✦
           </div>
         </div>
-        <div *ngIf="activePassage" class="match-notice">
-          <span><mat-icon>search</mat-icon>Passage from your search</span>
-          <button class="text-link" (click)="mode = 'search'">
-            Back to results
-          </button>
-          <button class="icon-button" (click)="activePassage = null" aria-label="Clear search marker">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
         <div *ngIf="selectionReady" class="selection-toolbar panel">
           <div class="selection-colors">
             <span *ngFor="let color of colors" [style.background]="color.swatch"></span>
@@ -157,14 +148,11 @@
           <button class="text-link" (mousedown)="$event.preventDefault()" (click)="annotationDialog(selectedText, selectedStart, selectedEnd)">
             <mat-icon>edit_note</mat-icon>Annotate
           </button>
-          <button class="text-link" (mousedown)="$event.preventDefault()" (click)="analyze()">
-            <mat-icon>auto_awesome</mat-icon>Analyze
-          </button>
           <button class="icon-button" (click)="selectionReady = false" aria-label="Close selection tools">
             <mat-icon>close</mat-icon>
           </button>
         </div>
-        <div class="book-content" tabindex="0" aria-label="Book text. Select a passage to annotate or analyze." [style.font-size.px]="fontSize" [style.line-height]="lineHeight" [style.font-family]="font === 'serif' ? 'var(--serif)' : 'var(--sans)'" (mouseup)="annotateText($event)" (keyup)="annotateText($event)" (touchend)="annotateText($event)">
+        <div #readerContent class="book-content" tabindex="0" aria-label="Book text. Select a passage to annotate." [style.font-size.px]="fontSize" [style.line-height]="lineHeight" [style.font-family]="font === 'serif' ? 'var(--serif)' : 'var(--sans)'" (mouseup)="annotateText($event)" (keyup)="annotateText($event)" (touchend)="annotateText($event)">
           <span *ngFor="let segment of segments; trackBy: trackSegment" [class.annotation]="!!segment.annotation" [class.search-match]="segment.match" [style.background-color]="showHighlights && segment.annotation ? displayColor(segment.annotation.color) : null" [attr.title]="segment.annotation?.comment || null" (click)="updateAnnotation(segment.annotation)">{{ segment.text }}</span>
         </div>
         <app-empty-state *ngIf="!pageText" title="This edition has no text yet" message="Choose another edition or upload a reading copy.">
@@ -198,9 +186,6 @@
         </button>
         <button [class.active]="panel === 'notes'" (click)="panel = 'notes'">
           Notes
-        </button>
-        <button [class.active]="panel === 'analysis'" (click)="panel = 'analysis'">
-          <mat-icon>auto_awesome</mat-icon>Analysis
         </button>
       </div>
       <div class="study-body">
@@ -298,8 +283,6 @@
             Open writing view<mat-icon>north_east</mat-icon>
           </button>
         </section>
-        <app-passage-analysis *ngIf="panel === 'analysis'" [passage]="analysisPassage" [bookTitle]="book.title" (saveToNotes)="addAnalysis($event)">
-        </app-passage-analysis>
       </div>
     </aside>
   </div>

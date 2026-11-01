@@ -80,25 +80,6 @@
   background:var(--accent-soft)!important
 }
 
-.match-notice {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:22px;
-  font-size:10px;
-  color:var(--accent);
-  background:var(--accent-soft);
-  padding:4px 10px;
-  border-radius:4px
-}
-
-.match-notice>span {
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-right:auto
-}
-
 .selection-toolbar {
   position:sticky;
   top:90px;

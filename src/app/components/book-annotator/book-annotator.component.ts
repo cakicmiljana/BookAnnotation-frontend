@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { afterNextRender, Component, DestroyRef, ElementRef, Injector, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -16,7 +16,7 @@ import { BooksService } from '../../services/books.service';
 import { PresentationService } from '../../ui/presentation.service';
 import { TextAnnotator } from '../../helper classes/TextAnnotator';
 import { ANNOTATION_COLORS } from '../../ui/annotation-fields.component';
-import { PassagePreview } from '../../ui/book-search/book-search.component';
+import { TextMatch } from '../../ui/book-search/text-search';
 interface ReadingSegment {
     text: string;
     annotation?: Annotation;
@@ -42,8 +42,9 @@ export class BookAnnotatorComponent implements OnInit {
     selectedStart = 0;
     selectedEnd = 0;
     selectedAnnotation: Annotation | null = null;
-    mode: 'read' | 'search' | 'notes' = 'read';
-    panel: 'annotations' | 'notes' | 'analysis' = 'annotations';
+    mode: 'read' | 'notes' = 'read';
+    showSearch = false;
+    panel: 'annotations' | 'notes' = 'annotations';
     showPanel = window.matchMedia('(min-width: 801px)').matches;
     showContents = false;
     showAppearance = false;
@@ -64,17 +65,21 @@ export class BookAnnotatorComponent implements OnInit {
     loadError = false;
     loading = true;
     selectionReady = false;
-    activePassage: PassagePreview | null = null;
+    activeMatch: TextMatch | null = null;
+    @ViewChild('readerContent') readerContent?: ElementRef<HTMLElement>;
+    @ViewChild('searchToggle') searchToggle?: ElementRef<HTMLButtonElement>;
     colors = ANNOTATION_COLORS;
     private annotator = new TextAnnotator();
     private destroyRef = inject(DestroyRef);
+    private injector = inject(Injector);
     constructor(private store: Store<AppState>, private booksService: BooksService, private route: ActivatedRoute, public ui: PresentationService) { }
     ngOnInit(): void {
         this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
             const mode = params.get('mode');
             const panel = params.get('panel');
-            this.mode = mode === 'search' || mode === 'notes' ? mode : 'read';
-            if (panel === 'notes' || panel === 'analysis') {
+            this.mode = mode === 'notes' ? 'notes' : 'read';
+            this.showSearch = mode === 'search';
+            if (panel === 'notes') {
                 this.panel = panel;
                 this.showPanel = true;
             }
@@ -89,7 +94,7 @@ export class BookAnnotatorComponent implements OnInit {
             this.note = undefined;
             this.currentPage = 0;
             this.editorOpen = false;
-            this.activePassage = null;
+            this.activeMatch = null;
             this.selectionReady = false;
             this.selectedText = '';
             if (!book)
@@ -130,22 +135,21 @@ export class BookAnnotatorComponent implements OnInit {
     get locations(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i); }
     trackSegment(index: number): number { return index; }
     get filteredAnnotations(): Annotation[] { return this.allAnnotations.filter(item => !this.tagFilter || item.tag === this.tagFilter); }
-    get analysisPassage(): string { return this.selectedText || this.activePassage?.text || this.fullContent.split('\n\n')[0] || ''; }
     get segments(): ReadingSegment[] {
         const start = this.currentPage * this.pageSize;
         const end = start + this.pageText.length;
         const annotations = this.allAnnotations.filter(item => item.startOffset < end && item.endOffset > start);
         const boundaries = new Set<number>([start, end]);
         annotations.forEach(item => { boundaries.add(Math.max(start, item.startOffset)); boundaries.add(Math.min(end, item.endOffset)); });
-        if (this.activePassage) {
-            boundaries.add(Math.max(start, Math.min(end, this.activePassage.offset)));
-            boundaries.add(Math.max(start, Math.min(end, this.activePassage.offset + this.activePassage.text.length)));
+        if (this.activeMatch) {
+            boundaries.add(Math.max(start, Math.min(end, this.activeMatch.offset)));
+            boundaries.add(Math.max(start, Math.min(end, this.activeMatch.offset + this.activeMatch.length)));
         }
         const points = [...boundaries].sort((a, b) => a - b);
         return points.slice(0, -1).map((point, i) => ({
             text: this.fullContent.slice(point, points[i + 1]),
             annotation: annotations.find(item => item.startOffset <= point && item.endOffset > point),
-            match: !!this.activePassage && point >= this.activePassage.offset && point < this.activePassage.offset + this.activePassage.text.length
+            match: !!this.activeMatch && point >= this.activeMatch.offset && point < this.activeMatch.offset + this.activeMatch.length
         }));
     }
     displayColor(color: string): string { return this.colors.find(item => item.value === color)?.swatch || (color === 'lightcoral' ? '#f2dcdc' : color); }
@@ -207,16 +211,23 @@ export class BookAnnotatorComponent implements OnInit {
     deleteAnnotation(): void { this.allAnnotations = this.allAnnotations.filter(item => item.id !== this.selectedAnnotation?.id); this.editorOpen = false; this.confirmDelete = false; }
     saveNote(): void { if (this.book)
         this.ui.keepNoteDraft(this.book.id, this.userId, this.noteContent); this.noteStatus = 'Draft kept for this visit'; }
-    openResult(result: PassagePreview): void { this.activePassage = result; this.mode = 'read'; this.getPageData({ pageIndex: Math.floor(result.offset / this.pageSize) }); }
-    analyze(result?: PassagePreview): void {
-        if (result) {
-            this.openResult(result);
-            this.selectedText = result.text;
-        }
-        this.panel = 'analysis';
-        this.showPanel = true;
-        this.selectionReady = false;
+    toggleSearch(): void {
+        if (this.showSearch && this.mode === 'read') { this.closeSearch(); return; }
+        this.mode = 'read';
+        this.showSearch = true;
     }
-    addAnalysis(text: string): void { this.noteContent += (this.noteContent ? '\n\n' : '') + text; this.noteStatus = 'Unsaved draft'; }
+    closeSearch(): void {
+        this.showSearch = false;
+        this.activeMatch = null;
+        this.searchToggle?.nativeElement.focus();
+    }
+    goToMatch(match: TextMatch | null): void {
+        this.activeMatch = match;
+        if (!match) return;
+        this.getPageData({ pageIndex: Math.floor(match.offset / this.pageSize) });
+        afterNextRender(() => {
+            this.readerContent?.nativeElement.querySelector('.search-match')?.scrollIntoView({ block: 'center', behavior: 'auto' });
+        }, { injector: this.injector });
+    }
     resetAppearance(): void { this.fontSize = 21; this.lineHeight = 1.85; this.readingWidth = 'comfortable'; this.font = 'serif'; this.theme = 'paper'; this.showHighlights = true; this.focusMode = false; }
 }

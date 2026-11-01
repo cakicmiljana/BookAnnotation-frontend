@@ -39,7 +39,6 @@ import { AnnotationFieldsComponent } from './ui/annotation-fields.component';
 import { LibraryViewComponent } from './ui/library-view/library-view.component';
 import { NotesOverviewComponent } from './components/notes-overview/notes-overview.component';
 import { BookSearchComponent } from './ui/book-search/book-search.component';
-import { PassageAnalysisComponent } from './ui/passage-analysis/passage-analysis.component';
 @NgModule({ declarations: [
         AppComponent,
         BookCoverComponent,
@@ -48,7 +47,6 @@ import { PassageAnalysisComponent } from './ui/passage-analysis/passage-analysis
         LibraryViewComponent,
         NotesOverviewComponent,
         BookSearchComponent,
-        PassageAnalysisComponent,
         BookListComponent,
         BookPreviewComponent,
         BookViewerComponent,
