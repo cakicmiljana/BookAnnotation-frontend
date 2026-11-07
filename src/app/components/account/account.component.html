@@ -23,15 +23,12 @@
       <article *ngIf="section === 'profile'" class="settings-card panel">
         <span class="eyebrow">Your profile</span>
         <div class="profile-identity">
-          <span class="avatar profile-avatar">{{ user.username.slice(0, 2) | uppercase }}</span>
-          <div>
-            <h2>
-              {{ user.username }}
-            </h2>
-            <p class="muted">
-              {{ user.email }}
-            </p>
-          </div>
+          <h2>
+            {{ user.username }}
+          </h2>
+          <p class="muted">
+            {{ user.email }}
+          </p>
         </div>
         <div class="profile-details">
           <div>
@@ -39,12 +36,6 @@
           </div>
           <div>
             <span>Email address</span><strong>{{ user.email }}</strong>
-          </div>
-          <div *ngIf="user.bio">
-            <span>A little about you</span>
-            <p>
-              {{ user.bio }}
-            </p>
           </div>
         </div>
         <div class="actions">
