@@ -5,8 +5,6 @@
       "username": "miljana",
       "email": "miljana@example.com",
       "passwordHash": "$2b$10$hash1",
-      "bio": "Frontend dev. Obsessed with marginalia.",
-      "avatarUrl": "https://i.pravatar.cc/150?img=1",
       "createdAt": "2026-01-01T09:00:00Z",
       "deletedAt": null
     },
@@ -15,8 +13,6 @@
       "username": "nikola",
       "email": "nikola@example.com",
       "passwordHash": "$2b$10$hash2",
-      "bio": "Backend engineer. Loves Russian novels.",
-      "avatarUrl": "https://i.pravatar.cc/150?img=2",
       "createdAt": "2026-01-02T10:00:00Z",
       "deletedAt": null
     }

@@ -6,7 +6,7 @@
     <a [routerLink]="ui.link('notes')" routerLinkActive="active">Notebook</a>
   </nav>
   <div class="header-end">
-    <span *ngIf="ui.preview" class="preview-label"><span class="preview-dot"></span>UI preview</span><a class="avatar" [routerLink]="ui.link('account')" aria-label="Open your account"><mat-icon>person_outline</mat-icon></a><a *ngIf="ui.preview" class="exit-preview" routerLink="/login" aria-label="Exit preview" matTooltip="Exit preview"><mat-icon>logout</mat-icon></a>
+    <span *ngIf="ui.preview" class="preview-label"><span class="preview-dot"></span>UI preview</span><a class="icon-button" [routerLink]="ui.link('account')" aria-label="Open your account" matTooltip="Your account"><mat-icon>person_outline</mat-icon></a><a *ngIf="ui.preview" class="exit-preview" routerLink="/login" aria-label="Exit preview" matTooltip="Exit preview"><mat-icon>logout</mat-icon></a>
     <button *ngIf="!ui.preview" class="icon-button" (click)="logout()" routerLink="/login" aria-label="Sign out" matTooltip="Sign out">
       <mat-icon>logout</mat-icon>
     </button>

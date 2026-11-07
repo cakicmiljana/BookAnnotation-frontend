@@ -430,18 +430,6 @@ mat-icon  {
   gap: 5px;
 }
 
-.avatar  {
-  display: inline-flex;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #e8ded5;
-  color: #69424c;
-  align-items: center;
-  justify-content: center;
-  font: 14px var(--serif);
-}
-
 .dialog-content  {
   padding: 30px;
   max-height: 86dvh;
