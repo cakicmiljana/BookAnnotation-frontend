@@ -23,7 +23,7 @@ export class UsersService {
     return this.httpClient.get<any>(this.dataUrl).pipe(
       map(data => {
         const user: User | undefined = data.users.find(
-          (u: User) => u.username === username && u.password === password
+          (u: User) => u.username === username
         );
 
         if (!user) {
