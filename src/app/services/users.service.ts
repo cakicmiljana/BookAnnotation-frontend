@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { User } from '../models/user';
 import { LoginResponse } from '../dtos/LoginResponse';
 
@@ -20,33 +21,23 @@ export class UsersService {
   }
 
   login(username: string, password: string): Observable<LoginResponse> {
-    return this.httpClient.get<any>(this.dataUrl).pipe(
-      map(data => {
-        const user: User | undefined = data.users.find(
-          (u: User) => u.username === username
-        );
-
-        if (!user) {
-          throw new Error('Invalid credentials');
-        }
-
-        const response: LoginResponse = {
-          user,
-          token: 'mock-jwt-token-12345'
-        };
-
-        return response;
-      })
-    );
+    return this.httpClient
+      .post<LoginResponse>(`${environment.apiUrl}/auth/login`, { username, password })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          const message =
+            error.status === 401 ? 'Invalid username or password'
+            : error.status === 0 ? 'Cannot reach the server. Is the backend running?'
+            : error.error?.message ?? 'Login failed';
+          return throwError(() => new Error(Array.isArray(message) ? message.join(', ') : message));
+        })
+      );
   }
 
-  // login(username: string, password: string): Observable<LoginResponse> {
-  //   return this.httpClient.get<any>(this.dataUrl).pipe(
-  //     map(data => data.users.find(
-  //       (u: User) => u.username === username && u.password === password
-  //     ))
-  //   );
-  // }
+  /** The currently authenticated user (requires a token). */
+  getCurrentUser(): Observable<User> {
+    return this.httpClient.get<User>(`${environment.apiUrl}/me`);
+  }
 
   updateUser(id: number, username: string, email: string, password: string) {
     console.warn('Mock mode: updateUser does not persist changes.');
