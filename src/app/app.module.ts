@@ -3,7 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BookListComponent } from './components/book-list/book-list.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { authInterceptor } from './auth/auth.interceptor';
 import { BookPreviewComponent } from './components/book-preview/book-preview.component';
 import { BookViewerComponent } from './components/book-viewer/book-viewer.component';
 import { VersionListComponent } from './components/version-list/version-list.component';
@@ -76,6 +77,6 @@ import { ResearchToolsComponent } from './ui/research-tools.component';
         MatSnackBarModule,
         StoreModule.forRoot({ auth: userReducer, books: booksReducer, annotations: annotationsReducer, notes: notesReducer }),
         EffectsModule.forRoot([UsersEffects, BooksEffects, AnnotationsEffects, NotesEffects]),
-        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })], providers: [provideHttpClient(withInterceptors([authInterceptor]), withInterceptorsFromDi())] })
 export class AppModule {
 }
