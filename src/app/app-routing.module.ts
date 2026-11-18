@@ -8,6 +8,7 @@ import { BookViewerComponent } from './components/book-viewer/book-viewer.compon
 import { BookAnnotatorComponent } from './components/book-annotator/book-annotator.component';
 import { LogInComponent } from './components/log-in/log-in.component';
 import { authGuard } from './auth/auth.guard';
+import { guestGuard } from './auth/guest.guard';
 import { NotesOverviewComponent } from './components/notes-overview/notes-overview.component';
 const screens: Routes = [
     { path: 'all-books', component: BookListComponent },
@@ -26,7 +27,7 @@ const routes: Routes = [
             ...screens
         ] },
     ...screens.map(screen => ({ ...screen, canActivate: [authGuard] })),
-    { path: 'login', component: LogInComponent },
+    { path: 'login', component: LogInComponent, canActivate: [guestGuard] },
     { path: '**', redirectTo: '/login' }
 ];
 @NgModule({
