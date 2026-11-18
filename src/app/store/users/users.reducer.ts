@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import * as UsersActions from './users.action';
 import { UsersState } from './users.state';
+import { tokenStorage } from 'src/app/auth/token-storage';
 
 export const initialState: UsersState = {
     user: null,
@@ -10,7 +11,11 @@ export const initialState: UsersState = {
 };
 
 export const userReducer = createReducer(
-    initialState,
+    { ...initialState, token: tokenStorage.get() },
+
+    on(UsersActions.sessionRestored, (state, { user }) => {
+        return { ...state, user }
+    }),
 
     on(UsersActions.login, (state) => {
         return { ...state,
