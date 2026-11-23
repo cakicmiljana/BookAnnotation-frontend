@@ -10,6 +10,7 @@ import { AppState } from '../../store/app.state';
 import { selectUserId } from '../../store/users/users.selector';
 interface NotebookEntry {
     book: Book;
+    text: string;
     content: string;
     annotations: Annotation[];
 }
@@ -33,11 +34,14 @@ export class NotesOverviewComponent implements OnInit {
         return forkJoin(books.map(book => forkJoin({
             note: this.books.getNote(book.id, userId),
             annotations: this.books.getAnnotationsByBookId(book.id, userId)
-        }).pipe(map(({ note, annotations }) => ({
-            book,
-            content: this.ui.getNoteDraft(book.id, userId) ?? note?.content ?? '',
-            annotations
-        })))));
+        }).pipe(switchMap(({ note, annotations }) =>
+            (annotations.length ? this.books.getBookContent(book.id) : of('')).pipe(map(text => ({
+                book,
+                text,
+                content: this.ui.getNoteDraft(book.id, userId) ?? note?.content ?? '',
+                annotations
+            })))
+        ))));
     }
     get visibleEntries(): NotebookEntry[] { return this.entries.filter(entry => (entry.book.title + ' ' + entry.book.author + ' ' + entry.content).toLowerCase().includes(this.query.toLowerCase())); }
     get noteCount(): number { return this.entries.filter(entry => entry.content).length; }

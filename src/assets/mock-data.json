@@ -64,7 +64,7 @@
   "annotations": [
     {
       "id": 1,
-      "bookId": 1,
+      "editionId": 1,
       "userId": 1,
       "startOffset": 10,
       "endOffset": 100,
@@ -76,7 +76,7 @@
     },
     {
       "id": 2,
-      "bookId": 1,
+      "editionId": 1,
       "userId": 1,
       "startOffset": 200,
       "endOffset": 400,
@@ -90,7 +90,7 @@
   "notes": [
     {
       "id": 1,
-      "bookId": 1,
+      "editionId": 1,
       "userId": 1,
       "content": "Compare Gatsby’s illusion with modern influencer culture."
     }

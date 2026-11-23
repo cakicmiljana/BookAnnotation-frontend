@@ -10,7 +10,7 @@ export class NotesEffects {
     this.actions$.pipe(
       ofType(NotesActions.getNote),
       switchMap((action) =>
-        this.booksService.getNote(action.bookId, action.userId).pipe(
+        this.booksService.getNote(action.editionId, action.userId).pipe(
           map(note => NotesActions.getNoteSuccess({ note })),
           catchError((error) => of(NotesActions.getNoteFailure({ error: error.message })))
         )
@@ -22,7 +22,7 @@ export class NotesEffects {
     this.actions$.pipe(
       ofType(NotesActions.createNoteSuccess),
       switchMap((action) =>
-        this.booksService.addNote(action.note.bookId, action.note.userId, action.note.content).pipe(
+        this.booksService.addNote(action.note.editionId, action.note.userId, action.note.content).pipe(
           map(() => NotesActions.createNoteSuccess({ note: action.note })),
           catchError((error) => of(NotesActions.createNoteFailure({ error: error.message })))
         )

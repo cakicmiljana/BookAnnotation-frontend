@@ -18,9 +18,9 @@ export const selectNotesError = createSelector(
   (state) => state.error
 );
 
-// Selector to find a note by bookId and userId
-export const selectNoteByBookAndUser = (bookId: number, userId: number) =>
+// Selector to find a note by editionId and userId
+export const selectNoteByBookAndUser = (editionId: number, userId: number) =>
   createSelector(
     selectAllNotes,
-    (notes) => notes.find(n => n.bookId === bookId && n.userId === userId)
+    (notes) => notes.find(n => n.editionId === editionId && n.userId === userId)
   );

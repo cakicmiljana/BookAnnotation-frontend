@@ -1,6 +1,6 @@
 export interface Annotation {
     id: number;
-    bookId: number;
+    editionId: number;
     userId: number;
     startOffset: number;
     endOffset: number;

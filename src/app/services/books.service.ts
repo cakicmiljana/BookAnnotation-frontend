@@ -4,6 +4,7 @@ import { Book } from '../models/book';
 import { Annotation } from '../models/annotation';
 import { Note } from '../models/note';
 import { Observable, map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,22 +16,21 @@ export class BooksService {
   constructor(private httpClient: HttpClient) {}
 
   getAllBooks(): Observable<Book[]> {
-    return this.httpClient.get<any>(this.dataUrl).pipe(
-      map(data => data.books)
-    );
+    return this.httpClient.get<Book[]>(`${environment.apiUrl}/editions`);
   }
 
   getBookById(id: number): Observable<Book> {
-    return this.httpClient.get<any>(this.dataUrl).pipe(
-      map(data => data.books.find((b: Book) => b.id === id))
-    );
+    return this.httpClient.get<Book>(`${environment.apiUrl}/editions/${id}`);
   }
-  
-  // retrieve the full book text
-  getBookContent(id: number): Observable<string | undefined> {
-    return this.httpClient.get<any>(this.dataUrl).pipe(
-      map(data => data.books.find((b: Book) => b.id === id)?.content)
-    );
+
+  getBookContent(id: number): Observable<string> {
+    return this.httpClient
+      .get<{ content: string }>(`${environment.apiUrl}/editions/${id}/content`)
+      .pipe(map(response => response.content));
+  }
+
+  getEditionsOfWork(workId: number): Observable<Book[]> {
+    return this.httpClient.get<Book[]>(`${environment.apiUrl}/works/${workId}/editions`);
   }
   
   getPageContent(id: number, page: number, pageSize: number): Observable<string> {
@@ -48,7 +48,7 @@ getAnnotationsByBookId(bookId: number, userId: number): Observable<Annotation[]>
     return this.httpClient.get<any>(this.dataUrl).pipe(
       map(data =>
         data.annotations.filter(
-          (a: Annotation) => a.bookId === bookId && a.userId === userId
+          (a: Annotation) => a.editionId === bookId && a.userId === userId
           )
         )
       );
@@ -57,7 +57,7 @@ getAnnotationsByBookId(bookId: number, userId: number): Observable<Annotation[]>
     getNote(bookId: number, userId: number): Observable<Note | undefined> {
       return this.httpClient.get<any>(this.dataUrl).pipe(
         map(data =>
-          data.notes.find((n: Note) => n.bookId === bookId && n.userId === userId)
+          data.notes.find((n: Note) => n.editionId === bookId && n.userId === userId)
         )
       );
     }

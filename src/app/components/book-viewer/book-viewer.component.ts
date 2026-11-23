@@ -30,10 +30,13 @@ export class BookViewerComponent {
         }
         if (this.bookId) {
             this.booksService.getBookById(this.bookId)
-                .subscribe({ next: b => { this.book = b ?? null; this.loadError = !b; }, error: () => this.loadError = true });
-            this.versionsService.getAllBooks()
-                .subscribe(v => this.versions = v.filter(edition => edition.id === this.bookId));
+                .subscribe({ next: b => { this.book = b; this.loadEditions(); }, error: () => this.loadError = true });
         }
+    }
+    private loadEditions(): void {
+        if (this.book)
+            this.versionsService.getEditionsOfWork(this.book.workId)
+                .subscribe(v => this.versions = v);
     }
     openVersionUploadDialog() {
         const dialogRef = this.dialog.open(VersionUploadComponent, {
@@ -41,9 +44,7 @@ export class BookViewerComponent {
             data: { ...this.book, preview: true }
         });
         dialogRef.componentInstance.versionUploaded.subscribe(() => {
-            if (this.bookId)
-                this.versionsService.getAllBooks()
-                    .subscribe(v => this.versions = v);
+            this.loadEditions();
             dialogRef.close();
         });
     }

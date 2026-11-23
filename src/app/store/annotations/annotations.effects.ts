@@ -11,8 +11,8 @@ export class AnnotationsEffects {
   loadAnnotations$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AnnotationsActions.loadAnnotations),
-      switchMap(({ bookId, userId }) =>
-        this.annotationsService.getAnnotationsByBookId(bookId, userId).pipe(
+      switchMap(({ editionId, userId }) =>
+        this.annotationsService.getAnnotationsByBookId(editionId, userId).pipe(
           map(annotations =>
             AnnotationsActions.loadAnnotationsSuccess({ annotations })
           ),

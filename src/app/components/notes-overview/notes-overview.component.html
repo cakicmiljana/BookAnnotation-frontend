@@ -55,7 +55,7 @@
       <div class="annotation-grid">
         <a *ngFor="let annotation of entry.annotations" class="collected-annotation panel" [routerLink]="ui.link('book-annotator', entry.book.id)"><span class="chip accent">{{ annotation.tag | titlecase }}</span>
         <blockquote>
-          “{{ entry.book.content.slice(annotation.startOffset, annotation.endOffset) }}”
+          “{{ entry.text.slice(annotation.startOffset, annotation.endOffset) }}”
         </blockquote>
         <p>
           {{ annotation.comment }}

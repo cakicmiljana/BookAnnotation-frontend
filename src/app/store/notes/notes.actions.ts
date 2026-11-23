@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { Note } from "src/app/models/note";
 
-export const getNote = createAction("Get Note", props<{ bookId: number; userId: number }>());
+export const getNote = createAction("Get Note", props<{ editionId: number; userId: number }>());
 export const getNoteSuccess = createAction("Get Note Success", props<{ note: Note | undefined }>());
 export const getNoteFailure = createAction("Get Note Failure", props<{ error: string }>());
 

@@ -2,7 +2,7 @@ import { afterNextRender, Component, DestroyRef, ElementRef, Injector, OnInit, V
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, of, switchMap, take } from 'rxjs';
+import { catchError, forkJoin, of, switchMap, take } from 'rxjs';
 import { AppState } from '../../store/app.state';
 import { selectAnnotations } from '../../store/annotations/annotations.selector';
 import { loadAnnotations } from '../../store/annotations/annotations.actions';
@@ -85,7 +85,8 @@ export class BookAnnotatorComponent implements OnInit {
             }
         });
         this.store.select(selectUserId).pipe(take(1)).subscribe(id => this.userId = this.ui.preview ? 1 : (id || 0));
-        this.route.paramMap.pipe(switchMap(params => { this.loading = true; return this.booksService.getBookById(Number((params.get('id') || '').replace(/^:/, ''))).pipe(catchError(() => of(null))); }), takeUntilDestroyed(this.destroyRef)).subscribe(book => {
+        this.route.paramMap.pipe(switchMap(params => { this.loading = true; const id = Number((params.get('id') || '').replace(/^:/, '')); return forkJoin({ book: this.booksService.getBookById(id), content: this.booksService.getBookContent(id) }).pipe(catchError(() => of(null))); }), takeUntilDestroyed(this.destroyRef)).subscribe(result => {
+            const book = result?.book;
             this.loading = false;
             this.loadError = !book;
             this.book = book || null;
@@ -99,7 +100,7 @@ export class BookAnnotatorComponent implements OnInit {
             this.selectedText = '';
             if (!book)
                 return;
-            this.fullContent = book.content || '';
+            this.fullContent = result!.content;
             this.pageSize = book.pageSize || 3000;
             this.totalPages = Math.max(1, Math.ceil(this.fullContent.length / this.pageSize));
             this.setPageText();
@@ -108,13 +109,13 @@ export class BookAnnotatorComponent implements OnInit {
                 this.booksService.getNote(book.id, 1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(note => { this.note = note; this.noteContent = this.ui.getNoteDraft(book.id, 1) ?? note?.content ?? ''; });
             }
             else {
-                this.store.dispatch(loadAnnotations({ bookId: book.id, userId: this.userId }));
-                this.store.dispatch(NotesActions.getNote({ bookId: book.id, userId: this.userId }));
+                this.store.dispatch(loadAnnotations({ editionId: book.id, userId: this.userId }));
+                this.store.dispatch(NotesActions.getNote({ editionId: book.id, userId: this.userId }));
             }
         });
         this.store.select(selectAnnotations).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(items => {
             if (!this.ui.preview)
-                this.allAnnotations = items.filter(item => item.userId === this.userId && item.bookId === this.book?.id).map(item => ({ ...item }));
+                this.allAnnotations = items.filter(item => item.userId === this.userId && item.editionId === this.book?.id).map(item => ({ ...item }));
         });
         this.store.select(state => state.notes).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
             if (!this.ui.preview && this.book)
@@ -200,7 +201,7 @@ export class BookAnnotatorComponent implements OnInit {
         if (!this.book)
             return;
         const item: Annotation = {
-            id: this.selectedAnnotation?.id ?? -Date.now(), bookId: this.book.id, userId: this.userId,
+            id: this.selectedAnnotation?.id ?? -Date.now(), editionId: this.book.id, userId: this.userId,
             startOffset: this.selectedStart, endOffset: this.selectedEnd, comment: this.draftComment, tag: this.draftTag, color: this.draftColor,
             createdAt: this.selectedAnnotation?.createdAt ?? new Date(), deletedAt: null
         };

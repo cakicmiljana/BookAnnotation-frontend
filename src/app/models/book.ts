@@ -1,5 +1,6 @@
 export interface Book {
     id: number;
+    workId: number;
     title: string;
     author: string;
     country: string;
@@ -9,6 +10,7 @@ export interface Book {
     publicationYear: number;
     createdAt: Date;
     deletedAt: Date | null;
-    content: string;
     pageSize: number;
+    contentLength: number;
+    uploadedByMe: boolean;
 }
