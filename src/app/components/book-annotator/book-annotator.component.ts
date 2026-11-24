@@ -12,7 +12,9 @@ import { Book } from '../../models/book';
 import { Annotation, AnnotationInput } from '../../models/annotation';
 import { Note } from '../../models/note';
 import { Bookmark } from '../../models/bookmark';
+import { ReadingPreferences } from '../../models/reading-preferences';
 import { BooksService } from '../../services/books.service';
+import { UsersService } from '../../services/users.service';
 import { PresentationService } from '../../ui/presentation.service';
 import { TextAnnotator } from '../../helper classes/TextAnnotator';
 import { ANNOTATION_COLORS } from '../../ui/annotation-fields.component';
@@ -72,7 +74,7 @@ export class BookAnnotatorComponent implements OnInit {
     private annotator = new TextAnnotator();
     private destroyRef = inject(DestroyRef);
     private injector = inject(Injector);
-    constructor(private store: Store<AppState>, private booksService: BooksService, private route: ActivatedRoute, public ui: PresentationService) { }
+    constructor(private store: Store<AppState>, private booksService: BooksService, private usersService: UsersService, private route: ActivatedRoute, public ui: PresentationService) { }
     ngOnInit(): void {
         this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
             const mode = params.get('mode');
@@ -84,6 +86,7 @@ export class BookAnnotatorComponent implements OnInit {
                 this.showPanel = true;
             }
         });
+        this.loadPreferences();
         this.route.paramMap.pipe(
             switchMap(params => {
                 this.loading = true;
@@ -300,5 +303,43 @@ export class BookAnnotatorComponent implements OnInit {
             this.readerContent?.nativeElement.querySelector('.search-match')?.scrollIntoView({ block: 'center', behavior: 'auto' });
         }, { injector: this.injector });
     }
-    resetAppearance(): void { this.fontSize = 21; this.lineHeight = 1.85; this.readingWidth = 'comfortable'; this.font = 'serif'; this.theme = 'paper'; this.showHighlights = true; this.focusMode = false; }
+    loadPreferences(): void {
+        this.usersService.getPreferences().subscribe(preferences => {
+            this.font = preferences.fontFamily;
+            this.fontSize = preferences.fontSize;
+            this.lineHeight = preferences.lineHeight;
+            this.readingWidth = preferences.readingWidth;
+            this.theme = preferences.theme;
+            this.showHighlights = preferences.showHighlights;
+        });
+    }
+    savePreferences(): void {
+        const preferences: ReadingPreferences = {
+            fontFamily: this.font,
+            fontSize: this.fontSize,
+            lineHeight: this.lineHeight,
+            readingWidth: this.readingWidth,
+            theme: this.theme,
+            showHighlights: this.showHighlights
+        };
+        this.usersService.savePreferences(preferences).subscribe();
+    }
+    changeFontSize(step: number): void {
+        this.fontSize = this.fontSize + step;
+        this.savePreferences();
+    }
+    setTheme(theme: string): void {
+        this.theme = theme;
+        this.savePreferences();
+    }
+    resetAppearance(): void {
+        this.fontSize = 21;
+        this.lineHeight = 1.85;
+        this.readingWidth = 'comfortable';
+        this.font = 'serif';
+        this.theme = 'paper';
+        this.showHighlights = true;
+        this.focusMode = false;
+        this.savePreferences();
+    }
 }

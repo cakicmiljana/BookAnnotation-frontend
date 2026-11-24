@@ -50,19 +50,21 @@
           Your reading preferences
         </h2>
         <p class="muted small">
-          Preview your preferred reading experience.
+          Choose how every book opens for you.
         </p>
-        <label class="field">
-          Reading typeface<select [(ngModel)]="preferredFont"><option>Literary serif</option><option>Clean sans-serif</option></select>
-        </label>
-        <label class="field">
-          Preferred appearance<select [(ngModel)]="preferredTheme"><option>Warm paper</option><option>Light</option><option>Night</option></select>
-        </label>
-        <label class="field">
-          Text size<select [(ngModel)]="preferredSize"><option>Comfortable · 21px</option><option>Compact · 18px</option><option>Large · 25px</option></select>
-        </label>
-        <p class="preview-label">
-          Preferences preview locally. Reader controls are available in each book.
+        <ng-container *ngIf="preferences">
+          <label class="field">
+            Reading typeface<select [ngModel]="preferences.fontFamily" (ngModelChange)="preferences.fontFamily = $event; savePreferences()"><option value="serif">Literary serif</option><option value="sans">Clean sans-serif</option></select>
+          </label>
+          <label class="field">
+            Preferred appearance<select [ngModel]="preferences.theme" (ngModelChange)="preferences.theme = $event; savePreferences()"><option value="paper">Warm paper</option><option value="light">Light</option><option value="night">Night</option></select>
+          </label>
+          <label class="field">
+            Text size<select [ngModel]="preferences.fontSize" (ngModelChange)="preferences.fontSize = $event; savePreferences()"><option *ngFor="let size of fontSizes" [ngValue]="size">{{ size }}px</option></select>
+          </label>
+        </ng-container>
+        <p class="preview-label" role="status">
+          {{ preferencesStatus || 'Saved to your account. You can also change these in the reader.' }}
         </p>
       </article>
       <article class="signout-card panel">

@@ -37,33 +37,33 @@
       </button>
     </div>
     <label class="field">
-      Typeface<select [(ngModel)]="font"><option value="serif">Literary serif</option><option value="sans">Clean sans-serif</option></select>
+      Typeface<select [ngModel]="font" (ngModelChange)="font = $event; savePreferences()"><option value="serif">Literary serif</option><option value="sans">Clean sans-serif</option></select>
     </label>
     <div class="appearance-row">
       <span>Font size</span>
       <div class="actions">
-        <button class="icon-button" (click)="fontSize = fontSize - 1" [disabled]="fontSize <= 16" aria-label="Decrease text size">
+        <button class="icon-button" (click)="changeFontSize(-1)" [disabled]="fontSize <= 16" aria-label="Decrease text size">
           <mat-icon>remove</mat-icon>
         </button>
         <span>{{ fontSize }}px</span>
-        <button class="icon-button" (click)="fontSize = fontSize + 1" [disabled]="fontSize >= 30" aria-label="Increase text size">
+        <button class="icon-button" (click)="changeFontSize(1)" [disabled]="fontSize >= 30" aria-label="Increase text size">
           <mat-icon>add</mat-icon>
         </button>
       </div>
     </div>
     <label class="field">
-      Line spacing · {{ lineHeight }}<input type="range" min="1.4" max="2.2" step=".05" [(ngModel)]="lineHeight">
+      Line spacing · {{ lineHeight }}<input type="range" min="1.4" max="2.2" step=".05" [(ngModel)]="lineHeight" (change)="savePreferences()">
     </label>
     <label class="field">
-      Reading width<select [(ngModel)]="readingWidth"><option value="narrow">Narrow</option><option value="comfortable">Comfortable</option><option value="wide">Wide</option></select>
+      Reading width<select [ngModel]="readingWidth" (ngModelChange)="readingWidth = $event; savePreferences()"><option value="narrow">Narrow</option><option value="comfortable">Comfortable</option><option value="wide">Wide</option></select>
     </label>
     <div class="segmented theme-choices">
-      <button *ngFor="let value of ['paper', 'light', 'night']" [class.active]="theme === value" (click)="theme = value">
+      <button *ngFor="let value of ['paper', 'light', 'night']" [class.active]="theme === value" (click)="setTheme(value)">
         {{ value | titlecase }}
       </button>
     </div>
     <label class="check-row">
-      <span>Show highlights</span><input type="checkbox" [(ngModel)]="showHighlights">
+      <span>Show highlights</span><input type="checkbox" [ngModel]="showHighlights" (ngModelChange)="showHighlights = $event; savePreferences()">
     </label>
     <label class="check-row">
       <span>Focus mode</span><input type="checkbox" [(ngModel)]="focusMode">

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user';
+import { ReadingPreferences } from '../models/reading-preferences';
 import { LoginResponse } from '../dtos/LoginResponse';
 
 @Injectable({
@@ -37,6 +38,14 @@ export class UsersService {
   /** The currently authenticated user (requires a token). */
   getCurrentUser(): Observable<User> {
     return this.httpClient.get<User>(`${environment.apiUrl}/me`);
+  }
+
+  getPreferences(): Observable<ReadingPreferences> {
+    return this.httpClient.get<ReadingPreferences>(`${environment.apiUrl}/me/preferences`);
+  }
+
+  savePreferences(preferences: ReadingPreferences): Observable<ReadingPreferences> {
+    return this.httpClient.put<ReadingPreferences>(`${environment.apiUrl}/me/preferences`, preferences);
   }
 
   updateUser(id: number, username: string, email: string, password: string) {

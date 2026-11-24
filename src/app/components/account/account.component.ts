@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { selectCurrentUser } from 'src/app/store/users/users.selector';
 import { User } from 'src/app/models/user';
+import { ReadingPreferences } from 'src/app/models/reading-preferences';
 import { AccountUpdateComponent } from '../account-update/account-update.component';
 import { PresentationService } from '../../ui/presentation.service';
 import { UsersService } from '../../services/users.service';
@@ -23,9 +24,9 @@ export class AccountComponent implements OnInit {
     router = inject(Router);
     destroyRef = inject(DestroyRef);
     section = 'profile';
-    preferredFont = 'Literary serif';
-    preferredTheme = 'Warm paper';
-    preferredSize = 'Comfortable · 21px';
+    preferences: ReadingPreferences | null = null;
+    preferencesStatus = '';
+    fontSizes = [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
     user: User | null = null;
     dialog = inject(MatDialog);
     store = inject(Store<AppState>);
@@ -36,6 +37,27 @@ export class AccountComponent implements OnInit {
         }
         this.store.select(selectCurrentUser).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(user => {
             this.user = user;
+        });
+        this.users.getPreferences().subscribe({
+            next: preferences => this.preferences = preferences,
+            error: () => this.preferencesStatus = 'Could not load your preferences'
+        });
+    }
+    savePreferences(): void {
+        if (!this.preferences)
+            return;
+        const preferences: ReadingPreferences = {
+            fontFamily: this.preferences.fontFamily,
+            fontSize: this.preferences.fontSize,
+            lineHeight: this.preferences.lineHeight,
+            readingWidth: this.preferences.readingWidth,
+            theme: this.preferences.theme,
+            showHighlights: this.preferences.showHighlights
+        };
+        this.preferencesStatus = 'Saving…';
+        this.users.savePreferences(preferences).subscribe({
+            next: () => this.preferencesStatus = 'Saved',
+            error: () => this.preferencesStatus = 'Could not save your preferences'
         });
     }
     openUserUpdateDialog() {
