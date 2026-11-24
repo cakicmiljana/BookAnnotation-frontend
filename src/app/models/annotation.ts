@@ -5,8 +5,20 @@ export interface Annotation {
     startOffset: number;
     endOffset: number;
     comment: string;
-    tag: string;
+    tag: string | null;
     color: string;
-    createdAt: Date;
-    deletedAt: Date | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface AnnotationInput {
+    startOffset: number;
+    endOffset: number;
+    comment: string;
+    tag: string | null;
+    color: string;
+}
+
+export interface NotebookAnnotation extends Annotation {
+    excerpt: string;
 }

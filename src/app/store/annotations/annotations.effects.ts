@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import * as AnnotationsActions from "./annotations.actions";
-import { catchError, map, of, switchMap } from "rxjs";
+import { catchError, map, mergeMap, of, switchMap } from "rxjs";
 import { BooksService } from "src/app/services/books.service";
-import { Annotation } from "src/app/models/annotation";
 
 @Injectable()
 export class AnnotationsEffects {
@@ -11,12 +10,10 @@ export class AnnotationsEffects {
   loadAnnotations$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AnnotationsActions.loadAnnotations),
-      switchMap(({ editionId, userId }) =>
-        this.annotationsService.getAnnotationsByBookId(editionId, userId).pipe(
-          map(annotations =>
-            AnnotationsActions.loadAnnotationsSuccess({ annotations })
-          ),
-          catchError(() => of({ type: 'load annotations error'}))
+      switchMap(({ editionId }) =>
+        this.booksService.getAnnotations(editionId).pipe(
+          map(annotations => AnnotationsActions.loadAnnotationsSuccess({ annotations })),
+          catchError(error => of(AnnotationsActions.loadAnnotationsFailure({ error: this.errorMessage(error) })))
         )
       )
     )
@@ -25,33 +22,49 @@ export class AnnotationsEffects {
   addAnnotation$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AnnotationsActions.addAnnotation),
-        switchMap(({ annotation }) =>
-            this.annotationsService.addAnnotation(annotation as Annotation).pipe(
-            map(added => AnnotationsActions.addAnnotationSuccess({ annotation: added as Annotation })),
-            catchError(() => of({ type: 'add annotation error'}))
-            )
+      mergeMap(({ editionId, annotation }) =>
+        this.booksService.addAnnotation(editionId, annotation).pipe(
+          map(added => AnnotationsActions.addAnnotationSuccess({ annotation: added })),
+          catchError(error => of(AnnotationsActions.addAnnotationFailure({ error: this.errorMessage(error) })))
         )
+      )
     )
   );
 
   updateAnnotation$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AnnotationsActions.updateAnnotation),
-      switchMap(({ annotation }) =>
-        this.annotationsService.updateAnnotation(annotation).pipe(
-          map(updated =>
-            AnnotationsActions.updateAnnotationSuccess({ annotation: updated as Annotation })
-          ),
-          catchError(error =>
-            of(AnnotationsActions.updateAnnotationFailure({ error: error.message }))
-          )
+      mergeMap(({ id, annotation }) =>
+        this.booksService.updateAnnotation(id, annotation).pipe(
+          map(updated => AnnotationsActions.updateAnnotationSuccess({ annotation: updated })),
+          catchError(error => of(AnnotationsActions.updateAnnotationFailure({ error: this.errorMessage(error) })))
         )
       )
     )
   );
 
+  deleteAnnotation$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AnnotationsActions.deleteAnnotation),
+      mergeMap(({ id }) =>
+        this.booksService.deleteAnnotation(id).pipe(
+          map(() => AnnotationsActions.deleteAnnotationSuccess({ id })),
+          catchError(error => of(AnnotationsActions.deleteAnnotationFailure({ error: this.errorMessage(error) })))
+        )
+      )
+    )
+  );
+
+  private errorMessage(error: any): string {
+    const message = error?.error?.message ?? 'Something went wrong';
+    if (Array.isArray(message)) {
+      return message.join(', ');
+    }
+    return message;
+  }
+
   constructor(
     private actions$: Actions,
-    private annotationsService: BooksService
+    private booksService: BooksService
   ) {}
 }

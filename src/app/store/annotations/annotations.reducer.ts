@@ -7,7 +7,9 @@ export const annotationsReducer = createReducer(
 
   on(AnnotationsActions.loadAnnotations, (state) => ({
     ...state,
-    loading: true
+    annotations: [],
+    loading: true,
+    error: null
   })),
   on(AnnotationsActions.loadAnnotationsSuccess, (state, { annotations }) => ({
     ...state,
@@ -16,16 +18,30 @@ export const annotationsReducer = createReducer(
   })),
   on(AnnotationsActions.addAnnotationSuccess, (state, { annotation }) => ({
     ...state,
-    annotations: [...state.annotations, annotation]
+    annotations: [...state.annotations, annotation],
+    error: null
   })),
   on(AnnotationsActions.updateAnnotationSuccess, (state, { annotation }) => ({
     ...state,
     annotations: state.annotations.map(a =>
       a.id === annotation.id ? annotation : a
-    )
+    ),
+    error: null
   })),
   on(AnnotationsActions.deleteAnnotationSuccess, (state, { id }) => ({
     ...state,
-    annotations: state.annotations.filter(a => a.id !== id)
-  }))
+    annotations: state.annotations.filter(a => a.id !== id),
+    error: null
+  })),
+  on(
+    AnnotationsActions.loadAnnotationsFailure,
+    AnnotationsActions.addAnnotationFailure,
+    AnnotationsActions.updateAnnotationFailure,
+    AnnotationsActions.deleteAnnotationFailure,
+    (state, { error }) => ({
+      ...state,
+      loading: false,
+      error
+    })
+  )
 );

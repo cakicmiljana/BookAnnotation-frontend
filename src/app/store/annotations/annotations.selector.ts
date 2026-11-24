@@ -9,6 +9,11 @@ export const selectAnnotations = createSelector(
   (state) => state.annotations
 );
 
+export const selectAnnotationsError = createSelector(
+  selectAnnotationsState,
+  (state) => state.error
+);
+
 export const selectSelectedAnnotation = createSelector(
   selectAnnotationsState,
   (state) => state.selectedAnnotation

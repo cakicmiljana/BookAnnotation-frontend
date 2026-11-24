@@ -23,7 +23,14 @@ export class AddAnnotationComponent {
   }
 
   addAnnotation() {
-    this.service.addAnnotationMock(this.data.bookId, this.data.userId, this.data.start, this.data.end, this.comment, this.tag, this.color)
+    const annotation = {
+      startOffset: this.data.start,
+      endOffset: this.data.end,
+      comment: this.comment,
+      tag: this.tag || null,
+      color: this.color
+    };
+    this.service.addAnnotation(this.data.editionId, annotation)
         .subscribe({
           next: (res) => {
             this.snackBar.open('You successfully annotated this book ✅', 'Close', {

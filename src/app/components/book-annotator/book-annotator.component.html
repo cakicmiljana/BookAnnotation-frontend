@@ -210,15 +210,12 @@
                 Keep annotation
               </button>
             </div>
-            <p class="preview-label">
-              Edits stay in this workspace for this visit.
-            </p>
             <button *ngIf="selectedAnnotation" class="text-link delete-link" (click)="confirmDelete = true">
               <mat-icon>delete_outline</mat-icon>Remove annotation
             </button>
             <div *ngIf="confirmDelete" class="status">
               <p>
-                Remove this annotation from the preview?
+                Remove this annotation?
               </p>
               <div class="actions">
                 <button class="button" (click)="confirmDelete = false">
@@ -231,6 +228,9 @@
             </div>
           </section>
           <ng-template #annotationList>
+            <p *ngIf="annotationError" class="status" role="alert">
+              {{ annotationError }}
+            </p>
             <div class="annotation-filter">
               <span class="small muted"></span><select [(ngModel)]="tagFilter" aria-label="Filter annotations by tag"><option value="">All tags</option><option *ngFor="let tag of ['important','analysis','quote','definition','question','symbolism','motif','criticism']" [value]="tag">{{ tag | titlecase }}</option></select>
             </div>

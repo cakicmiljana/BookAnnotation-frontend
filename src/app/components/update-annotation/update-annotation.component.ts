@@ -20,8 +20,14 @@ export class UpdateAnnotationComponent {
         this.color = this.data.color;
     }
     updateAnnotation() {
-        this.service.updateAnnotationMock(this.data.id, this.data.start, this.data.end, this.comment, this.tag, this.color)
-            .subscribe();
+        const annotation = {
+            startOffset: this.data.start,
+            endOffset: this.data.end,
+            comment: this.comment,
+            tag: this.tag || null,
+            color: this.color
+        };
+        this.service.updateAnnotation(this.data.id, annotation).subscribe();
     }
     deleteAnnotation() {
         this.service.deleteAnnotation(this.data.id).subscribe();

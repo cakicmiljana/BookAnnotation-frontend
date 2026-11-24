@@ -3,9 +3,13 @@ import { Annotation } from "src/app/models/annotation";
 export interface AnnotationsState {
   annotations: Annotation[];
   selectedAnnotation: Annotation | null;
+  loading: boolean;
+  error: string | null;
 }
 
 export const initialAnnotationsState: AnnotationsState = {
   annotations: [],
-  selectedAnnotation: null
+  selectedAnnotation: null,
+  loading: false,
+  error: null
 };

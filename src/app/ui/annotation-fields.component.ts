@@ -3,8 +3,7 @@ export const ANNOTATION_COLORS = [
     { name: 'Ochre', value: 'lightyellow', swatch: '#f4e4b4' },
     { name: 'Sage', value: 'darkseagreen', swatch: '#dfe8d5' },
     { name: 'Rose', value: 'lightpink', swatch: '#f2dcdc' },
-    { name: 'Blue', value: 'lightblue', swatch: '#dce8f1' },
-    { name: 'Lavender', value: '#e8dff1', swatch: '#e8dff1' }
+    { name: 'Blue', value: 'lightblue', swatch: '#dce8f1' }
 ];
 @Component({
     selector: 'app-annotation-fields', standalone: false,

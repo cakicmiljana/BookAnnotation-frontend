@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Book } from '../models/book';
-import { Annotation } from '../models/annotation';
+import { Annotation, AnnotationInput, NotebookAnnotation } from '../models/annotation';
 import { Note } from '../models/note';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -62,32 +62,26 @@ getAnnotationsByBookId(bookId: number, userId: number): Observable<Annotation[]>
       );
     }
   
-    // Mock-only actions
-    addAnnotationMock(bookId: any, userId: any, start: any, end: any, comment: string, tag: string, color: string) {
-      console.warn('Mock mode: addAnnotation does not persist.');
-      return new Observable(observer => observer.next(true));
+    getAnnotations(editionId: number): Observable<Annotation[]> {
+      return this.httpClient.get<Annotation[]>(`${environment.apiUrl}/editions/${editionId}/annotations`);
     }
 
-    addAnnotation(annotation: Annotation) {
-      console.warn('Mock mode: addAnnotation does not persist.');
-      return new Observable(observer => observer.next(true));
+    addAnnotation(editionId: number, annotation: AnnotationInput): Observable<Annotation> {
+      return this.httpClient.post<Annotation>(`${environment.apiUrl}/editions/${editionId}/annotations`, annotation);
     }
-  
-    updateAnnotationMock(id: any, start: any, end: any, comment: string, tag: string, color: string) {
-      console.warn('Mock mode: updateAnnotation does not persist.');
-      return new Observable(observer => observer.next(true));
+
+    updateAnnotation(id: number, annotation: AnnotationInput): Observable<Annotation> {
+      return this.httpClient.patch<Annotation>(`${environment.apiUrl}/annotations/${id}`, annotation);
     }
-  
-    updateAnnotation(annoation: Annotation) {
-      console.warn('Mock mode: updateAnnotation does not persist.');
-      return new Observable(observer => observer.next(true));
+
+    deleteAnnotation(id: number): Observable<void> {
+      return this.httpClient.delete<void>(`${environment.apiUrl}/annotations/${id}`);
     }
-  
-    deleteAnnotation(id: any) {
-      console.warn('Mock mode: deleteAnnotation does not persist.');
-      return new Observable(observer => observer.next(true));
+
+    getMyAnnotations(): Observable<NotebookAnnotation[]> {
+      return this.httpClient.get<NotebookAnnotation[]>(`${environment.apiUrl}/me/annotations`);
     }
-  
+
     addNote(bookId: number, userId: number, noteContent: string) {
       console.warn('Mock mode: addNote does not persist.');
       return new Observable(observer => observer.next(true));

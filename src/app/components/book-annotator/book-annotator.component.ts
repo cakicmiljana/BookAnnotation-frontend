@@ -4,13 +4,13 @@ import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, forkJoin, of, switchMap, take } from 'rxjs';
 import { AppState } from '../../store/app.state';
-import { selectAnnotations } from '../../store/annotations/annotations.selector';
-import { loadAnnotations } from '../../store/annotations/annotations.actions';
+import { selectAnnotations, selectAnnotationsError } from '../../store/annotations/annotations.selector';
+import * as AnnotationsActions from '../../store/annotations/annotations.actions';
 import { selectUserId } from '../../store/users/users.selector';
 import { selectNoteByBookAndUser } from '../../store/notes/notes.selector';
 import * as NotesActions from '../../store/notes/notes.actions';
 import { Book } from '../../models/book';
-import { Annotation } from '../../models/annotation';
+import { Annotation, AnnotationInput } from '../../models/annotation';
 import { Note } from '../../models/note';
 import { BooksService } from '../../services/books.service';
 import { PresentationService } from '../../ui/presentation.service';
@@ -32,6 +32,7 @@ export class BookAnnotatorComponent implements OnInit {
     note: Note | undefined;
     noteContent = '';
     noteStatus = 'Draft in this workspace';
+    annotationError: string | null = null;
     userId = 0;
     currentPage = 0;
     pageSize = 3000;
@@ -109,13 +110,18 @@ export class BookAnnotatorComponent implements OnInit {
                 this.booksService.getNote(book.id, 1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(note => { this.note = note; this.noteContent = this.ui.getNoteDraft(book.id, 1) ?? note?.content ?? ''; });
             }
             else {
-                this.store.dispatch(loadAnnotations({ editionId: book.id, userId: this.userId }));
+                this.store.dispatch(AnnotationsActions.loadAnnotations({ editionId: book.id }));
                 this.store.dispatch(NotesActions.getNote({ editionId: book.id, userId: this.userId }));
             }
         });
         this.store.select(selectAnnotations).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(items => {
-            if (!this.ui.preview)
-                this.allAnnotations = items.filter(item => item.userId === this.userId && item.editionId === this.book?.id).map(item => ({ ...item }));
+            if (!this.ui.preview) {
+                const bookAnnotations = items.filter(item => item.editionId === this.book?.id);
+                this.allAnnotations = bookAnnotations.map(item => ({ ...item }));
+            }
+        });
+        this.store.select(selectAnnotationsError).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(error => {
+            this.annotationError = error;
         });
         this.store.select(state => state.notes).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
             if (!this.ui.preview && this.book)
@@ -187,7 +193,7 @@ export class BookAnnotatorComponent implements OnInit {
         this.selectedStart = annotation.startOffset;
         this.selectedEnd = annotation.endOffset;
         this.draftComment = annotation.comment;
-        this.draftTag = annotation.tag;
+        this.draftTag = annotation.tag ?? '';
         this.draftColor = annotation.color;
         this.editorOpen = true;
         this.confirmDelete = false;
@@ -200,16 +206,29 @@ export class BookAnnotatorComponent implements OnInit {
     saveAnnotation(): void {
         if (!this.book)
             return;
-        const item: Annotation = {
-            id: this.selectedAnnotation?.id ?? -Date.now(), editionId: this.book.id, userId: this.userId,
-            startOffset: this.selectedStart, endOffset: this.selectedEnd, comment: this.draftComment, tag: this.draftTag, color: this.draftColor,
-            createdAt: this.selectedAnnotation?.createdAt ?? new Date(), deletedAt: null
+        const annotation: AnnotationInput = {
+            startOffset: this.selectedStart,
+            endOffset: this.selectedEnd,
+            comment: this.draftComment,
+            tag: this.draftTag || null,
+            color: this.draftColor
         };
-        this.allAnnotations = this.selectedAnnotation ? this.allAnnotations.map(annotation => annotation.id === item.id ? item : annotation) : [...this.allAnnotations, item];
+        if (this.selectedAnnotation) {
+            this.store.dispatch(AnnotationsActions.updateAnnotation({ id: this.selectedAnnotation.id, annotation }));
+        }
+        else {
+            this.store.dispatch(AnnotationsActions.addAnnotation({ editionId: this.book.id, annotation }));
+        }
         this.editorOpen = false;
         this.selectionReady = false;
     }
-    deleteAnnotation(): void { this.allAnnotations = this.allAnnotations.filter(item => item.id !== this.selectedAnnotation?.id); this.editorOpen = false; this.confirmDelete = false; }
+    deleteAnnotation(): void {
+        if (this.selectedAnnotation) {
+            this.store.dispatch(AnnotationsActions.deleteAnnotation({ id: this.selectedAnnotation.id }));
+        }
+        this.editorOpen = false;
+        this.confirmDelete = false;
+    }
     saveNote(): void { if (this.book)
         this.ui.keepNoteDraft(this.book.id, this.userId, this.noteContent); this.noteStatus = 'Draft kept for this visit'; }
     toggleSearch(): void {
