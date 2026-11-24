@@ -9,45 +9,22 @@ export class NotesEffects {
   getNote$ = createEffect(() =>
     this.actions$.pipe(
       ofType(NotesActions.getNote),
-      switchMap((action) =>
-        this.booksService.getNote(action.editionId, action.userId).pipe(
+      switchMap(({ editionId }) =>
+        this.booksService.getNote(editionId).pipe(
           map(note => NotesActions.getNoteSuccess({ note })),
-          catchError((error) => of(NotesActions.getNoteFailure({ error: error.message })))
+          catchError(() => of(NotesActions.getNoteFailure({ error: 'Could not load the note' })))
         )
       )
     )
   );
 
-  createNote$ = createEffect(() =>
+  saveNote$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(NotesActions.createNoteSuccess),
-      switchMap((action) =>
-        this.booksService.addNote(action.note.editionId, action.note.userId, action.note.content).pipe(
-          map(() => NotesActions.createNoteSuccess({ note: action.note })),
-          catchError((error) => of(NotesActions.createNoteFailure({ error: error.message })))
-        )
-      )
-    )
-  );
-
-  updateNote$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(NotesActions.updateNoteSuccess),
-      switchMap((action) =>
-        this.booksService.updateNote(action.note.id, action.note.content).pipe(
-          map(() => NotesActions.updateNoteSuccess({ note: action.note })),
-          catchError((error) => of(NotesActions.updateNoteFailure({ error: error.message })))
-        )
-      )
-    )
-  );
-
-  deleteNote$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(NotesActions.deleteNoteSuccess),
-      switchMap((action) =>
-        of(NotesActions.deleteNoteSuccess({ id: action.id })).pipe(
-          catchError((error) => of(NotesActions.deleteNoteFailure({ error: error.message })))
+      ofType(NotesActions.saveNote),
+      switchMap(({ editionId, content }) =>
+        this.booksService.saveNote(editionId, content).pipe(
+          map(note => NotesActions.saveNoteSuccess({ note })),
+          catchError(() => of(NotesActions.saveNoteFailure({ error: 'Could not save the note' })))
         )
       )
     )

@@ -2,12 +2,11 @@ import { afterNextRender, Component, DestroyRef, ElementRef, Injector, OnInit, V
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, forkJoin, of, switchMap, take } from 'rxjs';
+import { catchError, forkJoin, of, switchMap } from 'rxjs';
 import { AppState } from '../../store/app.state';
 import { selectAnnotations, selectAnnotationsError } from '../../store/annotations/annotations.selector';
 import * as AnnotationsActions from '../../store/annotations/annotations.actions';
-import { selectUserId } from '../../store/users/users.selector';
-import { selectNoteByBookAndUser } from '../../store/notes/notes.selector';
+import { selectNotesState } from '../../store/notes/notes.selector';
 import * as NotesActions from '../../store/notes/notes.actions';
 import { Book } from '../../models/book';
 import { Annotation, AnnotationInput } from '../../models/annotation';
@@ -31,9 +30,8 @@ export class BookAnnotatorComponent implements OnInit {
     allAnnotations: Annotation[] = [];
     note: Note | undefined;
     noteContent = '';
-    noteStatus = 'Draft in this workspace';
+    noteStatus = '';
     annotationError: string | null = null;
-    userId = 0;
     currentPage = 0;
     pageSize = 3000;
     totalPages = 0;
@@ -85,47 +83,60 @@ export class BookAnnotatorComponent implements OnInit {
                 this.showPanel = true;
             }
         });
-        this.store.select(selectUserId).pipe(take(1)).subscribe(id => this.userId = this.ui.preview ? 1 : (id || 0));
-        this.route.paramMap.pipe(switchMap(params => { this.loading = true; const id = Number((params.get('id') || '').replace(/^:/, '')); return forkJoin({ book: this.booksService.getBookById(id), content: this.booksService.getBookContent(id) }).pipe(catchError(() => of(null))); }), takeUntilDestroyed(this.destroyRef)).subscribe(result => {
-            const book = result?.book;
+        this.route.paramMap.pipe(
+            switchMap(params => {
+                this.loading = true;
+                const id = Number((params.get('id') || '').replace(/^:/, ''));
+                return forkJoin({
+                    book: this.booksService.getBookById(id),
+                    content: this.booksService.getBookContent(id)
+                }).pipe(catchError(() => of(null)));
+            }),
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(result => {
             this.loading = false;
-            this.loadError = !book;
-            this.book = book || null;
             this.allAnnotations = [];
             this.noteContent = '';
+            this.noteStatus = '';
             this.note = undefined;
             this.currentPage = 0;
             this.editorOpen = false;
             this.activeMatch = null;
             this.selectionReady = false;
             this.selectedText = '';
-            if (!book)
+            if (!result) {
+                this.book = null;
+                this.loadError = true;
                 return;
-            this.fullContent = result!.content;
-            this.pageSize = book.pageSize || 3000;
+            }
+            this.loadError = false;
+            this.book = result.book;
+            this.fullContent = result.content;
+            this.pageSize = result.book.pageSize || 3000;
             this.totalPages = Math.max(1, Math.ceil(this.fullContent.length / this.pageSize));
             this.setPageText();
-            if (this.ui.preview) {
-                this.booksService.getAnnotationsByBookId(book.id, 1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(items => this.allAnnotations = items.map(item => ({ ...item })));
-                this.booksService.getNote(book.id, 1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(note => { this.note = note; this.noteContent = this.ui.getNoteDraft(book.id, 1) ?? note?.content ?? ''; });
-            }
-            else {
-                this.store.dispatch(AnnotationsActions.loadAnnotations({ editionId: book.id }));
-                this.store.dispatch(NotesActions.getNote({ editionId: book.id, userId: this.userId }));
-            }
+            this.store.dispatch(AnnotationsActions.loadAnnotations({ editionId: result.book.id }));
+            this.store.dispatch(NotesActions.getNote({ editionId: result.book.id }));
         });
         this.store.select(selectAnnotations).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(items => {
-            if (!this.ui.preview) {
-                const bookAnnotations = items.filter(item => item.editionId === this.book?.id);
-                this.allAnnotations = bookAnnotations.map(item => ({ ...item }));
-            }
+            const bookAnnotations = items.filter(item => item.editionId === this.book?.id);
+            this.allAnnotations = bookAnnotations.map(item => ({ ...item }));
         });
         this.store.select(selectAnnotationsError).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(error => {
             this.annotationError = error;
         });
-        this.store.select(state => state.notes).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-            if (!this.ui.preview && this.book)
-                this.store.select(selectNoteByBookAndUser(this.book.id, this.userId)).pipe(take(1)).subscribe(note => { this.note = note; this.noteContent = this.ui.getNoteDraft(this.book!.id, this.userId) ?? note?.content ?? ''; });
+        this.store.select(selectNotesState).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(state => {
+            if (!this.book) {
+                return;
+            }
+            if (this.noteStatus === 'Saving…' && !state.saving) {
+                this.noteStatus = state.error ? 'Could not save your note' : 'Saved';
+            }
+            const note = state.notes.find(item => item.editionId === this.book?.id);
+            if (note && note !== this.note && this.noteStatus !== 'Unsaved changes') {
+                this.note = note;
+                this.noteContent = note.content;
+            }
         });
     }
     setPageText(): void { this.pageText = this.fullContent.substring(this.currentPage * this.pageSize, (this.currentPage + 1) * this.pageSize); }
@@ -229,8 +240,16 @@ export class BookAnnotatorComponent implements OnInit {
         this.editorOpen = false;
         this.confirmDelete = false;
     }
-    saveNote(): void { if (this.book)
-        this.ui.keepNoteDraft(this.book.id, this.userId, this.noteContent); this.noteStatus = 'Draft kept for this visit'; }
+    onNoteChange(text: string): void {
+        this.noteContent = text;
+        this.noteStatus = 'Unsaved changes';
+    }
+    saveNote(): void {
+        if (!this.book)
+            return;
+        this.noteStatus = 'Saving…';
+        this.store.dispatch(NotesActions.saveNote({ editionId: this.book.id, content: this.noteContent }));
+    }
     toggleSearch(): void {
         if (this.showSearch && this.mode === 'read') { this.closeSearch(); return; }
         this.mode = 'read';

@@ -1,36 +1,44 @@
 import { createReducer, on } from "@ngrx/store";
 import * as NotesActions from "./notes.actions";
 import { initialNotesState } from "./notes.state";
+import { Note } from "src/app/models/note";
+
+function putNote(notes: Note[], note: Note): Note[] {
+  const otherNotes = notes.filter(n => n.editionId !== note.editionId);
+  return [...otherNotes, note];
+}
 
 export const notesReducer = createReducer(
   initialNotesState,
 
+  on(NotesActions.getNote, (state) => ({
+    ...state,
+    loading: true,
+    error: null
+  })),
+
   on(NotesActions.getNoteSuccess, (state, { note }) => ({
     ...state,
-    notes: note ? [note, ...state.notes.filter(n => n.id !== note.id)] : state.notes,
+    notes: note ? putNote(state.notes, note) : state.notes,
+    loading: false
+  })),
+
+  on(NotesActions.saveNote, (state) => ({
+    ...state,
+    saving: true,
     error: null
   })),
 
-  on(NotesActions.createNoteSuccess, (state, { note }) => ({
+  on(NotesActions.saveNoteSuccess, (state, { note }) => ({
     ...state,
-    notes: [...state.notes, note],
-    error: null
+    notes: putNote(state.notes, note),
+    saving: false
   })),
 
-  on(NotesActions.updateNoteSuccess, (state, { note }) => ({
+  on(NotesActions.getNoteFailure, NotesActions.saveNoteFailure, (state, { error }) => ({
     ...state,
-    notes: state.notes.map(n => n.id === note.id ? note : n),
-    error: null
-  })),
-
-  on(NotesActions.deleteNoteSuccess, (state, { id }) => ({
-    ...state,
-    notes: state.notes.filter(n => n.id !== id),
-    error: null
-  })),
-
-  on(NotesActions.getNoteFailure, NotesActions.createNoteFailure, NotesActions.updateNoteFailure, NotesActions.deleteNoteFailure, (state, { error }) => ({
-    ...state,
+    loading: false,
+    saving: false,
     error
   }))
 );

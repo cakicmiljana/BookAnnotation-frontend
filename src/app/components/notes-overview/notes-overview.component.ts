@@ -1,18 +1,15 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable, forkJoin, of, switchMap, catchError, take, map } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Book } from '../../models/book';
-import { Annotation } from '../../models/annotation';
+import { Note } from '../../models/note';
+import { NotebookAnnotation } from '../../models/annotation';
 import { BooksService } from '../../services/books.service';
 import { PresentationService } from '../../ui/presentation.service';
-import { AppState } from '../../store/app.state';
-import { selectUserId } from '../../store/users/users.selector';
 interface NotebookEntry {
     book: Book;
-    text: string;
     content: string;
-    annotations: Annotation[];
+    annotations: NotebookAnnotation[];
 }
 @Component({ selector: 'app-notes-overview', standalone: false, templateUrl: './notes-overview.component.html', styleUrls: ['./notes-overview.component.css'] })
 export class NotesOverviewComponent implements OnInit {
@@ -22,26 +19,35 @@ export class NotesOverviewComponent implements OnInit {
     loading = true;
     error = false;
     private destroyRef = inject(DestroyRef);
-    constructor(private books: BooksService, private store: Store<AppState>, public ui: PresentationService) { }
+    constructor(private books: BooksService, public ui: PresentationService) { }
     ngOnInit(): void {
-        this.store.select(selectUserId).pipe(take(1), switchMap(id => {
-            const uid = this.ui.preview ? 1 : id || 0;
-            return this.books.getAllBooks().pipe(switchMap(books => this.loadEntries(books, uid)));
-        }), catchError(() => { this.error = true; return of([]); }), takeUntilDestroyed(this.destroyRef)).subscribe(entries => { this.entries = entries; this.loading = false; });
+        forkJoin({
+            books: this.books.getAllBooks(),
+            notes: this.books.getMyNotes(),
+            annotations: this.books.getMyAnnotations()
+        }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+            next: result => {
+                this.entries = this.buildEntries(result.books, result.notes, result.annotations);
+                this.loading = false;
+            },
+            error: () => {
+                this.error = true;
+                this.loading = false;
+            }
+        });
     }
-    private loadEntries(books: Book[], userId: number): Observable<NotebookEntry[]> {
-        if (!books.length) return of([]);
-        return forkJoin(books.map(book => forkJoin({
-            note: this.books.getNote(book.id, userId),
-            annotations: this.books.getAnnotationsByBookId(book.id, userId)
-        }).pipe(switchMap(({ note, annotations }) =>
-            (annotations.length ? this.books.getBookContent(book.id) : of('')).pipe(map(text => ({
-                book,
-                text,
-                content: this.ui.getNoteDraft(book.id, userId) ?? note?.content ?? '',
-                annotations
-            })))
-        ))));
+    private buildEntries(books: Book[], notes: Note[], annotations: NotebookAnnotation[]): NotebookEntry[] {
+        const entries: NotebookEntry[] = [];
+        for (const book of books) {
+            const note = notes.find(item => item.editionId === book.id);
+            const bookAnnotations = annotations.filter(item => item.editionId === book.id);
+            entries.push({
+                book: book,
+                content: note ? note.content : '',
+                annotations: bookAnnotations
+            });
+        }
+        return entries;
     }
     get visibleEntries(): NotebookEntry[] { return this.entries.filter(entry => (entry.book.title + ' ' + entry.book.author + ' ' + entry.content).toLowerCase().includes(this.query.toLowerCase())); }
     get noteCount(): number { return this.entries.filter(entry => entry.content).length; }

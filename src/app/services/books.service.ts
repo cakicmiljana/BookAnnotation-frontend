@@ -11,8 +11,6 @@ import { environment } from 'src/environments/environment';
 })
 export class BooksService {
 
-  private dataUrl = 'assets/mock-data.json';
-
   constructor(private httpClient: HttpClient) {}
 
   getAllBooks(): Observable<Book[]> {
@@ -44,51 +42,35 @@ export class BooksService {
     );
   }
   
-getAnnotationsByBookId(bookId: number, userId: number): Observable<Annotation[]> {
-    return this.httpClient.get<any>(this.dataUrl).pipe(
-      map(data =>
-        data.annotations.filter(
-          (a: Annotation) => a.editionId === bookId && a.userId === userId
-          )
-        )
-      );
-    }
-  
-    getNote(bookId: number, userId: number): Observable<Note | undefined> {
-      return this.httpClient.get<any>(this.dataUrl).pipe(
-        map(data =>
-          data.notes.find((n: Note) => n.editionId === bookId && n.userId === userId)
-        )
-      );
-    }
-  
-    getAnnotations(editionId: number): Observable<Annotation[]> {
-      return this.httpClient.get<Annotation[]>(`${environment.apiUrl}/editions/${editionId}/annotations`);
-    }
+  getAnnotations(editionId: number): Observable<Annotation[]> {
+    return this.httpClient.get<Annotation[]>(`${environment.apiUrl}/editions/${editionId}/annotations`);
+  }
 
-    addAnnotation(editionId: number, annotation: AnnotationInput): Observable<Annotation> {
-      return this.httpClient.post<Annotation>(`${environment.apiUrl}/editions/${editionId}/annotations`, annotation);
-    }
+  addAnnotation(editionId: number, annotation: AnnotationInput): Observable<Annotation> {
+    return this.httpClient.post<Annotation>(`${environment.apiUrl}/editions/${editionId}/annotations`, annotation);
+  }
 
-    updateAnnotation(id: number, annotation: AnnotationInput): Observable<Annotation> {
-      return this.httpClient.patch<Annotation>(`${environment.apiUrl}/annotations/${id}`, annotation);
-    }
+  updateAnnotation(id: number, annotation: AnnotationInput): Observable<Annotation> {
+    return this.httpClient.patch<Annotation>(`${environment.apiUrl}/annotations/${id}`, annotation);
+  }
 
-    deleteAnnotation(id: number): Observable<void> {
-      return this.httpClient.delete<void>(`${environment.apiUrl}/annotations/${id}`);
-    }
+  deleteAnnotation(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${environment.apiUrl}/annotations/${id}`);
+  }
 
-    getMyAnnotations(): Observable<NotebookAnnotation[]> {
-      return this.httpClient.get<NotebookAnnotation[]>(`${environment.apiUrl}/me/annotations`);
-    }
+  getMyAnnotations(): Observable<NotebookAnnotation[]> {
+    return this.httpClient.get<NotebookAnnotation[]>(`${environment.apiUrl}/me/annotations`);
+  }
 
-    addNote(bookId: number, userId: number, noteContent: string) {
-      console.warn('Mock mode: addNote does not persist.');
-      return new Observable(observer => observer.next(true));
-    }
-  
-    updateNote(id: number, noteContent: string) {
-      console.warn('Mock mode: updateNote does not persist.');
-      return new Observable(observer => observer.next(true));
-    }
+  getNote(editionId: number): Observable<Note | null> {
+    return this.httpClient.get<Note | null>(`${environment.apiUrl}/editions/${editionId}/note`);
+  }
+
+  saveNote(editionId: number, content: string): Observable<Note> {
+    return this.httpClient.put<Note>(`${environment.apiUrl}/editions/${editionId}/note`, { content });
+  }
+
+  getMyNotes(): Observable<Note[]> {
+    return this.httpClient.get<Note[]>(`${environment.apiUrl}/me/notes`);
+  }
 }

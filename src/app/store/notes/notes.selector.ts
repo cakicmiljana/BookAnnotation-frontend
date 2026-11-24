@@ -13,14 +13,18 @@ export const selectNotesLoading = createSelector(
   (state) => state.loading
 );
 
+export const selectNoteSaving = createSelector(
+  selectNotesState,
+  (state) => state.saving
+);
+
 export const selectNotesError = createSelector(
   selectNotesState,
   (state) => state.error
 );
 
-// Selector to find a note by editionId and userId
-export const selectNoteByBookAndUser = (editionId: number, userId: number) =>
+export const selectNoteByEdition = (editionId: number) =>
   createSelector(
     selectAllNotes,
-    (notes) => notes.find(n => n.editionId === editionId && n.userId === userId)
+    (notes) => notes.find(n => n.editionId === editionId)
   );

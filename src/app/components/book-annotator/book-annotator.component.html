@@ -113,11 +113,11 @@
           <label class="sr-only" for="full-note">
             Book note
           </label>
-          <textarea id="full-note" [(ngModel)]="noteContent" (ngModelChange)="noteStatus = 'Unsaved draft'" placeholder="Gather a thought, follow a theme, make a connection…"></textarea>
+          <textarea id="full-note" [ngModel]="noteContent" (ngModelChange)="onNoteChange($event)" placeholder="Gather a thought, follow a theme, make a connection…"></textarea>
           <footer class="actions spread">
-            <span class="preview-label" role="status">{{ noteStatus }} · local preview</span>
+            <span class="preview-label" role="status">{{ noteStatus }}</span>
             <button class="button primary" (click)="saveNote()">
-              <mat-icon>check</mat-icon>Keep draft
+              <mat-icon>check</mat-icon>Save note
             </button>
           </footer>
         </div>
@@ -268,17 +268,14 @@
             One quiet place for everything this book brings to mind.
           </p>
           <label class="field">
-            <span class="sr-only">Write your book note</span><textarea class="sidebar-note" rows="13" [(ngModel)]="noteContent" (ngModelChange)="noteStatus = 'Unsaved draft'" placeholder="Start with a question, an image, a connection…"></textarea>
+            <span class="sr-only">Write your book note</span><textarea class="sidebar-note" rows="13" [ngModel]="noteContent" (ngModelChange)="onNoteChange($event)" placeholder="Start with a question, an image, a connection…"></textarea>
           </label>
           <div class="actions spread">
             <span class="preview-label" role="status">{{ noteStatus }}</span>
             <button class="button primary" (click)="saveNote()">
-              Keep draft
+              Save note
             </button>
           </div>
-          <p class="preview-label">
-            Drafts are local to this visit.
-          </p>
           <button class="text-link" (click)="mode = 'notes'">
             Open writing view<mat-icon>north_east</mat-icon>
           </button>
