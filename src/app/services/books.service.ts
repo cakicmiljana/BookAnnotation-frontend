@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Book } from '../models/book';
 import { Annotation, AnnotationInput, NotebookAnnotation } from '../models/annotation';
+import { Bookmark } from '../models/bookmark';
 import { Note } from '../models/note';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -72,5 +73,17 @@ export class BooksService {
 
   getMyNotes(): Observable<Note[]> {
     return this.httpClient.get<Note[]>(`${environment.apiUrl}/me/notes`);
+  }
+
+  getBookmarks(editionId: number): Observable<Bookmark[]> {
+    return this.httpClient.get<Bookmark[]>(`${environment.apiUrl}/editions/${editionId}/bookmarks`);
+  }
+
+  addBookmark(editionId: number, offset: number): Observable<Bookmark> {
+    return this.httpClient.post<Bookmark>(`${environment.apiUrl}/editions/${editionId}/bookmarks`, { offset });
+  }
+
+  deleteBookmark(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${environment.apiUrl}/bookmarks/${id}`);
   }
 }

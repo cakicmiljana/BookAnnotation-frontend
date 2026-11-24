@@ -11,6 +11,7 @@ import * as NotesActions from '../../store/notes/notes.actions';
 import { Book } from '../../models/book';
 import { Annotation, AnnotationInput } from '../../models/annotation';
 import { Note } from '../../models/note';
+import { Bookmark } from '../../models/bookmark';
 import { BooksService } from '../../services/books.service';
 import { PresentationService } from '../../ui/presentation.service';
 import { TextAnnotator } from '../../helper classes/TextAnnotator';
@@ -32,6 +33,7 @@ export class BookAnnotatorComponent implements OnInit {
     noteContent = '';
     noteStatus = '';
     annotationError: string | null = null;
+    bookmarks: Bookmark[] = [];
     currentPage = 0;
     pageSize = 3000;
     totalPages = 0;
@@ -54,7 +56,6 @@ export class BookAnnotatorComponent implements OnInit {
     font = 'serif';
     theme = 'paper';
     showHighlights = true;
-    bookmarked = false;
     tagFilter = '';
     editorOpen = false;
     draftColor = 'lightyellow';
@@ -96,6 +97,7 @@ export class BookAnnotatorComponent implements OnInit {
         ).subscribe(result => {
             this.loading = false;
             this.allAnnotations = [];
+            this.bookmarks = [];
             this.noteContent = '';
             this.noteStatus = '';
             this.note = undefined;
@@ -117,6 +119,7 @@ export class BookAnnotatorComponent implements OnInit {
             this.setPageText();
             this.store.dispatch(AnnotationsActions.loadAnnotations({ editionId: result.book.id }));
             this.store.dispatch(NotesActions.getNote({ editionId: result.book.id }));
+            this.loadBookmarks(result.book.id);
         });
         this.store.select(selectAnnotations).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(items => {
             const bookAnnotations = items.filter(item => item.editionId === this.book?.id);
@@ -249,6 +252,35 @@ export class BookAnnotatorComponent implements OnInit {
             return;
         this.noteStatus = 'Saving…';
         this.store.dispatch(NotesActions.saveNote({ editionId: this.book.id, content: this.noteContent }));
+    }
+    loadBookmarks(editionId: number): void {
+        this.booksService.getBookmarks(editionId).subscribe({
+            next: bookmarks => this.bookmarks = bookmarks,
+            error: () => this.bookmarks = []
+        });
+    }
+    get bookmarked(): boolean {
+        return this.isBookmarked(this.currentPage);
+    }
+    isBookmarked(location: number): boolean {
+        const offset = location * this.pageSize;
+        return this.bookmarks.some(bookmark => bookmark.offset === offset);
+    }
+    toggleBookmark(): void {
+        if (!this.book)
+            return;
+        const offset = this.currentPage * this.pageSize;
+        const existing = this.bookmarks.find(bookmark => bookmark.offset === offset);
+        if (existing) {
+            this.booksService.deleteBookmark(existing.id).subscribe(() => {
+                this.bookmarks = this.bookmarks.filter(bookmark => bookmark.id !== existing.id);
+            });
+        }
+        else {
+            this.booksService.addBookmark(this.book.id, offset).subscribe(bookmark => {
+                this.bookmarks = [...this.bookmarks, bookmark];
+            });
+        }
     }
     toggleSearch(): void {
         if (this.showSearch && this.mode === 'read') { this.closeSearch(); return; }

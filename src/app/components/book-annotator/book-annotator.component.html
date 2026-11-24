@@ -19,7 +19,7 @@
       <button class="icon-button type-control" [class.active]="showAppearance" (click)="showAppearance = !showAppearance" aria-label="Reading appearance" [attr.aria-expanded]="showAppearance">
         Aa
       </button>
-      <button class="icon-button" [class.active]="bookmarked" (click)="bookmarked = !bookmarked" [attr.aria-pressed]="bookmarked" aria-label="Bookmark this location" matTooltip="Bookmark">
+      <button class="icon-button" [class.active]="bookmarked" (click)="toggleBookmark()" [attr.aria-pressed]="bookmarked" aria-label="Bookmark this location" matTooltip="Bookmark">
         <mat-icon>{{ bookmarked ? 'bookmark' : 'bookmark_border' }}</mat-icon>
       </button>
       <button class="icon-button" [class.active]="showPanel" (click)="showPanel = !showPanel" aria-label="Toggle study panel" [attr.aria-expanded]="showPanel" matTooltip="Study panel">
@@ -87,7 +87,7 @@
         Reading locations
       </div>
       <button *ngFor="let location of locations" [class.active]="currentPage === location" (click)="getPageData({pageIndex: location}); mode = 'read'">
-        <mat-icon>short_text</mat-icon>Part {{ location + 1 }}<span *ngIf="currentPage === location">Reading</span>
+        <mat-icon>{{ isBookmarked(location) ? 'bookmark' : 'short_text' }}</mat-icon>Part {{ location + 1 }}<span *ngIf="currentPage === location">Reading</span>
       </button>
       <p class="small muted">
         Locations follow the source text, independent of font size.
