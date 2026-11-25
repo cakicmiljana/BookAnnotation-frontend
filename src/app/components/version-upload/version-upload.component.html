@@ -11,7 +11,7 @@
     </button>
   </header>
   <p class="small muted">
-    Bring a text to your reading desk.
+    {{ workId ? 'Add another edition of ' + title + '.' : 'Bring a text to your reading desk.' }}
   </p>
   <div class="upload-dropzone" (dragover)="$event.preventDefault()" (drop)="onDrop($event)">
     <mat-icon>{{ file ? 'description' : 'upload_file' }}</mat-icon>
@@ -19,12 +19,12 @@
       {{ fileName || 'Choose your reading copy' }}
     </h3>
     <p>
-      {{ file ? 'Selected locally. No file has been uploaded.' : 'Drop a file here, or browse your files.' }}
+      {{ file ? 'Ready to upload.' : 'Drop a file here, or browse your files.' }}
     </p>
     <button class="button" (click)="fileInput.click()">
       {{ file ? 'Choose another file' : 'Browse files' }}
     </button>
-    <span>PDF or plain text · UI preview</span><input #fileInput type="file" accept="application/pdf,text/plain,.txt" (change)="onFileSelected($event)" hidden>
+    <span>PDF or plain text · up to 10 MB</span><input #fileInput type="file" accept="application/pdf,text/plain,.txt" (change)="onFileSelected($event)" hidden>
   </div>
   <p *ngIf="fileError" class="status error" role="alert">
     {{ fileError }}
@@ -32,10 +32,10 @@
   <form #editionForm="ngForm" (ngSubmit)="uploadVersion()">
     <div class="field-row">
       <label class="field">
-        Book title<input [ngModel]="data?.title || ''" name="title" placeholder="Book title" required>
+        Book title<input [(ngModel)]="title" name="title" placeholder="Book title" required [readonly]="!!workId">
       </label>
       <label class="field">
-        Author<input [ngModel]="data?.author || ''" name="author" placeholder="Author's name" required>
+        Author<input [(ngModel)]="author" name="author" placeholder="Author's name" required [readonly]="!!workId">
       </label>
     </div>
     <div class="field-row">
@@ -46,15 +46,15 @@
         ISBN <span class="optional">Optional</span><input [(ngModel)]="isbn" name="isbn" placeholder="Edition ISBN">
       </label>
     </div>
-    <p *ngIf="previewReady" class="status" role="status">
-      <mat-icon>check_circle_outline</mat-icon>Edition preview ready. Uploading will be connected in a later phase.
+    <p *ngIf="errorMessage" class="status error" role="alert">
+      {{ errorMessage }}
     </p>
     <footer class="dialog-footer">
       <button type="button" class="button quiet" mat-dialog-close>
         Cancel
       </button>
-      <button class="button primary" type="submit" [disabled]="!file || !!fileError || !editionForm.valid">
-        <mat-icon>upload_file</mat-icon>Prepare edition
+      <button class="button primary" type="submit" [disabled]="!file || !!fileError || !editionForm.valid || uploading">
+        <mat-icon>upload_file</mat-icon>{{ uploading ? 'Uploading…' : 'Upload edition' }}
       </button>
     </footer>
   </form>

@@ -58,7 +58,7 @@ export class BookViewerComponent {
     openVersionUploadDialog() {
         const dialogRef = this.dialog.open(VersionUploadComponent, {
             width: '560px',
-            data: { ...this.book, preview: true }
+            data: { ...this.book }
         });
         dialogRef.componentInstance.versionUploaded.subscribe(() => {
             this.loadEditions();

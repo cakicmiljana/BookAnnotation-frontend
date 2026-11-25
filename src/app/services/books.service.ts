@@ -88,6 +88,10 @@ export class BooksService {
     return this.httpClient.delete<void>(`${environment.apiUrl}/bookmarks/${id}`);
   }
 
+  uploadEdition(formData: FormData): Observable<Book> {
+    return this.httpClient.post<Book>(`${environment.apiUrl}/editions`, formData);
+  }
+
   getLibrary(): Observable<LibraryItem[]> {
     return this.httpClient.get<LibraryItem[]>(`${environment.apiUrl}/me/library`);
   }
