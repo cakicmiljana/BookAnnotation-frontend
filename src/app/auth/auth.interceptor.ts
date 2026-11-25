@@ -27,7 +27,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
       return next(request).pipe(
         catchError((error: unknown) => {
-          if (error instanceof HttpErrorResponse && error.status === 401 && token) {
+          const wrongCurrentPassword = req.url.endsWith('/me/password');
+          if (error instanceof HttpErrorResponse && error.status === 401 && token && !wrongCurrentPassword) {
             store.dispatch(logout());
           }
           return throwError(() => error);

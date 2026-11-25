@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user';
 import { ReadingPreferences } from '../models/reading-preferences';
@@ -11,15 +11,7 @@ import { LoginResponse } from '../dtos/LoginResponse';
 })
 export class UsersService {
 
-  private dataUrl = 'assets/mock-data.json';
-
   constructor(private httpClient: HttpClient) {}
-
-  getUserById(id: number): Observable<User | undefined> {
-    return this.httpClient.get<any>(this.dataUrl).pipe(
-      map(data => data.users.find((u: User) => u.id === id))
-    );
-  }
 
   login(username: string, password: string): Observable<LoginResponse> {
     return this.httpClient
@@ -48,8 +40,11 @@ export class UsersService {
     return this.httpClient.put<ReadingPreferences>(`${environment.apiUrl}/me/preferences`, preferences);
   }
 
-  updateUser(id: number, username: string, email: string, password: string) {
-    console.warn('Mock mode: updateUser does not persist changes.');
-    return this.getUserById(id);
+  updateProfile(username: string): Observable<User> {
+    return this.httpClient.patch<User>(`${environment.apiUrl}/me`, { username });
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+    return this.httpClient.put<void>(`${environment.apiUrl}/me/password`, { currentPassword, newPassword });
   }
 }

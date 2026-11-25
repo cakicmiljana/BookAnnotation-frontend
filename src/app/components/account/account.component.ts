@@ -31,10 +31,6 @@ export class AccountComponent implements OnInit {
     dialog = inject(MatDialog);
     store = inject(Store<AppState>);
     ngOnInit() {
-        if (this.ui.preview) {
-            this.users.getUserById(1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(user => this.user = user || null);
-            return;
-        }
         this.store.select(selectCurrentUser).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(user => {
             this.user = user;
         });

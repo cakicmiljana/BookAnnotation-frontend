@@ -17,6 +17,10 @@ export const userReducer = createReducer(
         return { ...state, user }
     }),
 
+    on(UsersActions.profileUpdated, (state, { user }) => {
+        return { ...state, user }
+    }),
+
     on(UsersActions.login, (state) => {
         return { ...state,
             loading: true,
