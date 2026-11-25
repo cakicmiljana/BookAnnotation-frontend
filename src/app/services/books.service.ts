@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Book } from '../models/book';
 import { Annotation, AnnotationInput, NotebookAnnotation } from '../models/annotation';
 import { Bookmark } from '../models/bookmark';
+import { LibraryItem } from '../models/library-item';
 import { Note } from '../models/note';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -85,5 +86,21 @@ export class BooksService {
 
   deleteBookmark(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${environment.apiUrl}/bookmarks/${id}`);
+  }
+
+  getLibrary(): Observable<LibraryItem[]> {
+    return this.httpClient.get<LibraryItem[]>(`${environment.apiUrl}/me/library`);
+  }
+
+  addToLibrary(editionId: number): Observable<LibraryItem> {
+    return this.httpClient.put<LibraryItem>(`${environment.apiUrl}/me/library/${editionId}`, {});
+  }
+
+  removeFromLibrary(editionId: number): Observable<void> {
+    return this.httpClient.delete<void>(`${environment.apiUrl}/me/library/${editionId}`);
+  }
+
+  saveReadingPosition(editionId: number, offset: number): Observable<LibraryItem> {
+    return this.httpClient.put<LibraryItem>(`${environment.apiUrl}/me/library/${editionId}/position`, { offset });
   }
 }

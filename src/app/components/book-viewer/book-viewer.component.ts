@@ -20,6 +20,7 @@ export class BookViewerComponent {
     versions: Book[] | null = null;
     routerId: string | null = "";
     bookId: number | null = null;
+    inLibrary = false;
     dialog = inject(MatDialog);
     constructor(private booksService: BooksService, private versionsService: BooksService, private route: ActivatedRoute, public ui: PresentationService) {
     }
@@ -31,6 +32,22 @@ export class BookViewerComponent {
         if (this.bookId) {
             this.booksService.getBookById(this.bookId)
                 .subscribe({ next: b => { this.book = b; this.loadEditions(); }, error: () => this.loadError = true });
+            this.checkLibrary(this.bookId);
+        }
+    }
+    private checkLibrary(bookId: number): void {
+        this.booksService.getLibrary().subscribe(library => {
+            this.inLibrary = library.some(item => item.id === bookId);
+        });
+    }
+    toggleLibrary(): void {
+        if (!this.book)
+            return;
+        if (this.inLibrary) {
+            this.booksService.removeFromLibrary(this.book.id).subscribe(() => this.inLibrary = false);
+        }
+        else {
+            this.booksService.addToLibrary(this.book.id).subscribe(() => this.inLibrary = true);
         }
     }
     private loadEditions(): void {

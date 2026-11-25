@@ -93,7 +93,8 @@ export class BookAnnotatorComponent implements OnInit {
                 const id = Number((params.get('id') || '').replace(/^:/, ''));
                 return forkJoin({
                     book: this.booksService.getBookById(id),
-                    content: this.booksService.getBookContent(id)
+                    content: this.booksService.getBookContent(id),
+                    library: this.booksService.getLibrary().pipe(catchError(() => of([])))
                 }).pipe(catchError(() => of(null)));
             }),
             takeUntilDestroyed(this.destroyRef)
@@ -119,7 +120,13 @@ export class BookAnnotatorComponent implements OnInit {
             this.fullContent = result.content;
             this.pageSize = result.book.pageSize || 3000;
             this.totalPages = Math.max(1, Math.ceil(this.fullContent.length / this.pageSize));
+            const libraryItem = result.library.find(item => item.id === result.book.id);
+            if (libraryItem) {
+                const savedPage = Math.floor(libraryItem.lastPosition / this.pageSize);
+                this.currentPage = Math.min(savedPage, this.totalPages - 1);
+            }
             this.setPageText();
+            this.saveReadingPosition();
             this.store.dispatch(AnnotationsActions.loadAnnotations({ editionId: result.book.id }));
             this.store.dispatch(NotesActions.getNote({ editionId: result.book.id }));
             this.loadBookmarks(result.book.id);
@@ -150,11 +157,23 @@ export class BookAnnotatorComponent implements OnInit {
         pageIndex: number;
         pageSize?: number;
     }): void {
+        const previousPage = this.currentPage;
         this.pageSize = event.pageSize ?? this.pageSize;
         this.totalPages = Math.max(1, Math.ceil(this.fullContent.length / this.pageSize));
         this.currentPage = Math.max(0, Math.min(this.totalPages - 1, event.pageIndex));
         this.setPageText();
         this.selectionReady = false;
+        if (this.currentPage !== previousPage) {
+            this.saveReadingPosition();
+        }
+    }
+    saveReadingPosition(): void {
+        if (!this.book)
+            return;
+        const offset = this.currentPage * this.pageSize;
+        this.booksService.saveReadingPosition(this.book.id, offset).subscribe({
+            error: () => console.warn('Could not save the reading position')
+        });
     }
     get locations(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i); }
     trackSegment(index: number): number { return index; }

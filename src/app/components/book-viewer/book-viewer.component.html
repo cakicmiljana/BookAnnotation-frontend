@@ -16,6 +16,9 @@
       </p>
       <div class="actions">
         <a class="button primary" [routerLink]="ui.link('book-annotator', book.id)">Read this edition<mat-icon>arrow_forward</mat-icon></a>
+        <button class="button" (click)="toggleLibrary()" [attr.aria-pressed]="inLibrary">
+          <mat-icon>{{ inLibrary ? 'bookmark_remove' : 'library_add' }}</mat-icon>{{ inLibrary ? 'Remove from library' : 'Add to library' }}
+        </button>
         <button class="button" (click)="openVersionUploadDialog()">
           <mat-icon>upload_file</mat-icon>Upload edition
         </button>

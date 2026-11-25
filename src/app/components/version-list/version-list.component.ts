@@ -1,7 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { Book } from 'src/app/models/book';
+import { Component } from '@angular/core';
+import { LibraryItem } from 'src/app/models/library-item';
 import { BooksService } from 'src/app/services/books.service';
-import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 
 @Component({
   selector: 'app-version-list',
@@ -10,15 +9,16 @@ import { setUserId, getUserId } from 'src/environments/userLoggedIn';
   standalone: false
 })
 export class VersionListComponent {
-  // @Input() 
-  versions : Book[] | null = null;
+  versions: LibraryItem[] | null = null;
 
   constructor(private service: BooksService) {
 
   }
 
-  ngOnInit() : void {
-    this.service.getAllBooks()
-      .subscribe(allVersions => this.versions = allVersions);
+  ngOnInit(): void {
+    this.service.getLibrary().subscribe({
+      next: library => this.versions = library,
+      error: () => this.versions = []
+    });
   }
 }
