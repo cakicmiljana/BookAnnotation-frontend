@@ -19,8 +19,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { AccountUpdateComponent } from './components/account-update/account-update.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { AddAnnotationComponent } from './components/add-annotation/add-annotation.component';
-import { UpdateAnnotationComponent } from './components/update-annotation/update-annotation.component';
 import { LogInComponent } from './components/log-in/log-in.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { StoreModule } from '@ngrx/store';
@@ -58,8 +56,6 @@ import { BookSearchComponent } from './ui/book-search/book-search.component';
         BookAnnotatorComponent,
         VersionUploadComponent,
         AccountUpdateComponent,
-        AddAnnotationComponent,
-        UpdateAnnotationComponent,
         LogInComponent
     ],
     bootstrap: [AppComponent],

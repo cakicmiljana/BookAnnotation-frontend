@@ -1,9 +1,0 @@
-:host {
-  display:block;
-  min-width:min(440px,85vw)
-}
-
-.quote {
-  max-height:190px;
-  overflow:auto
-}
