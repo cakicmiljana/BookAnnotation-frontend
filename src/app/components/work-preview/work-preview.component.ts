@@ -4,7 +4,7 @@ import { PresentationService } from '../../ui/presentation.service';
 @Component({
     selector: 'app-work-preview',
     templateUrl: './work-preview.component.html',
-    styleUrls: ['../book-preview/book-preview.component.css'],
+    styleUrls: ['../edition-preview/edition-preview.component.css'],
     standalone: false
 })
 export class WorkPreviewComponent {

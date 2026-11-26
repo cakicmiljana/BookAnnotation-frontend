@@ -8,29 +8,29 @@ import { selectAnnotations, selectAnnotationsError } from '../../store/annotatio
 import * as AnnotationsActions from '../../store/annotations/annotations.actions';
 import { selectNotesState } from '../../store/notes/notes.selector';
 import * as NotesActions from '../../store/notes/notes.actions';
-import { Book } from '../../models/book';
+import { Edition } from '../../models/edition';
 import { Annotation, AnnotationInput } from '../../models/annotation';
 import { Note } from '../../models/note';
 import { Bookmark } from '../../models/bookmark';
 import { ReadingPreferences } from '../../models/reading-preferences';
-import { BooksService } from '../../services/books.service';
+import { EditionsService } from '../../services/editions.service';
 import { UsersService } from '../../services/users.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PresentationService } from '../../ui/presentation.service';
 import { TextAnnotator } from '../../helper classes/TextAnnotator';
 import { ANNOTATION_COLORS } from '../../ui/annotation-fields.component';
-import { TextMatch } from '../../ui/book-search/text-search';
+import { TextMatch } from '../../ui/edition-search/text-search';
 interface ReadingSegment {
     text: string;
     annotation?: Annotation;
     match: boolean;
 }
 @Component({
-    selector: 'app-book-annotator', templateUrl: './book-annotator.component.html',
-    styleUrls: ['./book-annotator.component.css', './reader-surface.css', './reader-panels.css', './reader-annotations.css', './reader-appearance.css', './reader-responsive.css'], standalone: false
+    selector: 'app-edition-annotator', templateUrl: './edition-annotator.component.html',
+    styleUrls: ['./edition-annotator.component.css', './reader-surface.css', './reader-panels.css', './reader-annotations.css', './reader-appearance.css', './reader-responsive.css'], standalone: false
 })
-export class BookAnnotatorComponent implements OnInit {
-    book: Book | null = null;
+export class EditionAnnotatorComponent implements OnInit {
+    edition: Edition | null = null;
     allAnnotations: Annotation[] = [];
     note: Note | undefined;
     noteContent = '';
@@ -75,7 +75,7 @@ export class BookAnnotatorComponent implements OnInit {
     private annotator = new TextAnnotator();
     private destroyRef = inject(DestroyRef);
     private injector = inject(Injector);
-    constructor(private store: Store<AppState>, private booksService: BooksService, private usersService: UsersService, private route: ActivatedRoute, public ui: PresentationService, private snackBar: MatSnackBar) { }
+    constructor(private store: Store<AppState>, private editionsService: EditionsService, private usersService: UsersService, private route: ActivatedRoute, public ui: PresentationService, private snackBar: MatSnackBar) { }
     ngOnInit(): void {
         this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
             const mode = params.get('mode');
@@ -93,9 +93,9 @@ export class BookAnnotatorComponent implements OnInit {
                 this.loading = true;
                 const id = Number((params.get('id') || '').replace(/^:/, ''));
                 return forkJoin({
-                    book: this.booksService.getBookById(id),
-                    content: this.booksService.getBookContent(id),
-                    library: this.booksService.getLibrary().pipe(catchError(() => of([])))
+                    edition: this.editionsService.getEditionById(id),
+                    content: this.editionsService.getEditionContent(id),
+                    library: this.editionsService.getLibrary().pipe(catchError(() => of([])))
                 }).pipe(catchError(() => of(null)));
             }),
             takeUntilDestroyed(this.destroyRef)
@@ -112,41 +112,41 @@ export class BookAnnotatorComponent implements OnInit {
             this.selectionReady = false;
             this.selectedText = '';
             if (!result) {
-                this.book = null;
+                this.edition = null;
                 this.loadError = true;
                 return;
             }
             this.loadError = false;
-            this.book = result.book;
+            this.edition = result.edition;
             this.fullContent = result.content;
-            this.pageSize = result.book.pageSize || 3000;
+            this.pageSize = result.edition.pageSize || 3000;
             this.totalPages = Math.max(1, Math.ceil(this.fullContent.length / this.pageSize));
-            const libraryItem = result.library.find(item => item.id === result.book.id);
+            const libraryItem = result.library.find(item => item.id === result.edition.id);
             if (libraryItem) {
                 const savedPage = Math.floor(libraryItem.lastPosition / this.pageSize);
                 this.currentPage = Math.min(savedPage, this.totalPages - 1);
             }
             this.setPageText();
             this.saveReadingPosition();
-            this.store.dispatch(AnnotationsActions.loadAnnotations({ editionId: result.book.id }));
-            this.store.dispatch(NotesActions.getNote({ editionId: result.book.id }));
-            this.loadBookmarks(result.book.id);
+            this.store.dispatch(AnnotationsActions.loadAnnotations({ editionId: result.edition.id }));
+            this.store.dispatch(NotesActions.getNote({ editionId: result.edition.id }));
+            this.loadBookmarks(result.edition.id);
         });
         this.store.select(selectAnnotations).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(items => {
-            const bookAnnotations = items.filter(item => item.editionId === this.book?.id);
-            this.allAnnotations = bookAnnotations.map(item => ({ ...item }));
+            const editionAnnotations = items.filter(item => item.editionId === this.edition?.id);
+            this.allAnnotations = editionAnnotations.map(item => ({ ...item }));
         });
         this.store.select(selectAnnotationsError).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(error => {
             this.annotationError = error;
         });
         this.store.select(selectNotesState).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(state => {
-            if (!this.book) {
+            if (!this.edition) {
                 return;
             }
             if (this.noteStatus === 'Saving…' && !state.saving) {
                 this.noteStatus = state.error ? 'Could not save your note' : 'Saved';
             }
-            const note = state.notes.find(item => item.editionId === this.book?.id);
+            const note = state.notes.find(item => item.editionId === this.edition?.id);
             if (note && note !== this.note && this.noteStatus !== 'Unsaved changes') {
                 this.note = note;
                 this.noteContent = note.content;
@@ -169,10 +169,10 @@ export class BookAnnotatorComponent implements OnInit {
         }
     }
     saveReadingPosition(): void {
-        if (!this.book)
+        if (!this.edition)
             return;
         const offset = this.currentPage * this.pageSize;
-        this.booksService.saveReadingPosition(this.book.id, offset).subscribe({
+        this.editionsService.saveReadingPosition(this.edition.id, offset).subscribe({
             error: () => console.warn('Could not save the reading position')
         });
     }
@@ -241,7 +241,7 @@ export class BookAnnotatorComponent implements OnInit {
     updateAnnotation(annotation: Annotation | undefined): void { if (annotation && window.getSelection()?.isCollapsed !== false)
         this.edit(annotation); }
     saveAnnotation(): void {
-        if (!this.book)
+        if (!this.edition)
             return;
         const annotation: AnnotationInput = {
             startOffset: this.selectedStart,
@@ -254,7 +254,7 @@ export class BookAnnotatorComponent implements OnInit {
             this.store.dispatch(AnnotationsActions.updateAnnotation({ id: this.selectedAnnotation.id, annotation }));
         }
         else {
-            this.store.dispatch(AnnotationsActions.addAnnotation({ editionId: this.book.id, annotation }));
+            this.store.dispatch(AnnotationsActions.addAnnotation({ editionId: this.edition.id, annotation }));
         }
         this.editorOpen = false;
         this.selectionReady = false;
@@ -271,13 +271,13 @@ export class BookAnnotatorComponent implements OnInit {
         this.noteStatus = 'Unsaved changes';
     }
     saveNote(): void {
-        if (!this.book)
+        if (!this.edition)
             return;
         this.noteStatus = 'Saving…';
-        this.store.dispatch(NotesActions.saveNote({ editionId: this.book.id, content: this.noteContent }));
+        this.store.dispatch(NotesActions.saveNote({ editionId: this.edition.id, content: this.noteContent }));
     }
     loadBookmarks(editionId: number): void {
-        this.booksService.getBookmarks(editionId).subscribe({
+        this.editionsService.getBookmarks(editionId).subscribe({
             next: bookmarks => this.bookmarks = bookmarks,
             error: () => this.bookmarks = []
         });
@@ -290,18 +290,18 @@ export class BookAnnotatorComponent implements OnInit {
         return this.bookmarks.some(bookmark => bookmark.offset === offset);
     }
     toggleBookmark(): void {
-        if (!this.book)
+        if (!this.edition)
             return;
         const offset = this.currentPage * this.pageSize;
         const existing = this.bookmarks.find(bookmark => bookmark.offset === offset);
         if (existing) {
-            this.booksService.deleteBookmark(existing.id).subscribe({
+            this.editionsService.deleteBookmark(existing.id).subscribe({
                 next: () => this.bookmarks = this.bookmarks.filter(bookmark => bookmark.id !== existing.id),
                 error: () => this.snackBar.open('Could not remove the bookmark.', 'Close', { duration: 3000 })
             });
         }
         else {
-            this.booksService.addBookmark(this.book.id, offset).subscribe({
+            this.editionsService.addBookmark(this.edition.id, offset).subscribe({
                 next: bookmark => this.bookmarks = [...this.bookmarks, bookmark],
                 error: () => this.snackBar.open('Could not add the bookmark.', 'Close', { duration: 3000 })
             });

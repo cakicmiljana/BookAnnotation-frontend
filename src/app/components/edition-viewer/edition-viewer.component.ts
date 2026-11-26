@@ -1,28 +1,28 @@
 import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Book } from 'src/app/models/book';
-import { BooksService } from 'src/app/services/books.service';
+import { Edition } from 'src/app/models/edition';
+import { EditionsService } from 'src/app/services/editions.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { VersionUploadComponent } from '../version-upload/version-upload.component';
 import { PresentationService } from '../../ui/presentation.service';
 @Component({
-    selector: 'app-book-viewer',
-    templateUrl: './book-viewer.component.html',
-    styleUrls: ['./book-viewer.component.css'],
+    selector: 'app-edition-viewer',
+    templateUrl: './edition-viewer.component.html',
+    styleUrls: ['./edition-viewer.component.css'],
     standalone: false
 })
-export class BookViewerComponent {
+export class EditionViewerComponent {
     tab = 'about';
     loadError = false;
     @Input()
-    book: Book | null = null;
-    versions: Book[] | null = null;
+    edition: Edition | null = null;
+    versions: Edition[] | null = null;
     routerId: string | null = "";
-    bookId: number | null = null;
+    editionId: number | null = null;
     inLibrary = false;
     dialog = inject(MatDialog);
-    constructor(private booksService: BooksService, private versionsService: BooksService, private route: ActivatedRoute, public ui: PresentationService, private snackBar: MatSnackBar) {
+    constructor(private editionsService: EditionsService, private versionsService: EditionsService, private route: ActivatedRoute, public ui: PresentationService, private snackBar: MatSnackBar) {
     }
     ngOnInit(): void {
         const workId = this.route.snapshot.paramMap.get("workId");
@@ -32,16 +32,16 @@ export class BookViewerComponent {
         }
         this.routerId = this.route.snapshot.paramMap.get("id");
         if (this.routerId) {
-            this.bookId = Number(this.routerId.replace(/^:/, ''));
+            this.editionId = Number(this.routerId.replace(/^:/, ''));
         }
-        if (this.bookId) {
-            this.booksService.getBookById(this.bookId)
-                .subscribe({ next: b => { this.book = b; this.loadEditions(); }, error: () => this.loadError = true });
-            this.checkLibrary(this.bookId);
+        if (this.editionId) {
+            this.editionsService.getEditionById(this.editionId)
+                .subscribe({ next: b => { this.edition = b; this.loadEditions(); }, error: () => this.loadError = true });
+            this.checkLibrary(this.editionId);
         }
     }
     private loadWork(workId: number): void {
-        this.booksService.getEditionsOfWork(workId).subscribe({
+        this.editionsService.getEditionsOfWork(workId).subscribe({
             next: editions => {
                 if (editions.length === 0) {
                     this.loadError = true;
@@ -49,49 +49,54 @@ export class BookViewerComponent {
                 }
                 let firstEdition = editions[0];
                 for (const edition of editions) {
-                    if (edition.language === edition.originalLanguage) {
+                    if (edition.language === edition.work.originalLanguage) {
                         firstEdition = edition;
                         break;
                     }
                 }
                 this.versions = editions;
-                this.book = firstEdition;
-                this.bookId = firstEdition.id;
+                this.edition = firstEdition;
+                this.editionId = firstEdition.id;
                 this.checkLibrary(firstEdition.id);
             },
             error: () => this.loadError = true
         });
     }
-    private checkLibrary(bookId: number): void {
-        this.booksService.getLibrary().subscribe(library => {
-            this.inLibrary = library.some(item => item.id === bookId);
+    private checkLibrary(editionId: number): void {
+        this.editionsService.getLibrary().subscribe(library => {
+            this.inLibrary = library.some(item => item.id === editionId);
         });
     }
     toggleLibrary(): void {
-        if (!this.book)
+        if (!this.edition)
             return;
         if (this.inLibrary) {
-            this.booksService.removeFromLibrary(this.book.id).subscribe({
+            this.editionsService.removeFromLibrary(this.edition.id).subscribe({
                 next: () => this.inLibrary = false,
                 error: () => this.snackBar.open('Could not remove the book from your library.', 'Close', { duration: 3000 })
             });
         }
         else {
-            this.booksService.addToLibrary(this.book.id).subscribe({
+            this.editionsService.addToLibrary(this.edition.id).subscribe({
                 next: () => this.inLibrary = true,
                 error: () => this.snackBar.open('Could not add the book to your library.', 'Close', { duration: 3000 })
             });
         }
     }
     private loadEditions(): void {
-        if (this.book)
-            this.versionsService.getEditionsOfWork(this.book.workId)
+        if (this.edition)
+            this.versionsService.getEditionsOfWork(this.edition.workId)
                 .subscribe(v => this.versions = v);
     }
     openVersionUploadDialog() {
         const dialogRef = this.dialog.open(VersionUploadComponent, {
             width: '560px',
-            data: { ...this.book }
+            data: {
+                workId: this.edition?.workId,
+                title: this.edition?.work.title,
+                author: this.edition?.work.author,
+                language: this.edition?.language
+            }
         });
         dialogRef.componentInstance.versionUploaded.subscribe(() => {
             this.loadEditions();

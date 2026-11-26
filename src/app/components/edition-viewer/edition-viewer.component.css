@@ -9,7 +9,7 @@
   padding-bottom:42px
 }
 
-.book-detail-header app-book-cover {
+.book-detail-header app-work-cover {
   width:190px
 }
 
@@ -99,7 +99,7 @@ dd {
   .book-detail-header {
     gap:28px
   }
-  .book-detail-header app-book-cover {
+  .book-detail-header app-work-cover {
     width:135px
   }
   .about-layout {
@@ -115,7 +115,7 @@ dd {
     align-items:flex-start;
     gap:22px
   }
-  .book-detail-header app-book-cover {
+  .book-detail-header app-work-cover {
     width:90px
   }
   .detail-copy h1 {

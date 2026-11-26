@@ -1,0 +1,33 @@
+<article *ngIf="edition; else noEdition" class="book-card" [class.compact]="compact">
+  <a class="cover-link" [routerLink]="ui.link('book', edition.id)" (click)="selectEdition(edition.id)" [attr.aria-label]="'View ' + edition.work.title">
+  <div class="cover-stage" [class.stage-two]="edition.id % 3 === 2" [class.stage-three]="edition.id % 3 === 0">
+    <app-work-cover [workId]="edition.workId" [title]="edition.work.title" [author]="edition.work.author">
+    </app-work-cover>
+    <span class="cover-caption"></span>
+  </div>
+  </a>
+  <div class="book-copy">
+    <div class="book-heading">
+      <span class="eyebrow">{{ edition.work.country }} · {{ edition.work.publicationYear }}</span><a [routerLink]="ui.link('book', edition.id)" (click)="selectEdition(edition.id)" class="details-icon" aria-label="Book details"><mat-icon>north_east</mat-icon></a>
+    </div>
+    <a [routerLink]="ui.link('book', edition.id)" (click)="selectEdition(edition.id)">
+    <h3>
+      {{ edition.work.title }}
+    </h3>
+    </a>
+    <p class="book-author">
+      {{ edition.work.author }}
+    </p>
+    <p class="book-description">
+      {{ edition.work.description }}
+    </p>
+    <div class="book-footer">
+      <span>{{ edition.language }} <span class="dot">·</span> {{ edition.pages }} pages</span><a [routerLink]="ui.link('book-annotator', edition.id)" (click)="selectEdition(edition.id)" class="text-link">Read<mat-icon>arrow_forward</mat-icon></a>
+    </div>
+  </div>
+</article>
+<ng-template #noEdition>
+  <app-empty-state title="Choose a book to begin" message="Find your next read in the collection.">
+    <a class="button primary" [routerLink]="ui.link('all-books')">Explore books</a>
+  </app-empty-state>
+</ng-template>

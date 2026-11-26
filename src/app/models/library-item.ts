@@ -1,6 +1,6 @@
-import { Book } from './book';
+import { Edition } from './edition';
 
-export interface LibraryItem extends Book {
+export interface LibraryItem extends Edition {
     addedAt: string;
     lastOpenedAt: string | null;
     lastPosition: number;

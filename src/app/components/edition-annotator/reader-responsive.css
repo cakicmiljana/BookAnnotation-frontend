@@ -92,7 +92,7 @@
     border-bottom:1px solid var(--line);
     border-right:0
   }
-  .contents-panel app-book-cover,.contents-panel h3,.contents-panel>p {
+  .contents-panel app-work-cover,.contents-panel h3,.contents-panel>p {
     display:none
   }
   .contents-panel .eyebrow,.contents-heading {

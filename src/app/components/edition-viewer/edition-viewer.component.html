@@ -1,21 +1,21 @@
-<section class="page" *ngIf="book; else unavailable">
+<section class="page" *ngIf="edition; else unavailable">
   <a class="text-link back-link" [routerLink]="ui.link('my-books')"><mat-icon>arrow_back</mat-icon>Back to library</a>
   <div class="book-detail-header">
-    <app-book-cover [workId]="book.workId" [title]="book.title" [author]="book.author">
-    </app-book-cover>
+    <app-work-cover [workId]="edition.workId" [title]="edition.work.title" [author]="edition.work.author">
+    </app-work-cover>
     <div class="detail-copy">
       <span class="eyebrow">A closer look</span>
       <h1>
-        {{ book.title }}
+        {{ edition.work.title }}
       </h1>
       <p class="detail-author">
-        {{ book.author }}
+        {{ edition.work.author }}
       </p>
       <p class="detail-description">
-        {{ book.description }}
+        {{ edition.work.description }}
       </p>
       <div class="actions">
-        <a class="button primary" [routerLink]="ui.link('book-annotator', book.id)">Read this edition<mat-icon>arrow_forward</mat-icon></a>
+        <a class="button primary" [routerLink]="ui.link('book-annotator', edition.id)">Read this edition<mat-icon>arrow_forward</mat-icon></a>
         <button class="button" (click)="toggleLibrary()" [attr.aria-pressed]="inLibrary">
           <mat-icon>{{ inLibrary ? 'bookmark_remove' : 'library_add' }}</mat-icon>{{ inLibrary ? 'Remove from library' : 'Add to library' }}
         </button>
@@ -32,7 +32,7 @@
     <button [class.active]="tab === 'editions'" (click)="tab = 'editions'">
       Editions <span class="small">({{ versions?.length || 0 }})</span>
     </button>
-    <a [routerLink]="ui.link('book-annotator', book.id)" [queryParams]="{panel: 'notes'}">My book notes<mat-icon>north_east</mat-icon></a>
+    <a [routerLink]="ui.link('book-annotator', edition.id)" [queryParams]="{panel: 'notes'}">My book notes<mat-icon>north_east</mat-icon></a>
   </nav>
   <div *ngIf="tab === 'about'" class="about-layout">
     <article>
@@ -41,12 +41,12 @@
         A work to return to.
       </h2>
       <p class="serif about-description">
-        {{ book.description }}
+        {{ edition.work.description }}
       </p>
       <p class="muted">
         Read at your own pace. Highlight the passages that stay with you, gather your thoughts, and explore the ideas beneath the words.
       </p>
-      <a class="text-link" [routerLink]="ui.link('book-annotator', book.id)" [queryParams]="{mode: 'search'}"><mat-icon>search</mat-icon>Search inside this book</a>
+      <a class="text-link" [routerLink]="ui.link('book-annotator', edition.id)" [queryParams]="{mode: 'search'}"><mat-icon>search</mat-icon>Search inside this book</a>
     </article>
     <aside class="book-facts">
       <h3>
@@ -58,7 +58,7 @@
             Author
           </dt>
           <dd>
-            {{ book.author }}
+            {{ edition.work.author }}
           </dd>
         </div>
         <div>
@@ -66,7 +66,7 @@
             First published
           </dt>
           <dd>
-            {{ book.publicationYear }}
+            {{ edition.work.publicationYear }}
           </dd>
         </div>
         <div>
@@ -74,7 +74,7 @@
             Language
           </dt>
           <dd>
-            {{ book.language }}
+            {{ edition.language }}
           </dd>
         </div>
         <div>
@@ -82,7 +82,7 @@
             Country
           </dt>
           <dd>
-            {{ book.country }}
+            {{ edition.work.country }}
           </dd>
         </div>
         <div>
@@ -90,7 +90,7 @@
             Length
           </dt>
           <dd>
-            {{ book.pages }} pages
+            {{ edition.pages }} pages
           </dd>
         </div>
       </dl>

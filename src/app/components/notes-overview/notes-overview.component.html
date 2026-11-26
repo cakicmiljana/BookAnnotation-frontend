@@ -29,14 +29,14 @@
   <div class="note-grid" *ngIf="!loading && tab === 'notes'">
     <article *ngFor="let entry of visibleEntries" class="note-card panel">
       <div class="note-book">
-        <app-book-cover [workId]="entry.book.workId" [title]="entry.book.title" [author]="entry.book.author">
-        </app-book-cover>
+        <app-work-cover [workId]="entry.edition.workId" [title]="entry.edition.work.title" [author]="entry.edition.work.author">
+        </app-work-cover>
         <div>
           <h3>
-            {{ entry.book.title }}
+            {{ entry.edition.work.title }}
           </h3>
           <p>
-            {{ entry.book.author }}
+            {{ entry.edition.work.author }}
           </p>
         </div>
       </div>
@@ -44,16 +44,16 @@
       <p class="note-excerpt" [class.unwritten]="!entry.content">
         {{ entry.content || 'What stayed with you? Start with a thought, a question, a passage worth returning to.' }}
       </p>
-      <a class="text-link" [routerLink]="ui.link('book-annotator', entry.book.id)" [queryParams]="{mode: 'notes'}">{{ entry.content ? 'Continue writing' : 'Start a book note' }}<mat-icon>arrow_forward</mat-icon></a>
+      <a class="text-link" [routerLink]="ui.link('book-annotator', entry.edition.id)" [queryParams]="{mode: 'notes'}">{{ entry.content ? 'Continue writing' : 'Start a book note' }}<mat-icon>arrow_forward</mat-icon></a>
     </article>
   </div>
   <ng-container *ngIf="!loading && tab === 'annotations'">
     <section class="annotation-group" *ngFor="let entry of visibleEntries">
       <h2>
-        {{ entry.book.title }}
+        {{ entry.edition.work.title }}
       </h2>
       <div class="annotation-grid">
-        <a *ngFor="let annotation of entry.annotations" class="collected-annotation panel" [routerLink]="ui.link('book-annotator', entry.book.id)"><span class="chip accent">{{ annotation.tag | titlecase }}</span>
+        <a *ngFor="let annotation of entry.annotations" class="collected-annotation panel" [routerLink]="ui.link('book-annotator', entry.edition.id)"><span class="chip accent">{{ annotation.tag | titlecase }}</span>
         <blockquote>
           “{{ annotation.excerpt }}”
         </blockquote>

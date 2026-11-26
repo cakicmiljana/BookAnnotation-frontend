@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, map, of, switchMap } from "rxjs";
 import * as WorksActions from './works.action';
-import { BooksService } from "src/app/services/books.service";
+import { EditionsService } from "src/app/services/editions.service";
 
 @Injectable()
 export class WorksEffects {
@@ -10,13 +10,13 @@ export class WorksEffects {
     this.actions$.pipe(
         ofType(WorksActions.loadWorks),
         switchMap(() =>
-        this.booksService.getAllWorks().pipe(
+        this.editionsService.getAllWorks().pipe(
             map((works) => WorksActions.loadWorksSuccess({ works })),
             catchError(() => of({ type: 'load works error'}))
         )
         )
     ));
 
-    constructor(private actions$: Actions, private booksService: BooksService)
+    constructor(private actions$: Actions, private editionsService: EditionsService)
     {}
 }

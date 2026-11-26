@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Book } from 'src/app/models/book';
-import { BooksService } from 'src/app/services/books.service';
+import { Edition } from 'src/app/models/edition';
+import { EditionsService } from 'src/app/services/editions.service';
 import { PresentationService } from '../../ui/presentation.service';
 @Component({
     selector: 'app-version-preview',
@@ -10,7 +10,7 @@ import { PresentationService } from '../../ui/presentation.service';
 })
 export class VersionPreviewComponent {
     @Input()
-    version: Book | null = null;
-    constructor(private service: BooksService, public ui: PresentationService) {
+    version: Edition | null = null;
+    constructor(private service: EditionsService, public ui: PresentationService) {
     }
 }

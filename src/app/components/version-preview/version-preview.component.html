@@ -7,7 +7,7 @@
       {{ version.language }} edition
     </h3>
     <p>
-      {{ version.title }} <span>· {{ version.author }}</span>
+      {{ version.work.title }} <span>· {{ version.work.author }}</span>
     </p>
   </div>
   <span class="chip">{{ version.language }}</span><a class="button primary" [routerLink]="ui.link('book-annotator', version.id)">Read edition<mat-icon>arrow_forward</mat-icon></a>

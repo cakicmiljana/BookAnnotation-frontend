@@ -34,12 +34,12 @@
   background:#e6dbd6
 }
 
-.cover-stage app-book-cover {
+.cover-stage app-work-cover {
   width:124px;
   transition:transform .2s
 }
 
-.cover-link:hover app-book-cover {
+.cover-link:hover app-work-cover {
   transform:translateY(-4px) rotate(-1deg)
 }
 
@@ -120,7 +120,7 @@ h3 {
   border:0
 }
 
-.compact .cover-stage app-book-cover {
+.compact .cover-stage app-work-cover {
   width:70px
 }
 
@@ -136,7 +136,7 @@ h3 {
   .cover-stage {
     height:230px
   }
-  .cover-stage app-book-cover {
+  .cover-stage app-work-cover {
     width:105px
   }
   .book-copy {

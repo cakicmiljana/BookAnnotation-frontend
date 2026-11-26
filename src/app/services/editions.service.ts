@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Book } from '../models/book';
+import { Edition } from '../models/edition';
 import { Annotation, AnnotationInput, NotebookAnnotation } from '../models/annotation';
 import { Bookmark } from '../models/bookmark';
 import { LibraryItem } from '../models/library-item';
@@ -12,19 +12,19 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class BooksService {
+export class EditionsService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getAllBooks(): Observable<Book[]> {
-    return this.httpClient.get<Book[]>(`${environment.apiUrl}/editions`);
+  getAllEditions(): Observable<Edition[]> {
+    return this.httpClient.get<Edition[]>(`${environment.apiUrl}/editions`);
   }
 
-  getBookById(id: number): Observable<Book> {
-    return this.httpClient.get<Book>(`${environment.apiUrl}/editions/${id}`);
+  getEditionById(id: number): Observable<Edition> {
+    return this.httpClient.get<Edition>(`${environment.apiUrl}/editions/${id}`);
   }
 
-  getBookContent(id: number): Observable<string> {
+  getEditionContent(id: number): Observable<string> {
     return this.httpClient
       .get<{ content: string }>(`${environment.apiUrl}/editions/${id}/content`)
       .pipe(map(response => response.content));
@@ -34,12 +34,12 @@ export class BooksService {
     return this.httpClient.get<Work[]>(`${environment.apiUrl}/works`);
   }
 
-  getEditionsOfWork(workId: number): Observable<Book[]> {
-    return this.httpClient.get<Book[]>(`${environment.apiUrl}/works/${workId}/editions`);
+  getEditionsOfWork(workId: number): Observable<Edition[]> {
+    return this.httpClient.get<Edition[]>(`${environment.apiUrl}/works/${workId}/editions`);
   }
   
   getPageContent(id: number, page: number, pageSize: number): Observable<string> {
-    return this.getBookContent(id).pipe(
+    return this.getEditionContent(id).pipe(
       map(content => {
         if (!content) return '';
         const start = page * pageSize;
@@ -93,8 +93,8 @@ export class BooksService {
     return this.httpClient.delete<void>(`${environment.apiUrl}/bookmarks/${id}`);
   }
 
-  uploadEdition(formData: FormData): Observable<Book> {
-    return this.httpClient.post<Book>(`${environment.apiUrl}/editions`, formData);
+  uploadEdition(formData: FormData): Observable<Edition> {
+    return this.httpClient.post<Edition>(`${environment.apiUrl}/editions`, formData);
   }
 
   getLibrary(): Observable<LibraryItem[]> {

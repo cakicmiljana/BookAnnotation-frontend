@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LibraryItem } from 'src/app/models/library-item';
-import { BooksService } from 'src/app/services/books.service';
+import { EditionsService } from 'src/app/services/editions.service';
 
 @Component({
   selector: 'app-version-list',
@@ -11,7 +11,7 @@ import { BooksService } from 'src/app/services/books.service';
 export class VersionListComponent {
   versions: LibraryItem[] | null = null;
 
-  constructor(private service: BooksService) {
+  constructor(private service: EditionsService) {
 
   }
 

@@ -1,8 +1,8 @@
 <article class="book-card" [class.compact]="compact">
   <a class="cover-link" [routerLink]="ui.link('work', work.id)" [attr.aria-label]="'View ' + work.title">
   <div class="cover-stage" [class.stage-two]="work.id % 3 === 2" [class.stage-three]="work.id % 3 === 0">
-    <app-book-cover [workId]="work.id" [title]="work.title" [author]="work.author">
-    </app-book-cover>
+    <app-work-cover [workId]="work.id" [title]="work.title" [author]="work.author">
+    </app-work-cover>
     <span class="cover-caption"></span>
   </div>
   </a>

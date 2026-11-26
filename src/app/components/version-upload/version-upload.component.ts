@@ -2,8 +2,8 @@ import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Book } from 'src/app/models/book';
-import { BooksService } from 'src/app/services/books.service';
+import { Edition } from 'src/app/models/edition';
+import { EditionsService } from 'src/app/services/editions.service';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -15,7 +15,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 })
 export class VersionUploadComponent {
     @Output()
-    versionUploaded = new EventEmitter<Book>();
+    versionUploaded = new EventEmitter<Edition>();
     data = inject(MAT_DIALOG_DATA);
     workId: number | null = null;
     title: string = "";
@@ -27,13 +27,13 @@ export class VersionUploadComponent {
     fileError = '';
     uploading = false;
     errorMessage = '';
-    constructor(private service: BooksService, private snackBar: MatSnackBar) {
+    constructor(private service: EditionsService, private snackBar: MatSnackBar) {
     }
     ngOnInit() {
         this.workId = this.data?.workId ?? null;
         this.title = this.data?.title || '';
         this.author = this.data?.author || '';
-        this.language = this.data?.language || this.data?.originalLanguage || 'English';
+        this.language = this.data?.language || 'English';
     }
     onFileSelected(event: Event) {
         const input = event.target as HTMLInputElement;

@@ -10,23 +10,23 @@
       <mat-icon>add</mat-icon>Upload edition
     </button>
   </header>
-  <article *ngIf="personal && books?.length" class="featured panel">
-    <app-book-cover [workId]="books![0].workId" [title]="books![0].title" [author]="books![0].author">
-    </app-book-cover>
+  <article *ngIf="personal && editions?.length" class="featured panel">
+    <app-work-cover [workId]="editions![0].workId" [title]="editions![0].work.title" [author]="editions![0].work.author">
+    </app-work-cover>
     <div class="featured-copy">
       <span class="eyebrow">On your reading desk</span>
       <h2>
-        {{ books![0].title }}
+        {{ editions![0].work.title }}
       </h2>
       <p class="muted">
-        {{ books![0].author }}
+        {{ editions![0].work.author }}
       </p>
       <p class="featured-description">
-        {{ books![0].description }}
+        {{ editions![0].work.description }}
       </p>
     </div>
     <div class="featured-aside">  
-      <a class="button primary" [routerLink]="ui.link('book-annotator', books![0].id)">Open reading workspace<mat-icon>arrow_forward</mat-icon></a>
+      <a class="button primary" [routerLink]="ui.link('book-annotator', editions![0].id)">Open reading workspace<mat-icon>arrow_forward</mat-icon></a>
     </div>
   </article>
   <div class="collection-heading">
@@ -44,7 +44,7 @@
     </label>
     <div class="toolbar-options">
       <label class="sort-label">
-        Sort by<select class="sort-select" [(ngModel)]="sort" aria-label="Sort books"><option value="title">Title</option><option value="author">Author</option><option value="year">Publication year</option></select>
+        Sort by<select class="sort-select" [(ngModel)]="sort" aria-label="Sort editions"><option value="title">Title</option><option value="author">Author</option><option value="year">Publication year</option></select>
       </label>
       <div class="view-controls">
         <button class="icon-button" [class.active]="view === 'grid'" [attr.aria-pressed]="view === 'grid'" (click)="view = 'grid'" aria-label="Grid view">
@@ -58,8 +58,8 @@
   </div>
   <div class="book-grid" [class.list-view]="view === 'list'">
     <ng-container *ngIf="personal">
-      <app-book-preview *ngFor="let book of visibleBooks" [book]="book" [compact]="view === 'list'">
-      </app-book-preview>
+      <app-edition-preview *ngFor="let edition of visibleEditions" [edition]="edition" [compact]="view === 'list'">
+      </app-edition-preview>
     </ng-container>
     <ng-container *ngIf="!personal">
       <app-work-preview *ngFor="let work of visibleWorks" [work]="work" [compact]="view === 'list'">

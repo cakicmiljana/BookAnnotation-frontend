@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, OnChanges, ViewChild } from '@angular/core';
 import { findTextMatches, TextMatch } from './text-search';
 @Component({
-    selector: 'app-book-search', standalone: false,
-    templateUrl: './book-search.component.html', styleUrls: ['./book-search.component.css']
+    selector: 'app-edition-search', standalone: false,
+    templateUrl: './edition-search.component.html', styleUrls: ['./edition-search.component.css']
 })
-export class BookSearchComponent implements OnChanges, AfterViewInit {
+export class EditionSearchComponent implements OnChanges, AfterViewInit {
     @Input() text = '';
     @Output() matchSelected = new EventEmitter<TextMatch | null>();
     @Output() closed = new EventEmitter<void>();
