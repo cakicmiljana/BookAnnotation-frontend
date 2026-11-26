@@ -15,6 +15,7 @@ import { Bookmark } from '../../models/bookmark';
 import { ReadingPreferences } from '../../models/reading-preferences';
 import { BooksService } from '../../services/books.service';
 import { UsersService } from '../../services/users.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { PresentationService } from '../../ui/presentation.service';
 import { TextAnnotator } from '../../helper classes/TextAnnotator';
 import { ANNOTATION_COLORS } from '../../ui/annotation-fields.component';
@@ -74,7 +75,7 @@ export class BookAnnotatorComponent implements OnInit {
     private annotator = new TextAnnotator();
     private destroyRef = inject(DestroyRef);
     private injector = inject(Injector);
-    constructor(private store: Store<AppState>, private booksService: BooksService, private usersService: UsersService, private route: ActivatedRoute, public ui: PresentationService) { }
+    constructor(private store: Store<AppState>, private booksService: BooksService, private usersService: UsersService, private route: ActivatedRoute, public ui: PresentationService, private snackBar: MatSnackBar) { }
     ngOnInit(): void {
         this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
             const mode = params.get('mode');
@@ -294,13 +295,15 @@ export class BookAnnotatorComponent implements OnInit {
         const offset = this.currentPage * this.pageSize;
         const existing = this.bookmarks.find(bookmark => bookmark.offset === offset);
         if (existing) {
-            this.booksService.deleteBookmark(existing.id).subscribe(() => {
-                this.bookmarks = this.bookmarks.filter(bookmark => bookmark.id !== existing.id);
+            this.booksService.deleteBookmark(existing.id).subscribe({
+                next: () => this.bookmarks = this.bookmarks.filter(bookmark => bookmark.id !== existing.id),
+                error: () => this.snackBar.open('Could not remove the bookmark.', 'Close', { duration: 3000 })
             });
         }
         else {
-            this.booksService.addBookmark(this.book.id, offset).subscribe(bookmark => {
-                this.bookmarks = [...this.bookmarks, bookmark];
+            this.booksService.addBookmark(this.book.id, offset).subscribe({
+                next: bookmark => this.bookmarks = [...this.bookmarks, bookmark],
+                error: () => this.snackBar.open('Could not add the bookmark.', 'Close', { duration: 3000 })
             });
         }
     }
@@ -341,7 +344,9 @@ export class BookAnnotatorComponent implements OnInit {
             theme: this.theme,
             showHighlights: this.showHighlights
         };
-        this.usersService.savePreferences(preferences).subscribe();
+        this.usersService.savePreferences(preferences).subscribe({
+            error: () => this.snackBar.open('Could not save your reading preferences.', 'Close', { duration: 3000 })
+        });
     }
     changeFontSize(step: number): void {
         this.fontSize = this.fontSize + step;
