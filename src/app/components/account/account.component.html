@@ -70,14 +70,13 @@
       <article class="signout-card panel">
         <div>
           <h3>
-            {{ ui.preview ? 'Leave the preview' : 'Until the next chapter.' }}
+            Until the next chapter.
           </h3>
           <p class="small muted">
-            {{ ui.preview ? 'Return to the sign-in screen.' : 'Sign out of your reading room on this device.' }}
+            Sign out of your reading room on this device.
           </p>
         </div>
-        <a *ngIf="ui.preview" class="button" routerLink="/login">Exit preview<mat-icon>logout</mat-icon></a>
-        <button *ngIf="!ui.preview" class="button" (click)="signOut()">
+        <button class="button" (click)="signOut()">
           Sign out<mat-icon>logout</mat-icon>
         </button>
       </article>

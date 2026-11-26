@@ -61,7 +61,7 @@ export class AccountComponent implements OnInit {
             return;
         this.dialog.open(AccountUpdateComponent, {
             width: '520px',
-            data: { ...this.user, preview: this.ui.preview }
+            data: { ...this.user }
         });
     }
     signOut(): void { this.store.dispatch(logout()); this.router.navigate(['/login']); }

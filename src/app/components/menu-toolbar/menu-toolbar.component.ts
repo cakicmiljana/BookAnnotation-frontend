@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { logout } from 'src/app/store/users/users.action';
-import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 import { AccountComponent } from '../account/account.component';
 import { PresentationService } from '../../ui/presentation.service';
 @Component({

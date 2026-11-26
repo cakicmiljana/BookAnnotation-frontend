@@ -20,7 +20,6 @@ export class AccountUpdateComponent {
     currentPassword = '';
     password: string = "";
     confirmPassword = '';
-    previewSaved = false;
     saving = false;
     errorMessage = '';
     constructor(private service: UsersService, private snackBar: MatSnackBar, private store: Store, private dialogRef: MatDialogRef<AccountUpdateComponent>) {
@@ -34,10 +33,6 @@ export class AccountUpdateComponent {
     submitProfile(): void {
         if (this.password !== this.confirmPassword)
             return;
-        if (this.data.preview) {
-            this.previewSaved = true;
-            return;
-        }
         this.updateUser();
     }
     updateUser() {

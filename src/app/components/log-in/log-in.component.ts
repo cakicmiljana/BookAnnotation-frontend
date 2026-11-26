@@ -5,7 +5,6 @@ import { UsersService } from 'src/app/services/users.service';
 import { AppState } from 'src/app/store/app.state';
 import { login } from 'src/app/store/users/users.action';
 import { selectAuthError, selectIsLoggedIn, selectLoading } from 'src/app/store/users/users.selector';
-import { setUserId, getUserId } from 'src/environments/userLoggedIn';
 @Component({
     selector: 'app-log-in',
     templateUrl: './log-in.component.html',

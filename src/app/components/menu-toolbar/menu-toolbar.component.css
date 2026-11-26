@@ -62,17 +62,6 @@ nav a.active {
   margin-left:auto
 }
 
-.preview-dot {
-  height:5px;
-  width:5px;
-  border-radius:50%;
-  background:var(--accent)
-}
-
-.exit-preview {
-  color:var(--muted)
-}
-
 @media(max-width:1000px) {
   .app-header {
     gap:28px;
@@ -80,9 +69,6 @@ nav a.active {
   }
   nav {
     gap:20px
-  }
-  .preview-label {
-    display:none
   }
 }
 

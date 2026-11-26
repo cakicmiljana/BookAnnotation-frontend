@@ -21,11 +21,6 @@ const screens: Routes = [
 ];
 const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    // Explicit presentation sandbox; it does not create a user or bypass the auth guard.
-    { path: 'preview', children: [
-            { path: '', redirectTo: 'my-books', pathMatch: 'full' },
-            ...screens
-        ] },
     ...screens.map(screen => ({ ...screen, canActivate: [authGuard] })),
     { path: 'login', component: LogInComponent, canActivate: [guestGuard] },
     { path: '**', redirectTo: '/login' }

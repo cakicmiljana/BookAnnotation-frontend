@@ -1,5 +1,5 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
-<app-menu-toolbar *ngIf="(isLoggedIn$ | async) || ui.preview">
+<app-menu-toolbar *ngIf="isLoggedIn$ | async">
 </app-menu-toolbar>
 <main id="main-content" tabindex="-1">
   <router-outlet></router-outlet>
