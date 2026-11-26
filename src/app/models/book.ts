@@ -5,6 +5,7 @@ export interface Book {
     author: string;
     country: string;
     language: string;
+    originalLanguage: string | null;
     pages: number;
     description: string;
     publicationYear: number;

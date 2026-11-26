@@ -1,0 +1,28 @@
+<article class="book-card" [class.compact]="compact">
+  <a class="cover-link" [routerLink]="ui.link('work', work.id)" [attr.aria-label]="'View ' + work.title">
+  <div class="cover-stage" [class.stage-two]="work.id % 3 === 2" [class.stage-three]="work.id % 3 === 0">
+    <app-book-cover [workId]="work.id" [title]="work.title" [author]="work.author">
+    </app-book-cover>
+    <span class="cover-caption"></span>
+  </div>
+  </a>
+  <div class="book-copy">
+    <div class="book-heading">
+      <span class="eyebrow">{{ work.country }} · {{ work.publicationYear }}</span><a [routerLink]="ui.link('work', work.id)" class="details-icon" aria-label="Book details"><mat-icon>north_east</mat-icon></a>
+    </div>
+    <a [routerLink]="ui.link('work', work.id)">
+    <h3>
+      {{ work.title }}
+    </h3>
+    </a>
+    <p class="book-author">
+      {{ work.author }}
+    </p>
+    <p class="book-description">
+      {{ work.description }}
+    </p>
+    <div class="book-footer">
+      <span>{{ work.editionCount }} {{ work.editionCount === 1 ? 'edition' : 'editions' }}</span><a [routerLink]="ui.link('work', work.id)" class="text-link">View<mat-icon>arrow_forward</mat-icon></a>
+    </div>
+  </div>
+</article>

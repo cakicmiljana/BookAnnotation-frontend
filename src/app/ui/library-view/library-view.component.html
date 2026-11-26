@@ -11,7 +11,7 @@
     </button>
   </header>
   <article *ngIf="personal && books?.length" class="featured panel">
-    <app-book-cover [book]="books![0]">
+    <app-book-cover [workId]="books![0].workId" [title]="books![0].title" [author]="books![0].author">
     </app-book-cover>
     <div class="featured-copy">
       <span class="eyebrow">On your reading desk</span>
@@ -33,7 +33,7 @@
     <h2>
       {{ personal ? 'On your shelves' : 'Browse the collection' }}
     </h2>
-    <span class="small muted">{{ books?.length || 0 }} editions</span>
+    <span class="small muted">{{ totalCount }} {{ personal ? 'editions' : 'works' }}</span>
   </div>
   <div class="library-toolbar">
     <label class="input-icon">
@@ -57,10 +57,16 @@
     </div>
   </div>
   <div class="book-grid" [class.list-view]="view === 'list'">
-    <app-book-preview *ngFor="let book of visibleBooks" [book]="book" [compact]="view === 'list'">
-    </app-book-preview>
+    <ng-container *ngIf="personal">
+      <app-book-preview *ngFor="let book of visibleBooks" [book]="book" [compact]="view === 'list'">
+      </app-book-preview>
+    </ng-container>
+    <ng-container *ngIf="!personal">
+      <app-work-preview *ngFor="let work of visibleWorks" [work]="work" [compact]="view === 'list'">
+      </app-work-preview>
+    </ng-container>
   </div>
-  <app-empty-state *ngIf="!visibleBooks.length" [title]="query ? 'No books on this shelf' : 'Your library begins here'" [message]="query ? 'Try a different title or author.' : 'Add an edition and start a conversation with the text.'" [action]="query ? 'Clear filter' : 'Upload an edition'" (actionClick)="query ? query = '' : upload()">
+  <app-empty-state *ngIf="!visibleCount" [title]="query ? 'No books on this shelf' : 'Your library begins here'" [message]="query ? 'Try a different title or author.' : 'Add an edition and start a conversation with the text.'" [action]="query ? 'Clear filter' : 'Upload an edition'" (actionClick)="query ? query = '' : upload()">
   </app-empty-state>
   <footer class="library-footer">
   </footer>

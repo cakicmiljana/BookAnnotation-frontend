@@ -5,6 +5,7 @@ import { Annotation, AnnotationInput, NotebookAnnotation } from '../models/annot
 import { Bookmark } from '../models/bookmark';
 import { LibraryItem } from '../models/library-item';
 import { Note } from '../models/note';
+import { Work } from '../models/work';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -27,6 +28,10 @@ export class BooksService {
     return this.httpClient
       .get<{ content: string }>(`${environment.apiUrl}/editions/${id}/content`)
       .pipe(map(response => response.content));
+  }
+
+  getAllWorks(): Observable<Work[]> {
+    return this.httpClient.get<Work[]>(`${environment.apiUrl}/works`);
   }
 
   getEditionsOfWork(workId: number): Observable<Book[]> {

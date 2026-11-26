@@ -25,6 +25,11 @@ export class BookViewerComponent {
     constructor(private booksService: BooksService, private versionsService: BooksService, private route: ActivatedRoute, public ui: PresentationService, private snackBar: MatSnackBar) {
     }
     ngOnInit(): void {
+        const workId = this.route.snapshot.paramMap.get("workId");
+        if (workId) {
+            this.loadWork(Number(workId));
+            return;
+        }
         this.routerId = this.route.snapshot.paramMap.get("id");
         if (this.routerId) {
             this.bookId = Number(this.routerId.replace(/^:/, ''));
@@ -34,6 +39,28 @@ export class BookViewerComponent {
                 .subscribe({ next: b => { this.book = b; this.loadEditions(); }, error: () => this.loadError = true });
             this.checkLibrary(this.bookId);
         }
+    }
+    private loadWork(workId: number): void {
+        this.booksService.getEditionsOfWork(workId).subscribe({
+            next: editions => {
+                if (editions.length === 0) {
+                    this.loadError = true;
+                    return;
+                }
+                let firstEdition = editions[0];
+                for (const edition of editions) {
+                    if (edition.language === edition.originalLanguage) {
+                        firstEdition = edition;
+                        break;
+                    }
+                }
+                this.versions = editions;
+                this.book = firstEdition;
+                this.bookId = firstEdition.id;
+                this.checkLibrary(firstEdition.id);
+            },
+            error: () => this.loadError = true
+        });
     }
     private checkLibrary(bookId: number): void {
         this.booksService.getLibrary().subscribe(library => {

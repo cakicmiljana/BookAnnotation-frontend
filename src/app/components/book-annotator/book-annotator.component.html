@@ -75,7 +75,7 @@
   <div class="reader-layout" [class.with-contents]="showContents && !focusMode" [class.with-panel]="showPanel && !focusMode && mode === 'read'">
     <aside *ngIf="showContents && !focusMode" class="contents-panel">
       <span class="eyebrow">Your place in the text</span>
-      <app-book-cover [book]="book">
+      <app-book-cover [workId]="book.workId" [title]="book.title" [author]="book.author">
       </app-book-cover>
       <h3>
         {{ book.title }}

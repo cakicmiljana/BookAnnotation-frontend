@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Book } from '../../models/book';
+import { Work } from '../../models/work';
 import { PresentationService } from '../presentation.service';
 import { VersionUploadComponent } from '../../components/version-upload/version-upload.component';
 @Component({
@@ -12,6 +13,8 @@ export class LibraryViewComponent {
     @Input()
     books: Book[] | null = [];
     @Input()
+    works: Work[] | null = [];
+    @Input()
     personal = false;
     query = '';
     sort = 'title';
@@ -21,6 +24,23 @@ export class LibraryViewComponent {
         const query = this.query.toLocaleLowerCase().trim();
         return [...(this.books || [])].filter(book => (book.title + ' ' + book.author).toLocaleLowerCase().includes(query))
             .sort((a, b) => this.sort === 'author' ? a.author.localeCompare(b.author) : this.sort === 'year' ? a.publicationYear - b.publicationYear : a.title.localeCompare(b.title));
+    }
+    get visibleWorks(): Work[] {
+        const query = this.query.toLocaleLowerCase().trim();
+        return [...(this.works || [])].filter(work => (work.title + ' ' + work.author).toLocaleLowerCase().includes(query))
+            .sort((a, b) => this.sort === 'author' ? a.author.localeCompare(b.author) : this.sort === 'year' ? (a.publicationYear ?? 0) - (b.publicationYear ?? 0) : a.title.localeCompare(b.title));
+    }
+    get totalCount(): number {
+        if (this.personal) {
+            return this.books?.length || 0;
+        }
+        return this.works?.length || 0;
+    }
+    get visibleCount(): number {
+        if (this.personal) {
+            return this.visibleBooks.length;
+        }
+        return this.visibleWorks.length;
     }
     upload(): void {
         const dialogRef = this.dialog.open(VersionUploadComponent, { width: '560px', data: { title: '', author: '', language: 'English' } });

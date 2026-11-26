@@ -1,10 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Book } from 'src/app/models/book';
-import { BooksService } from 'src/app/services/books.service';
 import { AppState } from 'src/app/store/app.state';
-import { loadBooks } from 'src/app/store/books/books.action';
-import { selectBooks } from 'src/app/store/books/books.selector';
+import { loadWorks } from 'src/app/store/works/works.action';
+import { selectWorks } from 'src/app/store/works/works.selector';
 
 @Component({
   selector: 'app-book-list',
@@ -13,11 +11,10 @@ import { selectBooks } from 'src/app/store/books/books.selector';
   standalone: false
 })
 export class BookListComponent {
-  // @Input()
-  books$ = this.store.select(selectBooks);
+  works$ = this.store.select(selectWorks);
 
   ngOnInit() {
-    this.store.dispatch(loadBooks());
+    this.store.dispatch(loadWorks());
   }
 
   constructor(private store: Store<AppState>) {

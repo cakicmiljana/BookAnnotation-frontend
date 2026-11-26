@@ -29,7 +29,7 @@
   <div class="note-grid" *ngIf="!loading && tab === 'notes'">
     <article *ngFor="let entry of visibleEntries" class="note-card panel">
       <div class="note-book">
-        <app-book-cover [book]="entry.book">
+        <app-book-cover [workId]="entry.book.workId" [title]="entry.book.title" [author]="entry.book.author">
         </app-book-cover>
         <div>
           <h3>

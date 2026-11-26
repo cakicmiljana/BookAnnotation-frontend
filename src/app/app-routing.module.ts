@@ -17,6 +17,7 @@ const screens: Routes = [
     { path: 'account', component: AccountComponent },
     { path: 'book-preview', component: BookPreviewComponent },
     { path: 'book/:id', component: BookViewerComponent },
+    { path: 'work/:workId', component: BookViewerComponent },
     { path: 'book-annotator/:id', component: BookAnnotatorComponent }
 ];
 const routes: Routes = [

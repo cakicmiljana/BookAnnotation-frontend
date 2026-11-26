@@ -1,7 +1,7 @@
 <article *ngIf="book; else noBook" class="book-card" [class.compact]="compact">
   <a class="cover-link" [routerLink]="ui.link('book', book.id)" (click)="selectBook(book.id)" [attr.aria-label]="'View ' + book.title">
   <div class="cover-stage" [class.stage-two]="book.id % 3 === 2" [class.stage-three]="book.id % 3 === 0">
-    <app-book-cover [book]="book">
+    <app-book-cover [workId]="book.workId" [title]="book.title" [author]="book.author">
     </app-book-cover>
     <span class="cover-caption"></span>
   </div>

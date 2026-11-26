@@ -1,7 +1,7 @@
 <section class="page" *ngIf="book; else unavailable">
   <a class="text-link back-link" [routerLink]="ui.link('my-books')"><mat-icon>arrow_back</mat-icon>Back to library</a>
   <div class="book-detail-header">
-    <app-book-cover [book]="book">
+    <app-book-cover [workId]="book.workId" [title]="book.title" [author]="book.author">
     </app-book-cover>
     <div class="detail-copy">
       <span class="eyebrow">A closer look</span>

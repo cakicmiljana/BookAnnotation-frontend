@@ -28,6 +28,9 @@ import { UsersEffects } from './store/users/users.effects';
 import { userReducer } from './store/users/users.reducer';
 import { booksReducer } from './store/books/books.reducer';
 import { BooksEffects } from './store/books/books.effects';
+import { worksReducer } from './store/works/works.reducer';
+import { WorksEffects } from './store/works/works.effects';
+import { WorkPreviewComponent } from './components/work-preview/work-preview.component';
 import { annotationsReducer } from './store/annotations/annotations.reducer';
 import { AnnotationsEffects } from './store/annotations/annotations.effects';
 import { notesReducer } from './store/notes/notes.reducer';
@@ -48,6 +51,7 @@ import { BookSearchComponent } from './ui/book-search/book-search.component';
         BookSearchComponent,
         BookListComponent,
         BookPreviewComponent,
+        WorkPreviewComponent,
         BookViewerComponent,
         VersionListComponent,
         MenuToolbarComponent,
@@ -67,8 +71,8 @@ import { BookSearchComponent } from './ui/book-search/book-search.component';
         FormsModule,
         MatTooltipModule,
         MatSnackBarModule,
-        StoreModule.forRoot({ auth: userReducer, books: booksReducer, annotations: annotationsReducer, notes: notesReducer }),
-        EffectsModule.forRoot([UsersEffects, BooksEffects, AnnotationsEffects, NotesEffects]),
+        StoreModule.forRoot({ auth: userReducer, books: booksReducer, works: worksReducer, annotations: annotationsReducer, notes: notesReducer }),
+        EffectsModule.forRoot([UsersEffects, BooksEffects, WorksEffects, AnnotationsEffects, NotesEffects]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })], providers: [provideHttpClient(withInterceptors([authInterceptor]), withInterceptorsFromDi())] })
 export class AppModule {
 }
