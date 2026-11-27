@@ -13,7 +13,7 @@
       </button>
     </div>
     <div class="reader-tools">
-      <button class="icon-button" [class.active]="showContents" (click)="showContents = !showContents" aria-label="Toggle reading locations" [attr.aria-expanded]="showContents" matTooltip="Reading locations">
+      <button class="icon-button" [class.active]="showContents" (click)="showContents = !showContents" aria-label="Toggle reading locations" [attr.aria-expanded]="showContents" matTooltip="Table of contents">
         <mat-icon>format_list_bulleted</mat-icon>
       </button>
       <button class="icon-button type-control" [class.active]="showAppearance" (click)="showAppearance = !showAppearance" aria-label="Reading appearance" [attr.aria-expanded]="showAppearance">
@@ -74,18 +74,10 @@
   </section>
   <div class="reader-layout" [class.with-contents]="showContents && !focusMode" [class.with-panel]="showPanel && !focusMode && mode === 'read'">
     <aside *ngIf="showContents && !focusMode" class="contents-panel">
-      <span class="eyebrow">Your place in the text</span>
-      <app-work-cover [workId]="edition.workId" [title]="edition.work.title" [author]="edition.work.author">
-      </app-work-cover>
-      <h3>
-        {{ edition.work.title }}
-      </h3>
-      <p>
-        {{ edition.work.author }}
-      </p>
-      <div class="contents-heading">
-        Reading locations
-      </div>
+      <span class="eyebrow">Reading locations</span>
+    <!-- <div class="contents-heading">
+        Table of contents
+      </div> -->
       <button *ngFor="let location of locations" [class.active]="currentPage === location" (click)="getPageData({pageIndex: location}); mode = 'read'">
         <mat-icon>{{ isBookmarked(location) ? 'bookmark' : 'short_text' }}</mat-icon>Part {{ location + 1 }}<span *ngIf="currentPage === location">Reading</span>
       </button>
